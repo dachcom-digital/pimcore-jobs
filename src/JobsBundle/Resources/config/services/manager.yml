@@ -1,0 +1,20 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    JobsBundle\Registry\ConnectorRegistry: ~
+    JobsBundle\Registry\ConnectorRegistryInterface: '@JobsBundle\Registry\ConnectorRegistry'
+
+    JobsBundle\Manager\ConnectorDefinitionManager: ~
+    JobsBundle\Manager\ConnectorDefinitionManagerInterface: '@JobsBundle\Manager\ConnectorDefinitionManager'
+
+    JobsBundle\Connector\Google\Connector:
+        tags:
+            - {name: jobs.connector, identifier: google}
+
+    JobsBundle\Connector\Facebook\Connector:
+        tags:
+            - {name: jobs.connector, identifier: facebook}

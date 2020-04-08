@@ -1,0 +1,20 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    JobsBundle\Controller\Admin\SettingsController:
+        arguments:
+            $enabledConnectors: '%jobs.connectors.enabled%'
+        calls:
+            - [setContainer, ['@service_container']]
+
+    JobsBundle\Controller\ProviderController:
+        calls:
+            - [setContainer, ['@service_container']]
+
+    JobsBundle\Controller\FacebookController:
+        calls:
+            - [setContainer, ['@service_container']]

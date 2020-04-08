@@ -1,0 +1,35 @@
+# Admin Routes
+jobs_admin_settings_connectors:
+    path: /admin/jobs/settings/get-connectors
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::getConnectorsAction }
+
+jobs_admin_settings_connector_install:
+    path: /admin/jobs/settings/install-connector/{connectorName}
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::installConnectorAction }
+
+jobs_admin_settings_connector_uninstall:
+    path: /admin/jobs/settings/uninstall-connector/{connectorName}
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::uninstallConnectorAction }
+
+jobs_admin_settings_change_connector_state:
+    path: /admin/jobs/settings/change-connector-type/{connectorName}/{stateType}/{flag}
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::changeConnectorState }
+
+jobs_admin_settings_save_connector_configuration:
+    path: /admin/jobs/settings/save-connector-configuration/{connectorName}
+    methods: [POST]
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::saveConnectorConfiguration }
+
+# Provider Routes
+jobs_provider_stream:
+    path: /jobs/{connectorName}/{token}/stream
+    defaults: { _controller: JobsBundle\Controller\ProviderController::provideStreamAction }
+
+# Connector Specific Routes
+jobs_facebook_connect:
+    path: /jobs/facebook/{token}/connect
+    defaults: { _controller: JobsBundle\Controller\FacebookController::connectAction }
+
+jobs_facebook_connect_check:
+    path: /jobs/facebook/{token}/check
+    defaults: { _controller: JobsBundle\Controller\FacebookController::checkAction }

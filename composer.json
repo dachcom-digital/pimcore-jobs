@@ -1,0 +1,41 @@
+{
+    "name": "dachcom-digital/jobs",
+    "type": "pimcore-bundle",
+    "license": "GPL-3.0-or-later",
+    "description": "Pimcore Jobs API",
+    "keywords": ["pimcore", "jobs"],
+    "homepage": "https://github.com/dachcom-digital/pimcore-jobs",
+    "authors": [
+        {
+            "name": "DACHCOM.DIGITAL Stefan Hagspiel",
+            "email": "shagspiel@dachcom.ch",
+            "homepage": "http://www.dachcom.com/",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JobsBundle\\": "src/JobsBundle"
+        }
+    },
+    "extra": {
+        "pimcore": {
+            "bundles": [
+                "JobsBundle\\JobsBundle"
+            ]
+        }
+    },
+    "require": {
+        "pimcore/pimcore": "^6.0.0",
+        "doctrine/orm": "^2.7"
+    },
+    "require-dev": {
+        "codeception/codeception": "~2.4.0",
+        "phpstan/phpstan": "^0.11.1",
+        "phpstan/phpstan-symfony": "^0.11.0",
+        "symplify/easy-coding-standard": "^5.4"
+    },
+    "suggest": {
+        "facebook/graph-sdk": "^5.4"
+    }
+}
