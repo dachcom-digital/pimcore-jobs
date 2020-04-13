@@ -1,0 +1,25 @@
+JobsBundle\Model\ConnectorEngine:
+    type: entity
+    table: jobs_connector_engine
+    fields:
+        id:
+            type: integer
+            column: id
+            id: true
+            generator:
+                strategy: AUTO
+        name:
+            column: '`name`'
+            nullable: false
+            type: string
+            unique: true
+        enabled:
+            column: enabled
+            type: boolean
+        token:
+            type: string
+            unique: true
+        configuration:
+            column: configuration
+            nullable: true
+            type: object

@@ -29,28 +29,64 @@ class JobsExtension extends Extension
         $container->setParameter('jobs.persistence.doctrine.enabled', true);
         $container->setParameter('jobs.persistence.doctrine.manager', $entityManagerName);
 
-        $enabledConnectorNames = [];
-        foreach ($config['enabled_connectors'] as $enabledConnector) {
-            $enabledConnectorNames[] = $enabledConnector['connector_name'];
+        $availableConnectorsNames = [];
+
+        foreach ($config['available_connectors'] as $availableConnector) {
+            $availableConnectorsNames[] = $availableConnector['connector_name'];
+            $container->setParameter(sprintf('jobs.connectors.item_transformer.%s', $availableConnector['connector_name']), $availableConnector['connector_item_transformer']);
+            foreach ($availableConnector['connector_items_resolver'] as $itemsResolverConfig) {
+                $container->setParameter(sprintf('jobs.connectors.items_resolver.%s', $itemsResolverConfig['type']), $itemsResolverConfig['config']);
+            }
         }
 
-        $container->setParameter('jobs.entity.data_class', is_null($config['data_class']) ? '' : $config['data_class']);
-        $container->setParameter('jobs.connectors.enabled', $enabledConnectorNames);
+        foreach (array_merge($this->getCoreConnectors(), $config['available_connectors']) as $availableConnector) {
+            $container->setParameter(sprintf('jobs.connectors.system_config.%s', $availableConnector['connector_name']), $availableConnector['connector_config']);
+        }
 
-        $this->checkDependencies($loader);
+        $container->setParameter('jobs.context_definitions', $config['context_definitions']);
+        $container->setParameter('jobs.entity.data_class', is_null($config['data_class']) ? '' : $config['data_class']);
+        $container->setParameter('jobs.entity.data_class_validator', $config['data_class_validator']);
+        $container->setParameter('jobs.connectors.available', $availableConnectorsNames);
+
+        $this->checkGoogleConnectorDependencies($container, $loader);
     }
 
     /**
-     * @param YamlFileLoader $loader
+     * @param ContainerBuilder $container
+     * @param YamlFileLoader   $loader
      *
      * @throws \Exception
      */
-    protected function checkDependencies(YamlFileLoader $loader)
+    protected function checkGoogleConnectorDependencies(ContainerBuilder $container, YamlFileLoader $loader)
     {
-        if (!class_exists('JobsBundle\JobsBundle')) {
-            return;
-        }
+        $container->setParameter('jobs.connector.google.dependencies_installed', false);
 
-        $loader->load('external/seo.yml');
+        $bundles = $container->getParameter('kernel.bundles');
+        if (array_key_exists('SeoBundle', $bundles) && array_key_exists('SchemaBundle', $bundles)) {
+            $container->setParameter('jobs.connector.google.dependencies_installed', true);
+            $loader->load('external/seo.yml');
+            $loader->load('external/schema.yml');
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getCoreConnectors()
+    {
+        return [
+            [
+                'connector_name'   => 'google',
+                'connector_config' => [
+                    'core_disabled' => true
+                ]
+            ],
+            [
+                'connector_name'   => 'facebook',
+                'connector_config' => [
+                    'core_disabled' => true
+                ]
+            ]
+        ];
     }
 }

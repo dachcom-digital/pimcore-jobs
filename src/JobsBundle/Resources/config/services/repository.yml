@@ -5,6 +5,8 @@ services:
         autoconfigure: true
         public: false
 
-    JobsBundle\Repository\ConnectorDefinitionRepositoryInterface: '@JobsBundle\Repository\ConnectorDefinitionRepository'
-    JobsBundle\Repository\ConnectorDefinitionRepository: ~
+    JobsBundle\Repository\ConnectorEngineRepositoryInterface: '@JobsBundle\Repository\ConnectorEngineRepository'
+    JobsBundle\Repository\ConnectorEngineRepository: ~
 
+    JobsBundle\Repository\ConnectorContextItemRepositoryInterface: '@JobsBundle\Repository\ConnectorContextItemRepository'
+    JobsBundle\Repository\ConnectorContextItemRepository: ~

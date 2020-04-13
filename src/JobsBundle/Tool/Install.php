@@ -6,40 +6,12 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Migrations\MigrationException;
 use Doctrine\DBAL\Migrations\Version;
-use Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver;
 use Pimcore\Db\PimcoreExtensionsTrait;
 use Pimcore\Extension\Bundle\Installer\MigrationInstaller;
 use Pimcore\Migrations\Migration\InstallMigration;
-use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 class Install extends MigrationInstaller
 {
-    /**
-     * @var TokenStorageUserResolver
-     */
-    protected $resolver;
-
-    /**
-     * @var DecoderInterface
-     */
-    protected $serializer;
-
-    /**
-     * @param TokenStorageUserResolver $resolver
-     */
-    public function setTokenStorageUserResolver(TokenStorageUserResolver $resolver)
-    {
-        $this->resolver = $resolver;
-    }
-
-    /**
-     * @param DecoderInterface $serializer
-     */
-    public function setSerializer(DecoderInterface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
     /**
      * {@inheritdoc}
      */

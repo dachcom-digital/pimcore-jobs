@@ -1,0 +1,9 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    JobsBundle\Registry\ConnectorDefinitionRegistryInterface: '@JobsBundle\Registry\ConnectorDefinitionRegistry'
+    JobsBundle\Registry\ConnectorDefinitionRegistry: ~

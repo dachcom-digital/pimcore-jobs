@@ -13,17 +13,17 @@ jobs_admin_settings_connector_uninstall:
 
 jobs_admin_settings_change_connector_state:
     path: /admin/jobs/settings/change-connector-type/{connectorName}/{stateType}/{flag}
-    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::changeConnectorState }
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::changeConnectorStateAction }
 
 jobs_admin_settings_save_connector_configuration:
     path: /admin/jobs/settings/save-connector-configuration/{connectorName}
     methods: [POST]
-    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::saveConnectorConfiguration }
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::saveConnectorConfigurationAction }
 
 # Provider Routes
-jobs_provider_stream:
-    path: /jobs/{connectorName}/{token}/stream
-    defaults: { _controller: JobsBundle\Controller\ProviderController::provideStreamAction }
+jobs_provider_feed:
+    path: /jobs/{connectorName}/{token}/feed
+    defaults: { _controller: JobsBundle\Controller\ProviderController::provideFeedAction }
 
 # Connector Specific Routes
 jobs_facebook_connect:

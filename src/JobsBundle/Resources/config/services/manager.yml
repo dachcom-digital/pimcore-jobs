@@ -5,16 +5,13 @@ services:
         autoconfigure: true
         public: false
 
-    JobsBundle\Registry\ConnectorRegistry: ~
-    JobsBundle\Registry\ConnectorRegistryInterface: '@JobsBundle\Registry\ConnectorRegistry'
+    JobsBundle\Manager\ConnectorManagerInterface: '@JobsBundle\Manager\ConnectorManager'
+    JobsBundle\Manager\ConnectorManager:
+        arguments:
+            $availableConnectors: '%jobs.connectors.available%'
 
-    JobsBundle\Manager\ConnectorDefinitionManager: ~
-    JobsBundle\Manager\ConnectorDefinitionManagerInterface: '@JobsBundle\Manager\ConnectorDefinitionManager'
-
-    JobsBundle\Connector\Google\Connector:
-        tags:
-            - {name: jobs.connector, identifier: google}
-
-    JobsBundle\Connector\Facebook\Connector:
-        tags:
-            - {name: jobs.connector, identifier: facebook}
+    JobsBundle\Manager\ConnectorContextManagerInterface: '@JobsBundle\Manager\ConnectorContextManager'
+    JobsBundle\Manager\ConnectorContextManager:
+        public: true # required in coreExtensions
+        arguments:
+            $contextDefinitions: '%jobs.context_definitions%'

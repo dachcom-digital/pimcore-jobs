@@ -2,74 +2,39 @@
 
 namespace JobsBundle\Connector;
 
-use JobsBundle\Manager\ConnectorDefinitionManagerInterface;
-use JobsBundle\Model\ConnectorDefinitionInterface;
-use JobsBundle\Registry\ConnectorRegistryInterface;
+use JobsBundle\Feed\FeedGeneratorInterface;
+use JobsBundle\Manager\ConnectorManagerInterface;
+use JobsBundle\Model\ConnectorEngineInterface;
+use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
 
 class ConnectorService implements ConnectorServiceInterface
 {
-    protected $connectorRegistry;
-
-    protected $connectorDefinitionManager;
+    /**
+     * @var array|ConnectorEngineInterface[]
+     */
+    protected $connectorCache = [];
 
     /**
-     * @param ConnectorRegistryInterface          $connectorRegistry
-     * @param ConnectorDefinitionManagerInterface $connectorDefinitionManager
+     * @var ConnectorDefinitionRegistryInterface
+     */
+    protected $connectorDefinitionRegistry;
+
+    /**
+     * @var ConnectorManagerInterface
+     */
+    protected $connectorManager;
+
+    /**
+     * @param ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry
+     * @param ConnectorManagerInterface            $connectorManager
      */
     public function __construct(
-        ConnectorRegistryInterface $connectorRegistry,
-        ConnectorDefinitionManagerInterface $connectorDefinitionManager
+        ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry,
+        ConnectorManagerInterface $connectorManager
     ) {
-        $this->connectorRegistry = $connectorRegistry;
-        $this->connectorDefinitionManager = $connectorDefinitionManager;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function connectorIsInstalled(string $connectorName)
-    {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-
-        return $connectorDefinition instanceof ConnectorDefinitionInterface;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function connectorIsEnabled(string $connectorName)
-    {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
-            return false;
-        }
-
-        return $connectorDefinition->isEnabled();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function connectorIsConnected(string $connectorName)
-    {
-        $connector = $this->connectorRegistry->get($connectorName);
-
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
-            return false;
-        }
-
-        return $connector->isConnected($connectorDefinition->getConfiguration());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function connectorHasDataFeed(string $connectorName)
-    {
-        $connector = $this->connectorRegistry->get($connectorName);
-
-        return $connector->hasDataFeed();
+        $this->connectorCache = [];
+        $this->connectorDefinitionRegistry = $connectorDefinitionRegistry;
+        $this->connectorManager = $connectorManager;
     }
 
     /**
@@ -77,12 +42,12 @@ class ConnectorService implements ConnectorServiceInterface
      */
     public function installConnector(string $connectorName)
     {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if ($connectorDefinition instanceof ConnectorDefinitionInterface) {
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
+        if ($connectorDefinition->engineIsLoaded()) {
             throw new \Exception(sprintf('Cannot install "%s". Connector already exists.', $connectorName));
         }
 
-        $connector = $this->connectorDefinitionManager->createNew($connectorName);
+        $connector = $this->connectorManager->createNewEngine($connectorName);
 
         return $connector;
     }
@@ -92,16 +57,16 @@ class ConnectorService implements ConnectorServiceInterface
      */
     public function uninstallConnector(string $connectorName)
     {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
+        if (!$connectorDefinition->engineIsLoaded()) {
             throw new \Exception(sprintf('Cannot uninstall "%s". Connector does not exist.', $connectorName));
         }
 
-        if ($connectorDefinition->isEnabled() === true) {
+        if ($connectorDefinition->getConnectorEngine()->isEnabled() === true) {
             throw new \Exception(sprintf('Cannot uninstall "%s". Connector is currently enabled.', $connectorName));
         }
 
-        $this->connectorDefinitionManager->deleteByName($connectorName);
+        $this->connectorManager->deleteEngineByName($connectorName);
     }
 
     /**
@@ -109,26 +74,26 @@ class ConnectorService implements ConnectorServiceInterface
      */
     public function enableConnector(string $connectorName)
     {
-        $connector = $this->connectorRegistry->get($connectorName);
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
 
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
+        if (!$connectorDefinition->engineIsLoaded()) {
             throw new \Exception(sprintf('Cannot enable "%s". Connector does not exist.', $connectorName));
         }
 
-        if ($connectorDefinition->isEnabled() === true) {
+        $connectorEngine = $connectorDefinition->getConnectorEngine();
+        if ($connectorEngine->isEnabled() === true) {
             throw new \Exception(sprintf('Cannot enable "%s". Connector already enabled.', $connectorName));
         }
 
         try {
-            $connector->beforeEnable();
+            $connectorDefinition->beforeEnable();
         } catch (\Exception $e) {
             throw new \Exception(sprintf('Cannot enable "%s". %s.', $connectorName, $e->getMessage()));
         }
 
-        $connectorDefinition->setEnabled(true);
+        $connectorEngine->setEnabled(true);
 
-        $this->connectorDefinitionManager->update($connectorDefinition);
+        $this->connectorManager->updateEngine($connectorEngine);
     }
 
     /**
@@ -136,25 +101,26 @@ class ConnectorService implements ConnectorServiceInterface
      */
     public function disableConnector(string $connectorName)
     {
-        $connector = $this->connectorRegistry->get($connectorName);
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
+
+        if (!$connectorDefinition->engineIsLoaded()) {
             throw new \Exception(sprintf('Cannot disable "%s". Connector does not exist.', $connectorName));
         }
 
-        if ($connectorDefinition->isEnabled() === false) {
+        $connectorEngine = $connectorDefinition->getConnectorEngine();
+        if ($connectorEngine->isEnabled() === false) {
             throw new \Exception(sprintf('Cannot disable "%s". Connector already disabled.', $connectorName));
         }
 
         try {
-            $connector->beforeDisable();
+            $connectorDefinition->beforeDisable();
         } catch (\Exception $e) {
             throw new \Exception(sprintf('Cannot disable "%s". %s.', $connectorName, $e->getMessage()));
         }
 
-        $connectorDefinition->setEnabled(false);
+        $connectorEngine->setEnabled(false);
 
-        $this->connectorDefinitionManager->update($connectorDefinition);
+        $this->connectorManager->updateEngine($connectorEngine);
     }
 
     /**
@@ -162,18 +128,18 @@ class ConnectorService implements ConnectorServiceInterface
      */
     public function connectConnector(string $connectorName)
     {
-        $connector = $this->connectorRegistry->get($connectorName);
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
+
+        if (!$connectorDefinition->engineIsLoaded()) {
             throw new \Exception(sprintf('Cannot connect "%s". Connector does not exist.', $connectorName));
         }
 
-        if (!$connectorDefinition->isEnabled()) {
+        if (!$connectorDefinition->getConnectorEngine()->isEnabled()) {
             throw new \Exception(sprintf('Cannot connect  "%s". Connector is not enabled.', $connectorName));
         }
 
         try {
-            $connector->connect($connectorDefinition->getConfiguration());
+            $connectorDefinition->connect();
         } catch (\Exception $e) {
             throw new \Exception(sprintf('Cannot connect "%s". %s.', $connectorName, $e->getMessage()));
         }
@@ -184,18 +150,18 @@ class ConnectorService implements ConnectorServiceInterface
      */
     public function disconnectConnector(string $connectorName)
     {
-        $connector = $this->connectorRegistry->get($connectorName);
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
+
+        if (!$connectorDefinition->engineIsLoaded()) {
             throw new \Exception(sprintf('Cannot disconnect "%s". Connector does not exist.', $connectorName));
         }
 
-        if (!$connectorDefinition->isEnabled()) {
+        if (!$connectorDefinition->getConnectorEngine()->isEnabled()) {
             throw new \Exception(sprintf('Cannot disconnect  "%s". Connector is not enabled.', $connectorName));
         }
 
         try {
-            $connector->disconnect($connectorDefinition->getConfiguration());
+            $connectorDefinition->disconnect();
         } catch (\Exception $e) {
             throw new \Exception(sprintf('Cannot disconnect "%s". %s.', $connectorName, $e->getMessage()));
         }
@@ -204,108 +170,48 @@ class ConnectorService implements ConnectorServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getConnectorToken(string $connectorName)
+    public function generateConnectorFeed(string $connectorName, string $outputType, array $items, array $params = [])
     {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
-            throw new \Exception(sprintf('Cannot fetch token for "%s". Connector does not exist.', $connectorName));
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
+        $feedGenerator = $connectorDefinition->buildFeedGenerator($items, $params);
+
+        if (!$feedGenerator instanceof FeedGeneratorInterface) {
+            throw new \Exception(sprintf('Feed generation for "%s" failed.', $connectorName));
         }
 
-        return $connectorDefinition->getToken();
+        return $feedGenerator->generate($outputType);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function connectorHasCustomConfig(string $connectorName)
+    public function updateConnectorEngineConfiguration(string $connectorName, ConnectorEngineConfigurationInterface $connectorConfiguration)
     {
-        $connector = $this->connectorRegistry->get($connectorName);
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
 
-        return $connector->getConfigurationClass() !== null;
+        if (!$connectorDefinition->engineIsLoaded()) {
+            throw new \Exception(sprintf('Cannot fetch configuration for "%s". Connector Engine is not loaded.', $connectorName));
+        }
+
+        $connectorEngine = $connectorDefinition->getConnectorEngine();
+        $connectorEngine->setConfiguration(clone $connectorConfiguration);
+        $this->connectorManager->updateEngine($connectorEngine);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getConnectorConfiguration(string $connectorName)
+    public function connectorDefinitionIsEnabled(string $connectorDefinition)
     {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
-            return null;
-        }
-
-        $configuration = $connectorDefinition->getConfiguration();
-        if (!$configuration instanceof JobsConnectorConfigurationInterface) {
-            return null;
-        }
-
-        return $configuration;
+        return $this->connectorManager->connectorDefinitionIsEnabled($connectorDefinition);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getConnectorConfigurationForBackend(string $connectorName)
+    public function getConnectorDefinition(string $connectorName, bool $loadEngine = false)
     {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
-            return [];
-        }
-
-        $configuration = $connectorDefinition->getConfiguration();
-        if (!$configuration instanceof JobsConnectorConfigurationInterface) {
-            return [];
-        }
-
-        return $configuration->toBackendConfigArray();
+        return $this->connectorManager->getConnectorDefinition($connectorName, $loadEngine);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function updateConnectorConfiguration(string $connectorName, JobsConnectorConfigurationInterface $connectorConfiguration)
-    {
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
-            throw new \Exception(sprintf('Cannot fetch configuration for "%s". Connector does not exist.', $connectorName));
-        }
-
-        $refreshedConnectorConfiguration = clone $connectorConfiguration;
-
-        $connectorDefinition->setConfiguration($refreshedConnectorConfiguration);
-
-        $this->connectorDefinitionManager->update($connectorDefinition);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function updateConnectorConfigurationFromArray(string $connectorName, ?array $configuration)
-    {
-        $connector = $this->connectorRegistry->get($connectorName);
-        $connectorDefinition = $this->connectorDefinitionManager->getByName($connectorName);
-
-        if (!$connectorDefinition instanceof ConnectorDefinitionInterface) {
-            throw new \Exception(sprintf('Cannot fetch configuration for "%s". Connector does not exist.', $connectorName));
-        }
-
-        if ($connectorDefinition->getConfiguration() instanceof JobsConnectorConfigurationInterface) {
-            $connectorConfiguration = clone $connectorDefinition->getConfiguration();
-        } else {
-            $connectorConfigurationClass = $connector->getConfigurationClass();
-            $connectorConfiguration = new $connectorConfigurationClass();
-        }
-
-        try {
-            $connectorConfiguration = $connector->processBackendConfiguration($connectorConfiguration, $configuration);
-        } catch (\Throwable $e) {
-            throw new \Exception(sprintf('Error while processing backend configuration for %s": %s', $connectorName, $e->getMessage()), 0, $e);
-        }
-
-        $connectorDefinition->setConfiguration($connectorConfiguration);
-
-        $this->connectorDefinitionManager->update($connectorDefinition);
-    }
 }

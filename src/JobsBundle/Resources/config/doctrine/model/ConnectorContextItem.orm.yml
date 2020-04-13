@@ -1,0 +1,28 @@
+JobsBundle\Model\ConnectorContextItem:
+    type: entity
+    table: jobs_connector_context_item
+    fields:
+        id:
+            type: integer
+            id: true
+            column: id
+            generator:
+                strategy: AUTO
+        objectId:
+            column: object_id
+            nullable: false
+            type: integer
+        contextDefinitionId:
+            column: context_definition_id
+            type: integer
+    manyToOne:
+        connectorEngine:
+            targetEntity: JobsBundle\Model\ConnectorEngine
+            orphanRemoval: true
+            joinColumn:
+                name: jobs_connector_engine
+                referencedColumnName: id
+                onDelete: CASCADE
+    uniqueConstraints:
+        object_connector_context:
+            columns: [object_id, jobs_connector_engine, context_definition_id]

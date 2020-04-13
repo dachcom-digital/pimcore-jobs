@@ -3,7 +3,8 @@
 namespace JobsBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use JobsBundle\DependencyInjection\Compiler\ConnectorPass;
+use JobsBundle\DependencyInjection\Compiler\ConnectorDefinitionPass;
+use JobsBundle\DependencyInjection\Compiler\ContextItemsResolverPass;
 use JobsBundle\Tool\Install;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 use Pimcore\Extension\Bundle\Traits\PackageVersionTrait;
@@ -30,7 +31,8 @@ class JobsBundle extends AbstractPimcoreBundle
     {
         $this->configureDoctrineExtension($container);
 
-        $container->addCompilerPass(new ConnectorPass());
+        $container->addCompilerPass(new ConnectorDefinitionPass());
+        $container->addCompilerPass(new ContextItemsResolverPass());
     }
 
     /**
@@ -62,6 +64,8 @@ class JobsBundle extends AbstractPimcoreBundle
             '/bundles/jobs/js/connector/abstractConnector.js',
             '/bundles/jobs/js/connector/google.js',
             '/bundles/jobs/js/connector/facebook.js',
+            '/bundles/jobs/js/coreExtension/data/jobConnectorContext.js',
+            '/bundles/jobs/js/coreExtension/tags/jobConnectorContext.js',
         ];
     }
 

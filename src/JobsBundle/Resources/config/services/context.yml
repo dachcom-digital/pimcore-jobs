@@ -1,0 +1,21 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    JobsBundle\Registry\ContextItemsResolverRegistryInterface: '@JobsBundle\Registry\ContextItemsResolverRegistry'
+    JobsBundle\Registry\ContextItemsResolverRegistry: ~
+
+    JobsBundle\Context\Resolver\RequestResolver:
+        tags:
+            - {name: jobs.context.items_resolver, identifier: request}
+
+    JobsBundle\Context\Resolver\SeoQueueResolver:
+        tags:
+            - {name: jobs.context.items_resolver, identifier: seo_queue}
+
+    JobsBundle\Context\Resolver\FeedResolver:
+        tags:
+            - {name: jobs.context.items_resolver, identifier: feed}

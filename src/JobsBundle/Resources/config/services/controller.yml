@@ -6,8 +6,6 @@ services:
         public: true
 
     JobsBundle\Controller\Admin\SettingsController:
-        arguments:
-            $enabledConnectors: '%jobs.connectors.enabled%'
         calls:
             - [setContainer, ['@service_container']]
 

@@ -42,7 +42,7 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
                     buttons[1].setDisabled(false);
                     btn.setDisabled(true);
                     // use http://localhost:2332 or something in env context
-                    window.open('/jobs/facebook/' + token + '/connect', '_blank');
+                    window.open('http://localhost:2332/jobs/facebook/' + token + '/connect', '_blank');
                 }
             }, {
                 text: t('Check & Apply Connection'),
@@ -77,26 +77,25 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
             },
             {
                 xtype: 'textfield',
+                name: 'publisherName',
+                fieldLabel: 'The name of your organization',
+                allowBlank: false,
+                value: data.hasOwnProperty('publisherName') ? data.publisherName : null
+            },
+            {
+                xtype: 'textfield',
+                name: 'publisherUrl',
+                fieldLabel: 'The URL of your organizations\'s website',
+                allowBlank: false,
+                value: data.hasOwnProperty('publisherUrl') ? data.publisherUrl : null
+            },
+            {
+                xtype: 'textfield',
                 name: 'RecruitingManagerId',
                 fieldLabel: 'Recruiting Manager User ID',
                 allowBlank: false,
                 value: data.hasOwnProperty('RecruitingManagerId') ? data.RecruitingManagerId : null
             },
-            {
-                xtype: 'textfield',
-                name: 'CompanyName',
-                fieldLabel: 'Company Name',
-                allowBlank: false,
-                value: data.hasOwnProperty('CompanyName') ? data.CompanyName : null
-            },
-            {
-                xtype: 'textfield',
-                name: 'websiteUrl',
-                fieldLabel: 'Website Url',
-                allowBlank: false,
-                value: data.hasOwnProperty('websiteUrl') ? data.websiteUrl : null
-            },
-
             {
                 xtype: 'textfield',
                 name: 'photoUrl',

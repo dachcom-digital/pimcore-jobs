@@ -3,7 +3,10 @@
     "type": "pimcore-bundle",
     "license": "GPL-3.0-or-later",
     "description": "Pimcore Jobs API",
-    "keywords": ["pimcore", "jobs"],
+    "keywords": [
+        "pimcore",
+        "jobs"
+    ],
     "homepage": "https://github.com/dachcom-digital/pimcore-jobs",
     "authors": [
         {
@@ -36,6 +39,8 @@
         "symplify/easy-coding-standard": "^5.4"
     },
     "suggest": {
-        "facebook/graph-sdk": "^5.4"
+        "facebook/graph-sdk": "^5.4",
+        "dachcom-digital/schema": "^1.0",
+        "dachcom-digital/seo": "^1.0"
     }
 }

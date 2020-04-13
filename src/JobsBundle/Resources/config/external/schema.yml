@@ -1,0 +1,10 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    JobsBundle\Schema\Generator\GoogleForJobsGraphGenerator:
+        tags:
+            - {name: schema.generator, alias: google_jobs_connector }

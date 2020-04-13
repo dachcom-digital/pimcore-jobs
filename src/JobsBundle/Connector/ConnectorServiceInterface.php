@@ -2,42 +2,15 @@
 
 namespace JobsBundle\Connector;
 
-use JobsBundle\Model\ConnectorDefinitionInterface;
+use JobsBundle\Context\ResolvedItemInterface;
+use JobsBundle\Model\ConnectorEngineInterface;
 
 interface ConnectorServiceInterface
 {
     /**
      * @param string $connectorName
      *
-     * @return bool
-     */
-    public function connectorIsInstalled(string $connectorName);
-
-    /**
-     * @param string $connectorName
-     *
-     * @return bool
-     */
-    public function connectorIsEnabled(string $connectorName);
-
-    /**
-     * @param string $connectorName
-     *
-     * @return bool
-     */
-    public function connectorIsConnected(string $connectorName);
-
-    /**
-     * @param string $connectorName
-     *
-     * @return bool
-     */
-    public function connectorHasDataFeed(string $connectorName);
-
-    /**
-     * @param string $connectorName
-     *
-     * @return ConnectorDefinitionInterface
+     * @return ConnectorEngineInterface
      */
     public function installConnector(string $connectorName);
 
@@ -73,42 +46,33 @@ interface ConnectorServiceInterface
     public function disconnectConnector(string $connectorName);
 
     /**
-     * @param string $connectorName
+     * @param string                        $connectorName
+     * @param string                        $outputType
+     * @param array|ResolvedItemInterface[] $items
+     * @param array                         $params
      *
-     * @return string
+     * @return mixed|void
      */
-    public function getConnectorToken(string $connectorName);
+    public function generateConnectorFeed(string $connectorName, string $outputType, array $items, array $params = []);
 
     /**
-     * @param string $connectorName
+     * @param string                                $connectorName
+     * @param ConnectorEngineConfigurationInterface $connectorConfiguration
+     */
+    public function updateConnectorEngineConfiguration(string $connectorName, ConnectorEngineConfigurationInterface $connectorConfiguration);
+
+    /**
+     * @param string $connectorDefinitionName
      *
      * @return bool
      */
-    public function connectorHasCustomConfig(string $connectorName);
+    public function connectorDefinitionIsEnabled(string $connectorDefinitionName);
 
     /**
-     * @param string $connectorName
+     * @param string $connectorDefinitionName
+     * @param bool   $loadEngine
      *
-     * @return JobsConnectorConfigurationInterface|null
+     * @return ConnectorDefinitionInterface
      */
-    public function getConnectorConfiguration(string $connectorName);
-
-    /**
-     * @param string $connectorName
-     *
-     * @return array
-     */
-    public function getConnectorConfigurationForBackend(string $connectorName);
-
-    /**
-     * @param string                              $connectorName
-     * @param JobsConnectorConfigurationInterface $connectorConfiguration
-     */
-    public function updateConnectorConfiguration(string $connectorName, JobsConnectorConfigurationInterface $connectorConfiguration);
-
-    /**
-     * @param string     $connectorName
-     * @param array|null $configuration
-     */
-    public function updateConnectorConfigurationFromArray(string $connectorName, ?array $configuration);
+    public function getConnectorDefinition(string $connectorDefinitionName, bool $loadEngine = false);
 }

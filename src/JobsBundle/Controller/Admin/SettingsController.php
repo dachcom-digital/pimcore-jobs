@@ -2,31 +2,43 @@
 
 namespace JobsBundle\Controller\Admin;
 
+use JobsBundle\Connector\ConnectorDefinitionInterface;
+use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 use JobsBundle\Connector\ConnectorServiceInterface;
+use JobsBundle\Manager\ConnectorManagerInterface;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use JobsBundle\Registry\ConnectorRegistryInterface;
+use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
 use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 
 class SettingsController extends AdminController
 {
-    protected $enabledConnectors;
+    /**
+     * @var ConnectorManagerInterface
+     */
+    protected $connectorManager;
 
+    /**
+     * @var ConnectorDefinitionRegistryInterface
+     */
     protected $connectorRegistry;
 
+    /**
+     * @var ConnectorServiceInterface
+     */
     protected $connectorService;
 
     /**
-     * @param array                      $enabledConnectors
-     * @param ConnectorRegistryInterface $connectorRegistry
-     * @param ConnectorServiceInterface  $connectorService
+     * @param ConnectorManagerInterface            $connectorManager
+     * @param ConnectorDefinitionRegistryInterface $connectorRegistry
+     * @param ConnectorServiceInterface            $connectorService
      */
     public function __construct(
-        array $enabledConnectors,
-        ConnectorRegistryInterface $connectorRegistry,
+        ConnectorManagerInterface $connectorManager,
+        ConnectorDefinitionRegistryInterface $connectorRegistry,
         ConnectorServiceInterface $connectorService
     ) {
-        $this->enabledConnectors = $enabledConnectors;
+        $this->connectorManager = $connectorManager;
         $this->connectorRegistry = $connectorRegistry;
         $this->connectorService = $connectorService;
     }
@@ -41,32 +53,27 @@ class SettingsController extends AdminController
     {
         $connectors = [];
 
-        foreach ($this->enabledConnectors as $connectorName) {
+        foreach ($this->connectorManager->getAllConnectorDefinitions(true) as $connectorDefinitionName => $connectorDefinition) {
 
-            if (!$this->connectorRegistry->has($connectorName)) {
-                continue;
-            }
+            $engineConfiguration = null;
+            $isInstalled = $connectorDefinition->engineIsLoaded();
 
-            $customConfiguration = null;
-            $connector = $this->connectorRegistry->get($connectorName);
-            $isInstalled = $this->connectorService->connectorIsInstalled($connectorName);
-
-            if ($isInstalled && $this->connectorService->connectorHasCustomConfig($connectorName)) {
-                $customConfiguration = $this->connectorService->getConnectorConfigurationForBackend($connectorName);
+            if ($isInstalled && $connectorDefinition->needsEngineConfiguration()) {
+                $engineConfiguration = $this->getConnectorConfigurationForBackend($connectorDefinition);
             }
 
             $config = [
                 'installed'           => $isInstalled,
-                'enabled'             => $isInstalled && $this->connectorService->connectorIsEnabled($connectorName),
-                'connected'           => $isInstalled && $this->connectorService->connectorIsConnected($connectorName),
-                'token'               => $isInstalled ? $this->connectorService->getConnectorToken($connectorName) : null,
-                'autoConnect'         => $connector->isAutoConnected(),
-                'customConfiguration' => $customConfiguration
+                'enabled'             => $isInstalled && $connectorDefinition->getConnectorEngine()->isEnabled(),
+                'connected'           => $isInstalled && $connectorDefinition->isConnected(),
+                'token'               => $isInstalled ? $connectorDefinition->getConnectorEngine()->getToken() : null,
+                'autoConnect'         => $connectorDefinition->isAutoConnected(),
+                'customConfiguration' => $engineConfiguration
             ];
 
             $connectors[] = [
-                'name'   => $connectorName,
-                'label'  => ucfirst($connectorName),
+                'name'   => $connectorDefinitionName,
+                'label'  => ucfirst($connectorDefinitionName),
                 'config' => $config
             ];
         }
@@ -77,6 +84,12 @@ class SettingsController extends AdminController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param string  $connectorName
+     *
+     * @return JsonResponse
+     */
     public function installConnectorAction(Request $request, string $connectorName)
     {
         $token = null;
@@ -101,6 +114,12 @@ class SettingsController extends AdminController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param string  $connectorName
+     *
+     * @return JsonResponse
+     */
     public function uninstallConnectorAction(Request $request, string $connectorName)
     {
         $success = true;
@@ -122,7 +141,16 @@ class SettingsController extends AdminController
         ]);
     }
 
-    public function changeConnectorState(Request $request, string $connectorName, string $stateType, string $flag = 'activate')
+    /**
+     * @param Request $request
+     * @param string  $connectorName
+     * @param string  $stateType
+     * @param string  $flag
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function changeConnectorStateAction(Request $request, string $connectorName, string $stateType, string $flag = 'activate')
     {
         $success = true;
         $message = null;
@@ -170,7 +198,13 @@ class SettingsController extends AdminController
         ]);
     }
 
-    public function saveConnectorConfiguration(Request $request, string $connectorName)
+    /**
+     * @param Request $request
+     * @param string  $connectorName
+     *
+     * @return JsonResponse
+     */
+    public function saveConnectorConfigurationAction(Request $request, string $connectorName)
     {
         $success = true;
         $message = null;
@@ -178,7 +212,7 @@ class SettingsController extends AdminController
         $configuration = json_decode($request->request->get('configuration'), true);
 
         try {
-            $this->connectorService->updateConnectorConfigurationFromArray($connectorName, $configuration);
+            $this->updateConnectorConfigurationFromArray($connectorName, $configuration);
         } catch (\Throwable $e) {
             $success = false;
             $message = $e->getMessage();
@@ -189,4 +223,50 @@ class SettingsController extends AdminController
             'message' => $message
         ]);
     }
+
+    /**
+     * @param ConnectorDefinitionInterface $connectorDefinition
+     *
+     * @return array
+     */
+    protected function getConnectorConfigurationForBackend(ConnectorDefinitionInterface $connectorDefinition)
+    {
+        if (!$connectorDefinition->engineIsLoaded()) {
+            return [];
+        }
+
+        $engineConfiguration = $connectorDefinition->getConnectorEngine()->getConfiguration();
+        if (!$engineConfiguration instanceof ConnectorEngineConfigurationInterface) {
+            return [];
+        }
+
+        return $engineConfiguration->toBackendConfigArray();
+    }
+
+    /**
+     * @param string     $connectorName
+     * @param array|null $configuration
+     *
+     * @throws \Exception
+     */
+    protected function updateConnectorConfigurationFromArray(string $connectorName, ?array $configuration)
+    {
+        $connectorDefinition = $this->connectorManager->getConnectorDefinition($connectorName, true);
+
+        try {
+            $connectorConfiguration = $connectorDefinition->mapEngineConfigurationFromBackend($configuration);
+        } catch (\Throwable $e) {
+            throw new \Exception(sprintf('Error while processing backend configuration for %s": %s', $connectorName, $e->getMessage()), 0, $e);
+        }
+
+        if (!$connectorConfiguration instanceof ConnectorEngineConfigurationInterface) {
+            return;
+        }
+
+        $connectorEngine = $connectorDefinition->getConnectorEngine();
+        $connectorEngine->setConfiguration($connectorConfiguration);
+
+        $this->connectorService->updateConnectorEngineConfiguration($connectorName, $connectorConfiguration);
+    }
+
 }

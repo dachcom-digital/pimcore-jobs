@@ -1,0 +1,15 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    JobsBundle\Connector\ConnectorServiceInterface: '@JobsBundle\Connector\ConnectorService'
+    JobsBundle\Connector\ConnectorService: ~
+
+    JobsBundle\Context\ContextServiceInterface: '@JobsBundle\Context\ContextService'
+    JobsBundle\Context\ContextService: ~
+
+    JobsBundle\Service\LinkGeneratorServiceInterface: '@JobsBundle\Service\LinkGeneratorService'
+    JobsBundle\Service\LinkGeneratorService: ~
