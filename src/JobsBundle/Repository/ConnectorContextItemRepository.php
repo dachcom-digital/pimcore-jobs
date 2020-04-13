@@ -50,10 +50,6 @@ class ConnectorContextItemRepository implements ConnectorContextItemRepositoryIn
      */
     public function findById(int $id)
     {
-        if (empty($name)) {
-            return null;
-        }
-
         return $this->repository->find($id);
     }
 }

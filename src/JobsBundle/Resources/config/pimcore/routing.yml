@@ -20,6 +20,21 @@ jobs_admin_settings_save_connector_configuration:
     methods: [POST]
     defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::saveConnectorConfigurationAction }
 
+jobs_admin_settings_list_context_definitions:
+    path: /admin/jobs/settings/list-context-definitions
+    methods: [GET]
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::listContextDefinitionsAction }
+
+jobs_admin_settings_create_context_definition:
+    path: /admin/jobs/settings/create-context-definition
+    methods: [POST]
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::createContextDefinitionAction }
+
+jobs_admin_settings_delete_context_definition:
+    path: /admin/jobs/settings/delete-context-definition
+    methods: [DELETE]
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::deleteContextDefinitionAction }
+
 # Provider Routes
 jobs_provider_feed:
     path: /jobs/{connectorName}/{token}/feed

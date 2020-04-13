@@ -26,7 +26,6 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                ->variableNode('context_definitions')->defaultValue([])->end()
                 ->scalarNode('data_class')->defaultValue(null)->cannotBeEmpty()->end()
                 ->arrayNode('available_connectors')
                     ->prototype('array')

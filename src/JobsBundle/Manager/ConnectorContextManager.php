@@ -5,19 +5,20 @@ namespace JobsBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use JobsBundle\Model\ConnectorContextItem;
 use JobsBundle\Model\ConnectorContextItemInterface;
+use JobsBundle\Model\ContextDefinitionInterface;
 use JobsBundle\Repository\ConnectorContextItemRepositoryInterface;
 
 class ConnectorContextManager implements ConnectorContextManagerInterface
 {
     /**
-     * @var array
-     */
-    protected $contextDefinitions;
-
-    /**
      * @var ConnectorManagerInterface
      */
     protected $connectorManager;
+
+    /**
+     * @var ContextDefinitionManagerInterface
+     */
+    protected $contextDefinitionManager;
 
     /**
      * @var ConnectorContextItemRepositoryInterface
@@ -30,19 +31,19 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
     protected $entityManager;
 
     /**
-     * @param array                                   $contextDefinitions
      * @param ConnectorManagerInterface               $connectorManager
+     * @param ContextDefinitionManagerInterface       $contextDefinitionManager
      * @param ConnectorContextItemRepositoryInterface $connectorContextItemRepository
      * @param EntityManagerInterface                  $entityManager
      */
     public function __construct(
-        array $contextDefinitions,
         ConnectorManagerInterface $connectorManager,
+        ContextDefinitionManagerInterface $contextDefinitionManager,
         ConnectorContextItemRepositoryInterface $connectorContextItemRepository,
         EntityManagerInterface $entityManager
     ) {
-        $this->contextDefinitions = $contextDefinitions;
         $this->connectorManager = $connectorManager;
+        $this->contextDefinitionManager = $contextDefinitionManager;
         $this->connectorContextItemRepository = $connectorContextItemRepository;
         $this->entityManager = $entityManager;
     }
@@ -68,16 +69,25 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
      */
     public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId)
     {
-        $items = $this->connectorContextItemRepository->findForConnectorEngineAndObject($connectorEngineId, $objectId);
+        return $this->connectorContextItemRepository->findForConnectorEngineAndObject($connectorEngineId, $objectId);
+    }
 
-        foreach ($items as $item) {
-            $item->setContextDefinition(array_reduce($this->contextDefinitions,
-                function ($result, array $configItem) use ($item) {
-                    return $configItem['id'] === $item->getContextDefinitionId() ? $configItem : $result;
-                }));
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function getContextDefinition(int $definitionContextId)
+    {
+        return $this->contextDefinitionManager->getById($definitionContextId);
+    }
 
-        return $items;
+    /**
+     * {@inheritdoc}
+     */
+    public function connectorAllowsMultipleContextItems(string $connectorDefinitionName)
+    {
+        $connectorDefinition = $this->connectorManager->getConnectorDefinition($connectorDefinitionName, false);
+
+        return $connectorDefinition->allowMultipleContextItems();
     }
 
     /**
@@ -127,10 +137,19 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
     {
         $context = [];
         $onlineConnectors = [];
+        $contextDefinitions = [];
+
+        foreach ($this->contextDefinitionManager->getAll() as $contextDefinition) {
+            $contextDefinitions[] = [
+                'id'     => $contextDefinition->getId(),
+                'locale' => $contextDefinition->getLocale(),
+                'host'   => $contextDefinition->getHost(),
+            ];
+        }
 
         $data = [
             'context'             => [],
-            'context_definitions' => $this->contextDefinitions
+            'context_definitions' => $contextDefinitions
         ];
 
         $connectorContextItems = $this->getForObject($objectId);

@@ -10,3 +10,6 @@ services:
 
     JobsBundle\Repository\ConnectorContextItemRepositoryInterface: '@JobsBundle\Repository\ConnectorContextItemRepository'
     JobsBundle\Repository\ConnectorContextItemRepository: ~
+
+    JobsBundle\Repository\ContextDefinitionRepositoryInterface: '@JobsBundle\Repository\ContextDefinitionRepository'
+    JobsBundle\Repository\ContextDefinitionRepository: ~

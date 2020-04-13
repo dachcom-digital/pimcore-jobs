@@ -12,9 +12,6 @@ JobsBundle\Model\ConnectorContextItem:
             column: object_id
             nullable: false
             type: integer
-        contextDefinitionId:
-            column: context_definition_id
-            type: integer
     manyToOne:
         connectorEngine:
             targetEntity: JobsBundle\Model\ConnectorEngine
@@ -23,6 +20,13 @@ JobsBundle\Model\ConnectorContextItem:
                 name: jobs_connector_engine
                 referencedColumnName: id
                 onDelete: CASCADE
+        contextDefinition:
+            targetEntity: JobsBundle\Model\ContextDefinition
+            orphanRemoval: true
+            joinColumn:
+                name: context_definition
+                referencedColumnName: id
+                onDelete: CASCADE
     uniqueConstraints:
         object_connector_context:
-            columns: [object_id, jobs_connector_engine, context_definition_id]
+            columns: [object_id, jobs_connector_engine, context_definition]

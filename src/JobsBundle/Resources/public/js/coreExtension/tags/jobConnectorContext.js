@@ -187,19 +187,29 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
 
     getValue: function () {
 
-        var saveData = {};
+        var saveData = [];
 
         if (!this.isRendered()) {
             return null;
         }
 
         Ext.Array.each(this.connectorGrids, function (connector) {
-            var data = connector['grid'].getStore().getRange();
-            saveData[connector['connectorId']] = [];
-            Ext.Array.each(data, function (record) {
-                saveData[connector['connectorId']].push(record.getData());
+            var connectorData = connector.grid.getStore().getRange(),
+                connectorStorageData = {
+                    connectorId: connector.connectorId,
+                    connectorName: connector.connectorName,
+                    contextItems: []
+                };
+
+            Ext.Array.each(connectorData, function (record) {
+                if (record.get('active') === true) {
+                    connectorStorageData.contextItems.push(record.getData());
+                }
             });
+
+            saveData.push(connectorStorageData);
         });
+
 
         return saveData;
     },

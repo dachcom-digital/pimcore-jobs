@@ -4,11 +4,11 @@ namespace JobsBundle\CoreExtension;
 
 use JobsBundle\Manager\ConnectorContextManager;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
-use JobsBundle\Model\ConnectorContextItem;
 use JobsBundle\Model\ConnectorContextItemInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 use Pimcore\Model\DataObject\ClassDefinition\Data;
 use Pimcore\Model\DataObject\Concrete;
+use Pimcore\Model\Element\ValidationException;
 
 class JobConnectorContext extends Data implements Data\CustomResourcePersistingInterface
 {
@@ -131,22 +131,31 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
 
         $items = [];
 
-        foreach ($data as $connectorId => $connectorContext) {
+        foreach ($data as $connectorContext) {
+
+            $connectorId = $connectorContext['connectorId'];
+            $connectorName = $connectorContext['connectorName'];
+            $contextItems = $connectorContext['contextItems'];
 
             if (!is_numeric($connectorId)) {
                 continue;
             }
 
             $existingConnectorContextItems = $this->getConnectorContextManager()->getForConnectorEngineAndObject((int) $connectorId, $object->getId());
+            $multipleContextItemsAllowed = $this->getConnectorContextManager()->connectorAllowsMultipleContextItems($connectorName);
 
-            foreach ($connectorContext as $contextConfig) {
+            if (count($contextItems) > 1 && $multipleContextItemsAllowed === false) {
+                throw new ValidationException(sprintf('Invalid Job context configuration. "%s" Connector does not allow multiple items.', ucfirst($connectorName)));
+            }
+
+            foreach ($contextItems as $contextConfig) {
 
                 if ($contextConfig['active'] === false) {
                     continue;
                 }
 
                 $item = array_reduce($existingConnectorContextItems, function ($result, ConnectorContextItemInterface $item) use ($contextConfig) {
-                    return $item->getContextDefinitionId() === $contextConfig['id'] ? $item : $result;
+                    return $item->getContextDefinition()->getId() === $contextConfig['id'] ? $item : $result;
                 });
 
                 if (!$item instanceof ConnectorContextItemInterface) {
@@ -154,7 +163,7 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
                 }
 
                 $item->setObjectId($object->getId());
-                $item->setContextDefinitionId($contextConfig['id']);
+                $item->setContextDefinition($this->getConnectorContextManager()->getContextDefinition($contextConfig['id']));
 
                 $this->getConnectorContextManager()->update($item);
 

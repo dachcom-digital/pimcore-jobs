@@ -6,6 +6,7 @@ use JobsBundle\Connector\ConnectorDefinitionInterface;
 use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 use JobsBundle\Connector\ConnectorServiceInterface;
 use JobsBundle\Manager\ConnectorManagerInterface;
+use JobsBundle\Manager\ContextDefinitionManagerInterface;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
@@ -19,6 +20,11 @@ class SettingsController extends AdminController
     protected $connectorManager;
 
     /**
+     * @var ContextDefinitionManagerInterface
+     */
+    protected $contextDefinitionManager;
+
+    /**
      * @var ConnectorDefinitionRegistryInterface
      */
     protected $connectorRegistry;
@@ -30,15 +36,18 @@ class SettingsController extends AdminController
 
     /**
      * @param ConnectorManagerInterface            $connectorManager
+     * @param ContextDefinitionManagerInterface    $contextDefinitionManager
      * @param ConnectorDefinitionRegistryInterface $connectorRegistry
      * @param ConnectorServiceInterface            $connectorService
      */
     public function __construct(
         ConnectorManagerInterface $connectorManager,
+        ContextDefinitionManagerInterface $contextDefinitionManager,
         ConnectorDefinitionRegistryInterface $connectorRegistry,
         ConnectorServiceInterface $connectorService
     ) {
         $this->connectorManager = $connectorManager;
+        $this->contextDefinitionManager = $contextDefinitionManager;
         $this->connectorRegistry = $connectorRegistry;
         $this->connectorService = $connectorService;
     }
@@ -213,6 +222,81 @@ class SettingsController extends AdminController
 
         try {
             $this->updateConnectorConfigurationFromArray($connectorName, $configuration);
+        } catch (\Throwable $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        return $this->adminJson([
+            'success' => $success,
+            'message' => $message
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function listContextDefinitionsAction(Request $request)
+    {
+        $contextDefinitions = [];
+
+        foreach ($this->contextDefinitionManager->getAll() as $definition) {
+            $contextDefinitions[] = [
+                'id'     => $definition->getId(),
+                'host'   => $definition->getHost(),
+                'locale' => $definition->getLocale(),
+            ];
+        }
+
+        return $this->adminJson([
+            'success'     => true,
+            'definitions' => $contextDefinitions
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function createContextDefinitionAction(Request $request)
+    {
+        $success = true;
+        $message = null;
+
+        $host = $request->request->get('host');
+        $locale = $request->request->get('locale');
+
+        try {
+            $this->contextDefinitionManager->createNew($host, $locale);
+        } catch (\Throwable $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        return $this->adminJson([
+            'success' => $success,
+            'message' => $message
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function deleteContextDefinitionAction(Request $request)
+    {
+        $success = true;
+        $message = null;
+
+        $contextDefinitionId = $request->request->get('id');
+        $contextDefinition = $this->contextDefinitionManager->getById($contextDefinitionId);
+
+        try {
+            $this->contextDefinitionManager->delete($contextDefinition);
         } catch (\Throwable $e) {
             $success = false;
             $message = $e->getMessage();

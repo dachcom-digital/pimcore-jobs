@@ -30,12 +30,13 @@ class JobsExtension extends Extension
         $container->setParameter('jobs.persistence.doctrine.manager', $entityManagerName);
 
         $availableConnectorsNames = [];
-
         foreach ($config['available_connectors'] as $availableConnector) {
             $availableConnectorsNames[] = $availableConnector['connector_name'];
-            $container->setParameter(sprintf('jobs.connectors.item_transformer.%s', $availableConnector['connector_name']), $availableConnector['connector_item_transformer']);
+            $itemTransformerParameter = sprintf('jobs.connectors.item_transformer.%s', $availableConnector['connector_name']);
+            $container->setParameter($itemTransformerParameter, $availableConnector['connector_item_transformer']);
             foreach ($availableConnector['connector_items_resolver'] as $itemsResolverConfig) {
-                $container->setParameter(sprintf('jobs.connectors.items_resolver.%s', $itemsResolverConfig['type']), $itemsResolverConfig['config']);
+                $itemResolverParameter = sprintf('jobs.connectors.items_resolver.%s', $itemsResolverConfig['type']);
+                $container->setParameter($itemResolverParameter, $itemsResolverConfig['config']);
             }
         }
 
@@ -43,7 +44,6 @@ class JobsExtension extends Extension
             $container->setParameter(sprintf('jobs.connectors.system_config.%s', $availableConnector['connector_name']), $availableConnector['connector_config']);
         }
 
-        $container->setParameter('jobs.context_definitions', $config['context_definitions']);
         $container->setParameter('jobs.entity.data_class', is_null($config['data_class']) ? '' : $config['data_class']);
         $container->setParameter('jobs.entity.data_class_validator', $config['data_class_validator']);
         $container->setParameter('jobs.connectors.available', $availableConnectorsNames);

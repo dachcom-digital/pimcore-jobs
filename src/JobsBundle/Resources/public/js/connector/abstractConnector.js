@@ -209,38 +209,54 @@ Jobs.Connector.AbstractConnector = Class.create({
     installHandler: function (btn) {
 
         var url = this.data.installed ? '/admin/jobs/settings/uninstall-connector/' : '/admin/jobs/settings/install-connector/',
-            fieldset = btn.up('fieldset');
+            fieldset = btn.up('fieldset'),
+            doRequest = function (btn) {
 
-        btn.setDisabled(true);
+                btn.setDisabled(true);
 
-        Ext.Ajax.request({
-            url: url + this.type,
-            success: function (response) {
-                var resp = Ext.decode(response.responseText);
+                Ext.Ajax.request({
+                    url: url + this.type,
+                    success: function (response) {
+                        var resp = Ext.decode(response.responseText);
 
-                btn.setDisabled(false);
+                        btn.setDisabled(false);
 
-                if (resp.success === false) {
-                    Ext.MessageBox.alert(t('error'), resp.message);
-                    return;
-                }
+                        if (resp.success === false) {
+                            Ext.MessageBox.alert(t('error'), resp.message);
+                            return;
+                        }
 
-                this.data.installed = resp.installed;
-                this.data.token = resp.token;
+                        this.data.installed = resp.installed;
+                        this.data.token = resp.token;
 
-                if (this.data.installed === false) {
-                    this.data.enabled = false;
-                    this.data.connected = false;
-                }
+                        if (this.data.installed === false) {
+                            this.data.enabled = false;
+                            this.data.connected = false;
+                        }
 
-                this.changeState(fieldset, 'installation');
-                this.changeState(fieldset, 'connection');
-                this.changeState(fieldset, 'availability');
+                        this.changeState(fieldset, 'installation');
+                        this.changeState(fieldset, 'connection');
+                        this.changeState(fieldset, 'availability');
 
-            }.bind(this),
-            failure: function (response) {
-                btn.setDisabled(false);
+                    }.bind(this),
+                    failure: function (response) {
+                        btn.setDisabled(false);
+                    }
+                });
+            }.bind(this);
+
+        if (this.data.installed === false) {
+            doRequest(btn);
+            return;
+        }
+
+        Ext.Msg.confirm(t('delete'), t('Do you really want to uninstall this connector? Every linked Job Context will be removed too!'), function (confirmBtn) {
+
+            if (confirmBtn !== 'yes') {
+                return;
             }
+
+            doRequest(btn);
         });
     },
 

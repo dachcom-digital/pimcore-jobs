@@ -13,5 +13,6 @@ services:
     JobsBundle\Manager\ConnectorContextManagerInterface: '@JobsBundle\Manager\ConnectorContextManager'
     JobsBundle\Manager\ConnectorContextManager:
         public: true # required in coreExtensions
-        arguments:
-            $contextDefinitions: '%jobs.context_definitions%'
+
+    JobsBundle\Manager\ContextDefinitionManagerInterface: '@JobsBundle\Manager\ContextDefinitionManager'
+    JobsBundle\Manager\ContextDefinitionManager: ~

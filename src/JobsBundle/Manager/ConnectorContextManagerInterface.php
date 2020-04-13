@@ -3,6 +3,7 @@
 namespace JobsBundle\Manager;
 
 use JobsBundle\Model\ConnectorContextItemInterface;
+use JobsBundle\Model\ContextDefinitionInterface;
 
 interface ConnectorContextManagerInterface
 {
@@ -27,6 +28,20 @@ interface ConnectorContextManagerInterface
      * @return ConnectorContextItemInterface[]
      */
     public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId);
+
+    /**
+     * @param int $definitionContextId
+     *
+     * @return ContextDefinitionInterface
+     */
+    public function getContextDefinition(int $definitionContextId);
+
+    /**
+     * @param string $connectorDefinitionName
+     *
+     * @return bool
+     */
+    public function connectorAllowsMultipleContextItems(string $connectorDefinitionName);
 
     /**
      * @param int  $connectorId

@@ -30,22 +30,12 @@ interface ConnectorContextItemInterface
     public function getConnectorEngine();
 
     /**
-     * @param int $contextDefinitionId
+     * @param ContextDefinitionInterface $contextDefinition
      */
-    public function setContextDefinitionId(int $contextDefinitionId);
+    public function setContextDefinition(ContextDefinitionInterface $contextDefinition);
 
     /**
-     * @return int
-     */
-    public function getContextDefinitionId();
-
-    /**
-     * @param array $contextDefinition
-     */
-    public function setContextDefinition(array $contextDefinition);
-
-    /**
-     * @return array
+     * @return ContextDefinitionInterface
      */
     public function getContextDefinition();
 }

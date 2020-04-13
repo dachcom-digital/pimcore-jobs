@@ -138,6 +138,14 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     /**
      * {@inheritDoc}
      */
+    public function allowMultipleContextItems()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isAutoConnected()
     {
         return true;

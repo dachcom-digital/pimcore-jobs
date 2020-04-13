@@ -14,7 +14,7 @@ class LinkGeneratorService implements LinkGeneratorServiceInterface
     public function generate(Concrete $object, ConnectorContextItemInterface $contextItem)
     {
         $linkGeneratorContext = [
-            'contextName' => 'jobs.link_generator',
+            'contextName'          => 'jobs.link_generator',
             'connectorContextItem' => $contextItem
         ];
 

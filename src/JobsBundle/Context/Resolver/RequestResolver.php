@@ -151,7 +151,7 @@ class RequestResolver implements ContextItemsResolverInterface
 
             if ($this->configuration['must_match_request_locale'] === true) {
                 $contextDefinition = $contextItem->getContextDefinition();
-                if ($request->getLocale() !== $contextDefinition['locale']) {
+                if ($request->getLocale() !== $contextDefinition->getLocale()) {
                     continue;
                 }
             }

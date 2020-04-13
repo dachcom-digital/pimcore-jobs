@@ -59,6 +59,11 @@ interface ConnectorDefinitionInterface
     /**
      * @return bool
      */
+    public function allowMultipleContextItems();
+
+    /**
+     * @return bool
+     */
     public function isAutoConnected();
 
     /**

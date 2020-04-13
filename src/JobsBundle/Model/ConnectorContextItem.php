@@ -20,12 +20,7 @@ class ConnectorContextItem implements ConnectorContextItemInterface
     protected $connectorEngine;
 
     /**
-     * @var int
-     */
-    protected $contextDefinitionId;
-
-    /**
-     * @var array
+     * @var ContextDefinitionInterface
      */
     protected $contextDefinition;
 
@@ -80,23 +75,7 @@ class ConnectorContextItem implements ConnectorContextItemInterface
     /**
      * {@inheritdoc}
      */
-    public function setContextDefinitionId(int $contextDefinitionId)
-    {
-        $this->contextDefinitionId = $contextDefinitionId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getContextDefinitionId()
-    {
-        return $this->contextDefinitionId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContextDefinition(array $contextDefinition)
+    public function setContextDefinition(ContextDefinitionInterface $contextDefinition)
     {
         $this->contextDefinition = $contextDefinition;
     }

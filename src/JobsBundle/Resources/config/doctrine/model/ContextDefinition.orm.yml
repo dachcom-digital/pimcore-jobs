@@ -1,0 +1,21 @@
+JobsBundle\Model\ContextDefinition:
+    type: entity
+    table: jobs_context_definition
+    fields:
+        id:
+            type: integer
+            id: true
+            column: id
+            generator:
+                strategy: AUTO
+        host:
+            column: host
+            type: string
+            nullable: false
+        locale:
+            column: locale
+            type: string
+            nullable: false
+    uniqueConstraints:
+        object_connector_context:
+            columns: [host, locale]
