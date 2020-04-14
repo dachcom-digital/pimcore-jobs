@@ -28,7 +28,9 @@ jobs:
 Add the "Jobs Connector Context" field to your data class. It would be good practice if it's placed in a dedicated tab.
 Name it (Field "name") `jobConnectorContext`.
 
-You can check the Health state by visiting the Jobs Menu "Settings" => "Jobs Configuration": Watch out for this information: 
+You can check the Health state by visiting the Jobs Menu `"Settings"` => `"Jobs Configuration"`.
+Watch out for this information:   
+
 ![image](https://user-images.githubusercontent.com/700119/79228442-b7df1780-7e61-11ea-8885-d11ff3bc3877.png)
 
 
