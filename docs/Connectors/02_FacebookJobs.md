@@ -15,7 +15,7 @@ First things first. To use this connector, you have to install some dependencies
 This is a example Configuration.
 
 Each Connector needs some `Items Resolver` (Find the right object for the right context) and a single `Item Transformer`
-(Transform your object into a valid schema block in this case).
+(Transform your object into a valid Facebook xml block in this case [full feed specification](https://developers.facebook.com/docs/pages/jobs-xml/getting-started#company-info)).
 
 ```yaml
 jobs:
