@@ -1,8 +1,13 @@
 # Pimcore Jobs Bundle
-This bundle is currently under heavy development and not ready for production!
+
+> Note: This bundle is currently under heavy development and not ready for production!
+
+This Bundle allows you to synchronise your job offers with various connectors like [facebook jobs](https://developers.facebook.com/docs/pages/jobs-xml) or [google for jobs](https://developers.google.com/search/docs/data-types/job-posting).
+
+![image](https://user-images.githubusercontent.com/700119/79226665-0a6b0480-7e5f-11ea-9774-810b076e7fcd.png)
 
 #### Requirements
-* Pimcore >= 6.0.0
+* Pimcore >= 6.3.0
 
 ## Installation
 
@@ -12,46 +17,39 @@ This bundle is currently under heavy development and not ready for production!
 }
 ```
 
-## Include Routes
+### Installation via Extension Manager
+After you have installed the Jobs Bundle via composer, open pimcore backend and go to `Tools` => `Extension`:
+- Click the green `+` Button in `Enable / Disable` row
+- Click the green `+` Button in `Install/Uninstall` row
 
-```yaml
-# app/config/routing.yml
-jobs:
-    data_class: MyJobDataClass
-    context_definitions:
-        -   id: 1
-            locale: 'de'
-            host: 'https://www.solverat.com'
-        -   id: 2
-            locale: 'en'
-            host: 'https://www.solverat.com'
+### Installation via CommandLine
+After you have installed the Jobs Bundle via composer:
+- Execute: `$ bin/console pimcore:bundle:enable JobsBundle`
+- Execute: `$ bin/console pimcore:bundle:install JobsBundle`
 
-    available_connectors:
-        -   connector_name: facebook
-            connector_item_transformer: AppBundle\Transformer\FacebookItemTransformer
-            connector_items_resolver:
-                -   type: feed
-        -   connector_name: google
-            connector_item_transformer: AppBundle\Transformer\GoogleItemTransformer
-            connector_items_resolver:
-                -   type: seo_queue
-                -   type: request
-                    config:
-                        route_name: 'my_object_route'
-                        route_request_identifier: 'object_id'
-                        route_object_identifier: 'id'
-                        must_match_request_locale: true
-```
+## Upgrading
 
-## Configuration 
+### Upgrading via Extension Manager
+After you have updated the Jobs Bundle via composer, open pimcore backend and go to `Tools` => `Extension`:
+- Click the green `+` Button in `Update` row
 
-```yaml
-jobs:
-    data_class: Pimcore\Model\DataObject\Job
-    available_connectors:
-        -   connector_name: facebook
-        -   connector_name: google
-```
+### Upgrading via CommandLine
+After you have updated the Jobs Bundle via composer:
+- Execute: `$ bin/console pimcore:bundle:update JobsBundle`
+
+### Migrate via CommandLine
+Does actually the same as the update command and preferred in CI-Workflow:
+- Execute: `$ bin/console pimcore:migrations:migrate -b JobsBundle`
+
+## Usage
+This Bundle needs some preparation. Please checkout the [Setup](docs/00_Setup.md) guide first.
+
+## Further Information
+- [Setup](docs/00_Setup.md)
+- [Context Definitions](docs/21_CustomItemsResolver.md)
+- [Connectors](./docs/10_Connectors.md)
+  - [Google For Jobs](./docs/Connectors/01_GoogleForJobs.md)
+  - [Facebook Jobs](./docs/Connectors/02_FacebookJobs.md)
 
 ## Copyright and license
 Copyright: [DACHCOM.DIGITAL](http://dachcom-digital.ch)  

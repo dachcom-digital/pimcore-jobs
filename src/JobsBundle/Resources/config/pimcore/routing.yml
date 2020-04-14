@@ -3,6 +3,10 @@ jobs_admin_settings_connectors:
     path: /admin/jobs/settings/get-connectors
     defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::getConnectorsAction }
 
+jobs_admin_settings_data_class_health_check:
+    path: /admin/jobs/settings/data-class-health-check
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::dataClassHealthCheckAction }
+
 jobs_admin_settings_connector_install:
     path: /admin/jobs/settings/install-connector/{connectorName}
     defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::installConnectorAction }

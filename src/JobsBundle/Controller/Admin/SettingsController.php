@@ -106,6 +106,28 @@ class SettingsController extends AdminController
 
     /**
      * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function dataClassHealthCheckAction(Request $request)
+    {
+        $dataClassReady = false;
+        $dataClass = $this->environmentService->getDataClass();
+        $dataClassPath = sprintf('Pimcore\Model\DataObject\%s', ucfirst($dataClass));
+
+        if (class_exists($dataClassPath) && method_exists($dataClassPath, 'getJobConnectorContext')) {
+            $dataClassReady = true;
+        }
+
+        return $this->adminJson([
+            'success'        => true,
+            'dataClassPath'  => $dataClassPath,
+            'dataClassReady' => $dataClassReady
+        ]);
+    }
+
+    /**
+     * @param Request $request
      * @param string  $connectorName
      *
      * @return JsonResponse

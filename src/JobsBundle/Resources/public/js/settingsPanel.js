@@ -47,7 +47,48 @@ Jobs.SettingsPanel = Class.create({
             items: [this.generateContextDefinitionGrid()]
         }));
 
+        this.generateDataClassHealthCheck();
         this.addConnectors();
+    },
+
+    generateDataClassHealthCheck: function () {
+
+        Ext.Ajax.request({
+            url: '/admin/jobs/settings/data-class-health-check',
+            success: function (response) {
+                var config = Ext.decode(response.responseText);
+
+                var descriptionText = !config.dataClassReady
+                    ? t(' Your Data Class is not ready to use. You need to add the "ConnectorContext" type to your class "' + config.dataClassPath + '".')
+                    : t(' Active Data Class: ') + config.dataClassPath;
+
+                this.panel.add({
+                    region: 'north',
+                    xtype: 'fieldcontainer',
+                    layout: 'fit',
+                    style: 'margin: 10px',
+                    items: [
+                        {
+                            xtype: 'label',
+                            text: t('Data Class Configuration: '),
+                        },
+                        {
+                            xtype: 'label',
+                            text: config.dataClassReady ? t('Ready.') : t('Not Ready.'),
+                            listeners: {
+                                afterrender: function (label) {
+                                    label.setStyle('color', config.dataClassReady ? '#0e793e' : '#af1e32')
+                                }.bind(this)
+                            }
+                        },
+                        {
+                            xtype: 'label',
+                            text: descriptionText
+                        }
+                    ]
+                })
+            }.bind(this)
+        });
     },
 
     generateContextDefinitionGrid: function () {
