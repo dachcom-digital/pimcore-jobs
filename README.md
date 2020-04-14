@@ -46,10 +46,13 @@ This Bundle needs some preparation. Please checkout the [Setup](docs/00_Setup.md
 
 ## Further Information
 - [Setup](docs/00_Setup.md)
-- [Context Definitions](docs/21_CustomItemsResolver.md)
 - [Connectors](./docs/10_Connectors.md)
   - [Google For Jobs](./docs/Connectors/01_GoogleForJobs.md)
   - [Facebook Jobs](./docs/Connectors/02_FacebookJobs.md)
+- [Feeds](docs/11_Feeds.md)
+- [Object Context](docs/12_ObjectContext.md)
+- [Available Items Resolver](docs/20_AvailableItemsResolver.md)
+  - [Custom Items Resolver](docs/21_CustomItemsResolver.md) (Expert)
 
 ## Copyright and license
 Copyright: [DACHCOM.DIGITAL](http://dachcom-digital.ch)  
