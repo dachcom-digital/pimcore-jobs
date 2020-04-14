@@ -95,7 +95,7 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
                     buttons[1].setDisabled(false);
                     btn.setDisabled(true);
                     // use http://localhost:2332 or something in env context
-                    window.open('http://localhost:2332/jobs/facebook/' + token + '/connect', '_blank');
+                    window.open('/jobs/facebook/' + token + '/connect', '_blank');
                 }
             }, {
                 text: t('Check & Apply Connection'),
