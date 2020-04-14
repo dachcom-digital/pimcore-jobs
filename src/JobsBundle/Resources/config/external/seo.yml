@@ -6,7 +6,5 @@ services:
         public: false
 
     JobsBundle\Seo\ResourceProcessor\GoogleJobsProcessor:
-        arguments:
-            $dataClass: '%jobs.entity.data_class%'
         tags:
             - { name: seo.index.resource_processor, identifier: google_jobs }

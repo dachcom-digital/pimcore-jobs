@@ -185,6 +185,22 @@ class ConnectorService implements ConnectorServiceInterface
     /**
      * {@inheritDoc}
      */
+    public function updateConnectorFeedIds(string $connectorName, array $feedIds)
+    {
+        $connectorDefinition = $this->getConnectorDefinition($connectorName, true);
+
+        if (!$connectorDefinition->engineIsLoaded()) {
+            throw new \Exception(sprintf('Cannot fetch configuration for "%s". Connector Engine is not loaded.', $connectorName));
+        }
+
+        $connectorEngine = $connectorDefinition->getConnectorEngine();
+        $connectorEngine->setFeedIds($feedIds);
+        $this->connectorManager->updateEngine($connectorEngine);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function updateConnectorEngineConfiguration(string $connectorName, ConnectorEngineConfigurationInterface $connectorConfiguration)
     {
         $connectorDefinition = $this->getConnectorDefinition($connectorName, true);

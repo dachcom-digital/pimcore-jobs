@@ -13,3 +13,6 @@ services:
 
     JobsBundle\Service\LinkGeneratorServiceInterface: '@JobsBundle\Service\LinkGeneratorService'
     JobsBundle\Service\LinkGeneratorService: ~
+
+    JobsBundle\Service\EnvironmentServiceInterface: '@JobsBundle\Service\EnvironmentService'
+    JobsBundle\Service\EnvironmentService: ~

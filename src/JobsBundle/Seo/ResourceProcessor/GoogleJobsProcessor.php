@@ -6,6 +6,7 @@ use Pimcore\Model\DataObject\Concrete;
 use SeoBundle\Model\QueueEntryInterface;
 use SeoBundle\Worker\WorkerResponseInterface;
 use SeoBundle\ResourceProcessor\ResourceProcessorInterface;
+use JobsBundle\Service\EnvironmentServiceInterface;
 use JobsBundle\Connector\ConnectorServiceInterface;
 use JobsBundle\Context\ContextServiceInterface;
 use JobsBundle\Context\ResolvedItemInterface;
@@ -13,9 +14,9 @@ use JobsBundle\Context\ResolvedItemInterface;
 class GoogleJobsProcessor implements ResourceProcessorInterface
 {
     /**
-     * @var string
+     * @var EnvironmentServiceInterface
      */
-    protected $dataClass;
+    protected $environmentService;
 
     /**
      * @var ContextServiceInterface
@@ -28,16 +29,16 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
     protected $connectorService;
 
     /**
-     * @param string                    $dataClass
-     * @param ContextServiceInterface   $contextService
-     * @param ConnectorServiceInterface $connectorService
+     * @param EnvironmentServiceInterface $environmentService
+     * @param ContextServiceInterface     $contextService
+     * @param ConnectorServiceInterface   $connectorService
      */
     public function __construct(
-        string $dataClass,
+        EnvironmentServiceInterface $environmentService,
         ContextServiceInterface $contextService,
         ConnectorServiceInterface $connectorService
     ) {
-        $this->dataClass = $dataClass;
+        $this->environmentService = $environmentService;
         $this->contextService = $contextService;
         $this->connectorService = $connectorService;
     }
@@ -64,11 +65,11 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
      */
     public function supportsResource($resource)
     {
-        if (empty($this->dataClass)) {
+        if (empty($this->environmentService->getDataClass())) {
             return false;
         }
 
-        $classPath = sprintf('Pimcore\Model\DataObject\%s', $this->dataClass);
+        $classPath = sprintf('Pimcore\Model\DataObject\%s', $this->environmentService->getDataClass());
         if (!class_exists($classPath)) {
             return false;
         }

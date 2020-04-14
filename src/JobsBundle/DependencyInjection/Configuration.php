@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->scalarNode('data_class')->defaultValue(null)->cannotBeEmpty()->end()
+                ->scalarNode('feed_host')->defaultValue(null)->end()
                 ->arrayNode('available_connectors')
                     ->prototype('array')
                         ->addDefaultsIfNotSet()

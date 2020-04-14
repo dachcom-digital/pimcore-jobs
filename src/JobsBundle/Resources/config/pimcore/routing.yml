@@ -35,9 +35,14 @@ jobs_admin_settings_delete_context_definition:
     methods: [DELETE]
     defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::deleteContextDefinitionAction }
 
+jobs_admin_settings_list_feed_ids:
+    path: /admin/jobs/settings/list-feed-ids/{connectorName}
+    methods: [GET]
+    defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::listFeedIdsAction }
+
 # Provider Routes
 jobs_provider_feed:
-    path: /jobs/{connectorName}/{token}/feed
+    path: /jobs/{connectorName}/{token}/feed/{feedId}
     defaults: { _controller: JobsBundle\Controller\ProviderController::provideFeedAction }
 
 # Connector Specific Routes
@@ -48,3 +53,8 @@ jobs_facebook_connect:
 jobs_facebook_connect_check:
     path: /jobs/facebook/{token}/check
     defaults: { _controller: JobsBundle\Controller\FacebookController::checkAction }
+
+jobs_facebook_generate_feed:
+    methods: [POST]
+    path: /admin/jobs/facebook/generate-feed
+    defaults: { _controller: JobsBundle\Controller\FacebookController::adminGenerateFeedAction }

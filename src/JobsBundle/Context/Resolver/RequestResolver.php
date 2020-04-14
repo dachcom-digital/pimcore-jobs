@@ -3,7 +3,7 @@
 namespace JobsBundle\Context\Resolver;
 
 use JobsBundle\Connector\ConnectorDefinitionInterface;
-use JobsBundle\Model\ConnectorEngineInterface;
+use JobsBundle\Service\EnvironmentServiceInterface;
 use Pimcore\Model\DataObject;
 use JobsBundle\Context\ResolvedItem;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
@@ -18,9 +18,10 @@ class RequestResolver implements ContextItemsResolverInterface
     protected $configuration;
 
     /**
-     * @var string
+     * @var EnvironmentServiceInterface
      */
-    protected $dataClass;
+    protected $environmentService;
+
 
     /**
      * @var ConnectorContextManagerInterface
@@ -38,9 +39,9 @@ class RequestResolver implements ContextItemsResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function setDataClass(string $dataClass)
+    public function setEnvironment(EnvironmentServiceInterface $environmentService)
     {
-        $this->dataClass = $dataClass;
+        $this->environmentService = $environmentService;
     }
 
     /**
@@ -94,7 +95,7 @@ class RequestResolver implements ContextItemsResolverInterface
         /** @var Request $request */
         $request = $contextParameter['request'];
         $isPreFlightCheck = $contextParameter['is_preflight_check'] === true;
-        $classPath = sprintf('Pimcore\Model\DataObject\%s', $this->dataClass);
+        $classPath = sprintf('Pimcore\Model\DataObject\%s', $this->environmentService->getDataClass());
 
         $detailRouteRequestIdentifier = $this->configuration['route_request_identifier'];
         $detailRouteObjectIdentifier = $this->configuration['route_object_identifier'];

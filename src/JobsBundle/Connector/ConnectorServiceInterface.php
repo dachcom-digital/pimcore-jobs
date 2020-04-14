@@ -56,6 +56,12 @@ interface ConnectorServiceInterface
     public function generateConnectorFeed(string $connectorName, string $outputType, array $items, array $params = []);
 
     /**
+     * @param string $connectorName
+     * @param array  $feedIds
+     */
+    public function updateConnectorFeedIds(string $connectorName, array $feedIds);
+
+    /**
      * @param string                                $connectorName
      * @param ConnectorEngineConfigurationInterface $connectorConfiguration
      */

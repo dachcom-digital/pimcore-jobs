@@ -7,6 +7,8 @@ use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 use JobsBundle\Connector\ConnectorServiceInterface;
 use JobsBundle\Manager\ConnectorManagerInterface;
 use JobsBundle\Manager\ContextDefinitionManagerInterface;
+use JobsBundle\Service\EnvironmentServiceInterface;
+use JobsBundle\Tool\FeedIdHelper;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
@@ -14,6 +16,11 @@ use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 
 class SettingsController extends AdminController
 {
+    /**
+     * @var ConnectorManagerInterface
+     */
+    protected $environmentService;
+
     /**
      * @var ConnectorManagerInterface
      */
@@ -35,17 +42,20 @@ class SettingsController extends AdminController
     protected $connectorService;
 
     /**
+     * @param EnvironmentServiceInterface          $environmentService
      * @param ConnectorManagerInterface            $connectorManager
      * @param ContextDefinitionManagerInterface    $contextDefinitionManager
      * @param ConnectorDefinitionRegistryInterface $connectorRegistry
      * @param ConnectorServiceInterface            $connectorService
      */
     public function __construct(
+        EnvironmentServiceInterface $environmentService,
         ConnectorManagerInterface $connectorManager,
         ContextDefinitionManagerInterface $contextDefinitionManager,
         ConnectorDefinitionRegistryInterface $connectorRegistry,
         ConnectorServiceInterface $connectorService
     ) {
+        $this->environmentService = $environmentService;
         $this->connectorManager = $connectorManager;
         $this->contextDefinitionManager = $contextDefinitionManager;
         $this->connectorRegistry = $connectorRegistry;
@@ -61,8 +71,9 @@ class SettingsController extends AdminController
     public function getConnectorsAction(Request $request)
     {
         $connectors = [];
+        $allConnectorDefinitions = $this->connectorManager->getAllConnectorDefinitions(true);
 
-        foreach ($this->connectorManager->getAllConnectorDefinitions(true) as $connectorDefinitionName => $connectorDefinition) {
+        foreach ($allConnectorDefinitions as $connectorDefinitionName => $connectorDefinition) {
 
             $engineConfiguration = null;
             $isInstalled = $connectorDefinition->engineIsLoaded();
@@ -230,6 +241,28 @@ class SettingsController extends AdminController
         return $this->adminJson([
             'success' => $success,
             'message' => $message
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $connectorName
+     *
+     * @return JsonResponse
+     */
+    public function listFeedIdsAction(Request $request, string $connectorName)
+    {
+        $connectorDefinition = $this->connectorManager->getConnectorDefinition($connectorName, true);
+
+        $feeds = [];
+        if ($connectorDefinition->engineIsLoaded() === true) {
+            $feedIdHelper = new FeedIdHelper($connectorDefinition->getConnectorEngine());
+            $feeds = $feedIdHelper->generateFeedList($this->environmentService->getFeedHost());
+        }
+
+        return $this->adminJson([
+            'success' => true,
+            'feeds'   => $feeds
         ]);
     }
 

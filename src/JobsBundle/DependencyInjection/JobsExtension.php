@@ -2,6 +2,7 @@
 
 namespace JobsBundle\DependencyInjection;
 
+use JobsBundle\Service\EnvironmentService;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -44,22 +45,46 @@ class JobsExtension extends Extension
             $container->setParameter(sprintf('jobs.connectors.system_config.%s', $availableConnector['connector_name']), $availableConnector['connector_config']);
         }
 
-        $container->setParameter('jobs.entity.data_class', is_null($config['data_class']) ? '' : $config['data_class']);
         $container->setParameter('jobs.entity.data_class_validator', $config['data_class_validator']);
         $container->setParameter('jobs.connectors.available', $availableConnectorsNames);
 
-        $this->checkGoogleConnectorDependencies($container, $loader);
+        $this->setupEnvironment($container, $config);
+        $this->checkGoogleConnectorDependencies($container, $loader, $availableConnectorsNames);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    protected function setupEnvironment(ContainerBuilder $container, array $config)
+    {
+        $feedHost = is_string($config['feed_host']) ? $config['feed_host'] : '';
+        $dataClass = is_string($config['data_class']) ? $config['data_class'] : '';
+
+        if (empty($feedHost) && $container->hasParameter('pimcore.config')) {
+            $pimcoreConfig = $container->getParameter('pimcore.config');
+            $feedHost = isset($pimcoreConfig['general']['domain']) ? $pimcoreConfig['general']['domain'] : null;
+        }
+
+        $connectorServiceDefinition = $container->getDefinition(EnvironmentService::class);
+        $connectorServiceDefinition->setArgument('$dataClass', $dataClass);
+        $connectorServiceDefinition->setArgument('$feedHost', $feedHost);
     }
 
     /**
      * @param ContainerBuilder $container
      * @param YamlFileLoader   $loader
+     * @param array            $availableConnectorsNames
      *
      * @throws \Exception
      */
-    protected function checkGoogleConnectorDependencies(ContainerBuilder $container, YamlFileLoader $loader)
+    protected function checkGoogleConnectorDependencies(ContainerBuilder $container, YamlFileLoader $loader, array $availableConnectorsNames)
     {
         $container->setParameter('jobs.connector.google.dependencies_installed', false);
+
+        if (!in_array('google', $availableConnectorsNames)) {
+            return;
+        }
 
         $bundles = $container->getParameter('kernel.bundles');
         if (array_key_exists('SeoBundle', $bundles) && array_key_exists('SchemaBundle', $bundles)) {

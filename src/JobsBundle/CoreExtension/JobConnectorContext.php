@@ -6,6 +6,7 @@ use JobsBundle\Manager\ConnectorContextManager;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
 use JobsBundle\Model\ConnectorContextItemInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
+use JobsBundle\Model\ContextDefinitionInterface;
 use Pimcore\Model\DataObject\ClassDefinition\Data;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\Element\ValidationException;
@@ -304,7 +305,8 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
         /** @var ConnectorContextItemInterface $element */
         foreach ($data as $element) {
             $connector = $element->getConnector() instanceof ConnectorEngineInterface ? $element->getConnector()->getName() : '[removed]';
-            $preview[] = (string) sprintf('%s: Context ID %s', $connector, $element->getContextDefinitionId());
+            $contextDefinitionId = $element->getContextDefinition() instanceof ContextDefinitionInterface ? $element->getContextDefinition()->getId() : '[removed]';
+            $preview[] = (string) sprintf('%s: Context ID %s', $connector, $contextDefinitionId);
         }
 
         return join(', ', $preview);

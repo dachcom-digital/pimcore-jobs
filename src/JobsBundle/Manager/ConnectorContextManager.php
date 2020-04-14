@@ -180,7 +180,7 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
                     'id'   => $connectorContextItem->getConnectorEngine()->getId(),
                     'name' => $connectorContextItem->getConnectorEngine()->getName()
                 ],
-                'contextDefinitionId' => $connectorContextItem->getContextDefinitionId(),
+                'contextDefinitionId' => $connectorContextItem->getContextDefinition()->getId(),
             ];
         }
 

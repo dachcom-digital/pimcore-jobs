@@ -5,6 +5,7 @@ Jobs.Connector.AbstractConnector = Class.create({
     data: null,
 
     customConfigurationPanel: null,
+    feedConfigurationPanel: null,
 
     states: {
         installation: {
@@ -49,8 +50,88 @@ Jobs.Connector.AbstractConnector = Class.create({
     /**
      * @abstract
      */
+    hasFeedConfiguration: function () {
+        return false;
+    },
+
+    /**
+     * @abstract
+     */
+    generateFeed: function () {
+        return false;
+    },
+
+    /**
+     * @abstract
+     */
     getCustomConfigurationFields: function (data) {
         return [];
+    },
+
+    generateFeedConfigurationPanel: function () {
+
+        var fieldset = new Ext.form.FieldSet({
+            collapsible: false,
+            title: t('Data Feeds')
+        });
+
+        this.feedConfigurationPanel = new Ext.grid.GridPanel({
+            anchor: '100%',
+            width: 500,
+            columnLines: true,
+            stripeRows: true,
+            disabled: this.data.installed === false,
+            store: new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                proxy: {
+                    type: 'ajax',
+                    url: '/admin/jobs/settings/list-feed-ids/' + this.type,
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'feeds',
+                        idProperty: 'internalId'
+                    }
+                },
+                fields: ['internalId', 'externalId', 'feedUrl']
+            }),
+            tbar: [
+                {
+                    xtype: 'button',
+                    text: t('Add Feed'),
+                    iconCls: 'pimcore_icon_add',
+                    handler: function (btn) {
+                        this.generateFeed(btn, btn.up('gridpanel').getStore());
+                    }.bind(this)
+                }
+            ],
+            columns: [
+                {
+                    text: t('Internal Id'),
+                    sortable: false,
+                    dataIndex: 'internalId',
+                    hidden: false,
+                    flex: 1
+                },
+                {
+                    text: t('External Id'),
+                    sortable: false,
+                    dataIndex: 'externalId',
+                    hidden: false,
+                    flex: 1
+                },
+                {
+                    text: t('Feed Url'),
+                    sortable: false,
+                    dataIndex: 'feedUrl',
+                    flex: 5
+                }
+            ]
+        });
+
+        fieldset.add(this.feedConfigurationPanel);
+
+        return fieldset;
     },
 
     generateCustomConfigurationPanel: function () {
@@ -321,12 +402,23 @@ Jobs.Connector.AbstractConnector = Class.create({
             fieldContainer.setDisabled(!this.data.installed);
         }
 
-        if (stateType === 'installation' && this.hasCustomConfiguration() === true) {
+        if (stateType === 'installation') {
             if (this.data.installed === false) {
-                this.customConfigurationPanel.getForm().reset();
-                this.customConfigurationPanel.setDisabled(true);
+                if (this.hasCustomConfiguration() === true) {
+                    this.customConfigurationPanel.getForm().reset();
+                    this.customConfigurationPanel.setDisabled(true);
+                }
+                if (this.hasFeedConfiguration() === true) {
+                    this.feedConfigurationPanel.getStore().reload();
+                    this.feedConfigurationPanel.setDisabled(true);
+                }
             } else {
-                this.customConfigurationPanel.setDisabled(false);
+                if (this.hasCustomConfiguration() === true) {
+                    this.customConfigurationPanel.setDisabled(false);
+                }
+                if (this.hasFeedConfiguration() === true) {
+                    this.feedConfigurationPanel.setDisabled(false);
+                }
             }
         }
     },

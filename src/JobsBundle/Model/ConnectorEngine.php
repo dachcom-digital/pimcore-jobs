@@ -32,6 +32,11 @@ class ConnectorEngine implements ConnectorEngineInterface
     protected $configuration;
 
     /**
+     * @var array
+     */
+    protected $feedIds;
+
+    /**
      * {@inheritdoc}
      */
     public function setId($id)
@@ -106,6 +111,30 @@ class ConnectorEngine implements ConnectorEngineInterface
     /**
      * {@inheritdoc}
      */
+    public function setFeedIds(array $feedIds)
+    {
+        $this->feedIds = $feedIds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasFeedIds()
+    {
+        return is_array($this->feedIds) && count($this->feedIds) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFeedIds()
+    {
+        return $this->feedIds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setConfiguration(ConnectorEngineConfigurationInterface $configuration)
     {
         $this->configuration = $configuration;
@@ -118,4 +147,5 @@ class ConnectorEngine implements ConnectorEngineInterface
     {
         return $this->configuration;
     }
+
 }

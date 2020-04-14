@@ -5,6 +5,59 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
         return true;
     },
 
+    hasFeedConfiguration: function () {
+        return true;
+    },
+
+    generateFeed: function (btn, gridStore) {
+
+        btn.setDisabled(true);
+
+        var doRequest = function (params) {
+            Ext.Ajax.request({
+                url: '/admin/jobs/facebook/generate-feed',
+                method: 'POST',
+                params: params,
+                success: function (response) {
+                    var data = Ext.decode(response.responseText);
+                    if (!data.success) {
+                        cancelResponse(data.message);
+                        return;
+                    }
+
+                    if (data.dispatchType === 'confirm') {
+                        confirmResponse(data.confirmText, data.state);
+                    } else if (data.dispatchType === 'success') {
+                        successResponse(data.confirmText);
+                    }
+                }.bind(this),
+                failure: function () {
+                    cancelResponse('Request failed.');
+                }
+            });
+        }, cancelResponse = function (message) {
+            Ext.Msg.alert(t('error'), message);
+            btn.setDisabled(false);
+        }, successResponse = function (successText) {
+            Ext.Msg.alert(t('success'), successText);
+            gridStore.reload();
+            btn.setDisabled(false);
+        }, confirmResponse = function (confirmText, state) {
+            Ext.Msg.confirm(t('New Feed'), confirmText, function (confirmBtn) {
+
+                if (confirmBtn !== 'yes') {
+                    btn.setDisabled(false);
+                    return;
+                }
+
+                doRequest({state: state})
+
+            }.bind(this));
+        };
+
+        doRequest({state: 'initial'});
+    },
+
     connectHandler: function (stateType, mainBtn) {
 
         var stateData = this.states[stateType],
@@ -88,13 +141,6 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
                 fieldLabel: 'The URL of your organizations\'s website',
                 allowBlank: false,
                 value: data.hasOwnProperty('publisherUrl') ? data.publisherUrl : null
-            },
-            {
-                xtype: 'textfield',
-                name: 'RecruitingManagerId',
-                fieldLabel: 'Recruiting Manager User ID',
-                allowBlank: false,
-                value: data.hasOwnProperty('RecruitingManagerId') ? data.RecruitingManagerId : null
             },
             {
                 xtype: 'textfield',

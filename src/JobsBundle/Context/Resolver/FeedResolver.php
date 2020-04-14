@@ -2,6 +2,7 @@
 
 namespace JobsBundle\Context\Resolver;
 
+use JobsBundle\Service\EnvironmentServiceInterface;
 use Pimcore\Model\DataObject;
 use JobsBundle\Context\ResolvedItem;
 use JobsBundle\Connector\ConnectorDefinitionInterface;
@@ -16,9 +17,9 @@ class FeedResolver implements ContextItemsResolverInterface
     protected $configuration;
 
     /**
-     * @var string
+     * @var EnvironmentServiceInterface
      */
-    protected $dataClass;
+    protected $environmentService;
 
     /**
      * @var ConnectorContextManagerInterface
@@ -36,9 +37,9 @@ class FeedResolver implements ContextItemsResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function setDataClass(string $dataClass)
+    public function setEnvironment(EnvironmentServiceInterface $environmentService)
     {
-        $this->dataClass = $dataClass;
+        $this->environmentService = $environmentService;
     }
 
     /**
@@ -55,11 +56,13 @@ class FeedResolver implements ContextItemsResolverInterface
     public function configureContextParameter(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'feed' => null
+            'internal_feed_id' => null,
+            'external_feed_id' => null,
         ]);
 
-        $resolver->setRequired(['feed']);
-        $resolver->setAllowedTypes('feed', ['null']);
+        $resolver->setRequired(['internal_feed_id', 'external_feed_id']);
+        $resolver->setAllowedTypes('internal_feed_id', ['null', 'int', 'string']);
+        $resolver->setAllowedTypes('external_feed_id', ['null', 'int', 'string']);
     }
 
     /**
@@ -67,9 +70,8 @@ class FeedResolver implements ContextItemsResolverInterface
      */
     public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
     {
+        // @todo: Determinate feed?
         $connectorContextItems = $this->connectorContextManager->getForConnectorEngine($connectorDefinition->getConnectorEngine()->getId());
-
-        // @todo: Determinate feed!
 
         $resolvedItems = [];
         foreach ($connectorContextItems as $contextItem) {

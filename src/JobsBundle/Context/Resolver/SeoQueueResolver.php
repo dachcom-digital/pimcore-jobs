@@ -7,6 +7,7 @@ use JobsBundle\Context\ResolvedItem;
 use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
 use JobsBundle\Model\ConnectorContextItemInterface;
+use JobsBundle\Service\EnvironmentServiceInterface;
 use JobsBundle\Service\LinkGeneratorServiceInterface;
 use Pimcore\Model\DataObject\Concrete;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,9 +20,9 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     protected $configuration;
 
     /**
-     * @var string
+     * @var EnvironmentServiceInterface
      */
-    protected $dataClass;
+    protected $environmentService;
 
     /**
      * @var ConnectorContextManagerInterface
@@ -46,9 +47,9 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function setDataClass(string $dataClass)
+    public function setEnvironment(EnvironmentServiceInterface $environmentService)
     {
-        $this->dataClass = $dataClass;
+        $this->environmentService = $environmentService;
     }
 
     /**
@@ -69,7 +70,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
         ]);
 
         $resolver->setRequired(['resource']);
-        $resolver->setAllowedTypes('resource', [sprintf('Pimcore\Model\DataObject\%s', $this->dataClass)]);
+        $resolver->setAllowedTypes('resource', [sprintf('Pimcore\Model\DataObject\%s', $this->environmentService->getDataClass())]);
     }
 
     /**

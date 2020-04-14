@@ -3,6 +3,7 @@
 namespace JobsBundle\DependencyInjection\Compiler;
 
 use JobsBundle\Registry\ContextItemsResolverRegistry;
+use JobsBundle\Service\EnvironmentService;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -50,7 +51,7 @@ final class ContextItemsResolverPass implements CompilerPassInterface
             $itemsResolverDefinition = $container->getDefinition($serviceId);
             $itemsResolverConfig = $container->getParameter(sprintf('jobs.connectors.items_resolver.%s', $attributes['identifier']));
             $itemsResolverDefinition->addMethodCall('setConfiguration', [$itemsResolverConfig]);
-            $itemsResolverDefinition->addMethodCall('setDataClass', [$container->getParameter('jobs.entity.data_class')]);
+            $itemsResolverDefinition->addMethodCall('setEnvironment', [$container->getDefinition(EnvironmentService::class)]);
             $definition->addMethodCall('register', [new Reference($serviceId), $attributes['identifier']]);
         }
     }

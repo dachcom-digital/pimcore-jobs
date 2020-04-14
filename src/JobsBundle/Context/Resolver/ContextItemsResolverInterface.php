@@ -4,16 +4,17 @@ namespace JobsBundle\Context\Resolver;
 
 use JobsBundle\Connector\ConnectorDefinitionInterface;
 use JobsBundle\Context\ResolvedItem;
+use JobsBundle\Service\EnvironmentServiceInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 interface ContextItemsResolverInterface
 {
     /**
-     * @param string $dataClass
+     * @param EnvironmentServiceInterface $environmentService
      *
      * @return mixed
      */
-    public function setDataClass(string $dataClass);
+    public function setEnvironment(EnvironmentServiceInterface $environmentService);
 
     /**
      * @param array $resolverConfiguration

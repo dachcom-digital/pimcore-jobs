@@ -266,6 +266,10 @@ Jobs.SettingsPanel = Class.create({
                     items: [connectorLayout.getSystemFields()]
                 });
 
+                if (connectorLayout.hasFeedConfiguration() === true) {
+                    connectorPanel.add(connectorLayout.generateFeedConfigurationPanel());
+                }
+
                 if (connectorLayout.hasCustomConfiguration() === true) {
                     connectorPanel.add(connectorLayout.generateCustomConfigurationPanel());
                 }

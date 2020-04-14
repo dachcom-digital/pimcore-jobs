@@ -37,6 +37,8 @@ interface ConnectorDefinitionInterface
     public function engineIsLoaded();
 
     /**
+     * Returns true if connector is fully configured and ready to provide data
+     *
      * @return bool
      */
     public function isOnline();
@@ -50,11 +52,6 @@ interface ConnectorDefinitionInterface
      * @throws \Exception
      */
     public function beforeDisable();
-
-    /**
-     * @return bool
-     */
-    public function hasDataFeed();
 
     /**
      * @return bool

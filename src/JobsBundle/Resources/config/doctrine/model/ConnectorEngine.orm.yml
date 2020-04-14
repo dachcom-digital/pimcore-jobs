@@ -19,7 +19,11 @@ JobsBundle\Model\ConnectorEngine:
         token:
             type: string
             unique: true
+        feedIds:
+            column: feed_ids
+            type: array
+            nullable: true
         configuration:
             column: configuration
-            nullable: true
             type: object
+            nullable: true

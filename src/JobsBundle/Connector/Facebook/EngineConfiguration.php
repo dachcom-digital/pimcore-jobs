@@ -7,6 +7,27 @@ use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 class EngineConfiguration implements ConnectorEngineConfigurationInterface
 {
     /**
+     * @internal
+     *l
+     * @var string
+     */
+    protected $accessToken;
+
+    /**
+     * @internal
+     *
+     * @var string
+     */
+    protected $accessTokenExpiresAt;
+
+    /**
+     * @internal
+     *
+     * @var string
+     */
+    protected $recruitingManagerId;
+
+    /**
      * @var string
      */
     protected $appId;
@@ -29,12 +50,63 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     /**
      * @var string
      */
-    protected $accessToken;
+    protected $photoUrl;
 
     /**
      * @var string
      */
-    protected $accessTokenExpiresAt;
+    protected $dataPolicyUrl;
+
+    /**
+     * @param string $token
+     *
+     * @internal
+     */
+    public function setAccessToken($token)
+    {
+        $this->accessToken = $token;
+    }
+
+    /**
+     * @param string $expiresAt
+     *
+     * @internal
+     */
+    public function setAccessTokenExpiresAt($expiresAt)
+    {
+        $this->accessTokenExpiresAt = $expiresAt;
+    }
+
+    /**
+     * @return string
+     *
+     * @internal
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * @return string
+     *
+     * @internal
+     *
+     */
+    public function getRecruitingManagerId()
+    {
+        return $this->recruitingManagerId;
+    }
+
+    /**
+     * @param string $recruitingManagerId
+     *
+     * @internal
+     */
+    public function setRecruitingManagerId(string $recruitingManagerId)
+    {
+        $this->recruitingManagerId = $recruitingManagerId;
+    }
 
     /**
      * @param $appId
@@ -66,30 +138,6 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     public function getAppSecret()
     {
         return $this->appSecret;
-    }
-
-    /**
-     * @param string $token
-     */
-    public function setAccessToken($token)
-    {
-        $this->accessToken = $token;
-    }
-
-    /**
-     * @param string $expiresAt
-     */
-    public function setAccessTokenExpiresAt($expiresAt)
-    {
-        $this->accessTokenExpiresAt = $expiresAt;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        return $this->accessToken;
     }
 
     /**
@@ -125,6 +173,38 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     }
 
     /**
+     * @return string
+     */
+    public function getPhotoUrl()
+    {
+        return $this->photoUrl;
+    }
+
+    /**
+     * @param string $photoUrl
+     */
+    public function setPhotoUrl(string $photoUrl)
+    {
+        $this->photoUrl = $photoUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataPolicyUrl()
+    {
+        return $this->dataPolicyUrl;
+    }
+
+    /**
+     * @param string $dataPolicyUrl
+     */
+    public function setDataPolicyUrl(string $dataPolicyUrl)
+    {
+        $this->dataPolicyUrl = $dataPolicyUrl;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getConfigParam(string $param)
@@ -147,6 +227,8 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
             'appSecret'     => $this->getAppSecret(),
             'publisherName' => $this->getPublisherName(),
             'publisherUrl'  => $this->getPublisherUrl(),
+            'photoUrl'      => $this->getPhotoUrl(),
+            'dataPolicyUrl' => $this->getDataPolicyUrl(),
         ];
     }
 }

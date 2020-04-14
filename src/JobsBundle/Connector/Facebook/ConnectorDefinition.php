@@ -93,6 +93,19 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
             return false;
         }
 
+        if(!$this->isConnected()) {
+            return false;
+        }
+
+        $configuration = $this->getConnectorEngine()->getConfiguration();
+        if (!$configuration instanceof EngineConfiguration) {
+            return false;
+        }
+
+        if(empty($configuration->getRecruitingManagerId())) {
+            return false;
+        }
+
         return $this->isConnected();
     }
 
@@ -110,14 +123,6 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     public function beforeDisable()
     {
         // not required. just disable it.
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function hasDataFeed()
-    {
-        return true;
     }
 
     /**
@@ -250,8 +255,10 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
 
         $connectorConfiguration->setAppId($data['appId']);
         $connectorConfiguration->setAppSecret($data['appSecret']);
-        $connectorConfiguration->setPublisherUrl($data['publisherUrl']);
         $connectorConfiguration->setPublisherName($data['publisherName']);
+        $connectorConfiguration->setPublisherUrl($data['publisherUrl']);
+        $connectorConfiguration->setPhotoUrl($data['photoUrl']);
+        $connectorConfiguration->setDataPolicyUrl($data['dataPolicyUrl']);
 
         return $connectorConfiguration;
     }

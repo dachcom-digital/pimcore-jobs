@@ -37,6 +37,21 @@ interface ConnectorEngineInterface
     public function isEnabled();
 
     /**
+     * @param array $feedIds
+     */
+    public function setFeedIds(array $feedIds);
+
+    /**
+     * @return bool
+     */
+    public function hasFeedIds();
+
+    /**
+     * @return array|null
+     */
+    public function getFeedIds();
+
+    /**
      * @param string $token
      */
     public function setToken(string $token);
