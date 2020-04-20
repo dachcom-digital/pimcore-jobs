@@ -9,7 +9,7 @@ use JobsBundle\Connector\ConnectorDefinitionInterface;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FeedResolver implements ContextItemsResolverInterface
+class PimcoreObjectResolver implements ContextItemsResolverInterface
 {
     /**
      * @var array
@@ -64,13 +64,15 @@ class FeedResolver implements ContextItemsResolverInterface
     public function configureContextParameter(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'internal_feed_id' => null,
-            'external_feed_id' => null,
+            'element' => null,
+            'locale'  => null,
+            'host'    => null
         ]);
 
-        $resolver->setRequired(['internal_feed_id', 'external_feed_id']);
-        $resolver->setAllowedTypes('internal_feed_id', ['null', 'int', 'string']);
-        $resolver->setAllowedTypes('external_feed_id', ['null', 'int', 'string']);
+        $resolver->setRequired(['element', 'locale', 'host']);
+        $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('locale', ['null', 'string']);
+        $resolver->setAllowedTypes('element', DataObject\Concrete::class);
     }
 
     /**
@@ -78,14 +80,23 @@ class FeedResolver implements ContextItemsResolverInterface
      */
     public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
     {
-        // @todo: Determinate feed?
-        $connectorContextItems = $this->connectorContextManager->getForConnectorEngine($connectorDefinition->getConnectorEngine()->getId());
+        /** @var DataObject\Concrete $element */
+        $element = $contextParameter['element'];
+
+        $connectorContextItems = $this->connectorContextManager->getForConnectorEngineAndObject($connectorDefinition->getConnectorEngine()->getId(), $element->getId());
 
         $resolvedItems = [];
         foreach ($connectorContextItems as $contextItem) {
-            /** @var DataObject\Concrete $object */
-            $object = DataObject::getById($contextItem->getObjectId());
-            $resolvedItems[] = new ResolvedItem($contextItem, $object, []);
+            $contextDefinition = $contextItem->getContextDefinition();
+            if ($contextParameter['locale'] !== $contextDefinition->getLocale()) {
+                continue;
+            }
+
+            if ($contextParameter['host'] !== null && $contextParameter['host'] !== $contextDefinition->getHost()) {
+                continue;
+            }
+
+            $resolvedItems[] = new ResolvedItem($contextItem, $element, []);
         }
 
         return $resolvedItems;

@@ -90,7 +90,6 @@ class JobsExtension extends Extension
         if (array_key_exists('SeoBundle', $bundles) && array_key_exists('SchemaBundle', $bundles)) {
             $container->setParameter('jobs.connector.google.dependencies_installed', true);
             $loader->load('external/seo.yml');
-            $loader->load('external/schema.yml');
         }
     }
 

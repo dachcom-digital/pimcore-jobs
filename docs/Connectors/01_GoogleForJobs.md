@@ -26,20 +26,15 @@ jobs:
             connector_item_transformer: AppBundle\Transformer\GoogleItemTransformer
             connector_items_resolver:
                 -   type: seo_queue
-                -   type: request
-                    config:
-                        route_name: 'my_object_route'
-                        route_request_identifier: 'object_id'
-                        route_object_identifier: 'id'
-                        is_localized_field: false
-                        must_match_request_locale: true
+                -   type: pimcore_object
 ```
 
 ## Item Resolver
 The Google For Jobs Workflow is a tricky one. We need multiple resolver because there are two endpoints within its workflow.
 The first one (`seo_queue`) needs to submit the object (Multiple times, based selected context definitions) to the google index api. 
-The second one (`request`) on the other hand only allows a single object - but may has to match with the given locale / host. 
-Therefor the `request` Items Resolver comes with some configurable options. Read more about the Request Resolver [here](../20_AvailableItemsResolver.md).
+The second one (`pimcore_object`) on the other hand only allows a single object - but may has to match with the given locale / host. 
+
+Some items resolver does have some configurable options. Read more about all items resolver [here](../20_AvailableItemsResolver.md).
 
 ## Item Transformer
 In our example we have a service class called `AppBundle\Transformer\GoogleItemTransformer`.

@@ -5,9 +5,6 @@ services:
         autoconfigure: true
         public: false
 
-    JobsBundle\Registry\ConnectorRegistryInterface: '@JobsBundle\Registry\ConnectorRegistry'
-    JobsBundle\Registry\ConnectorRegistry: ~
-
     JobsBundle\Connector\Google\ConnectorDefinition:
         arguments:
             $dependenciesInstalled: '%jobs.connector.google.dependencies_installed%'

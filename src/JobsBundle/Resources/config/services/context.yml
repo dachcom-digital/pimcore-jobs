@@ -8,9 +8,13 @@ services:
     JobsBundle\Registry\ContextItemsResolverRegistryInterface: '@JobsBundle\Registry\ContextItemsResolverRegistry'
     JobsBundle\Registry\ContextItemsResolverRegistry: ~
 
-    JobsBundle\Context\Resolver\RequestResolver:
+    JobsBundle\Context\Resolver\DynamicRouteRequestResolver:
         tags:
-            - {name: jobs.context.items_resolver, identifier: request}
+            - {name: jobs.context.items_resolver, identifier: dynamic_route_request}
+
+    JobsBundle\Context\Resolver\PimcoreObjectResolver:
+        tags:
+            - {name: jobs.context.items_resolver, identifier: pimcore_object}
 
     JobsBundle\Context\Resolver\SeoQueueResolver:
         tags:

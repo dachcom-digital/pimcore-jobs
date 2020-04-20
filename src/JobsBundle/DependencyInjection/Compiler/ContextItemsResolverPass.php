@@ -2,12 +2,14 @@
 
 namespace JobsBundle\DependencyInjection\Compiler;
 
+use JobsBundle\Context\Resolver\ContextItemsResolverInterface;
 use JobsBundle\Registry\ContextItemsResolverRegistry;
 use JobsBundle\Service\EnvironmentService;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ContextItemsResolverPass implements CompilerPassInterface
 {
@@ -50,8 +52,21 @@ final class ContextItemsResolverPass implements CompilerPassInterface
 
             $itemsResolverDefinition = $container->getDefinition($serviceId);
             $itemsResolverConfig = $container->getParameter(sprintf('jobs.connectors.items_resolver.%s', $attributes['identifier']));
-            $itemsResolverDefinition->addMethodCall('setConfiguration', [$itemsResolverConfig]);
+
+            $options = new OptionsResolver();
+            /** @var ContextItemsResolverInterface $class */
+            $class = $itemsResolverDefinition->getClass();
+            $class::configureOptions($options);
+
+            try {
+                $resolvedOptions = $options->resolve($itemsResolverConfig);
+            } catch (\Throwable $e) {
+                throw new \Exception(sprintf('Invalid "%s" items resolver options. %s', $serviceId, $e->getMessage()));
+            }
+
+            $itemsResolverDefinition->addMethodCall('setConfiguration', [$resolvedOptions]);
             $itemsResolverDefinition->addMethodCall('setEnvironment', [$container->getDefinition(EnvironmentService::class)]);
+
             $definition->addMethodCall('register', [new Reference($serviceId), $attributes['identifier']]);
         }
     }

@@ -10,11 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 interface ContextItemsResolverInterface
 {
     /**
-     * @param EnvironmentServiceInterface $environmentService
-     *
-     * @return mixed
+     * @param OptionsResolver $resolver
      */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService);
+    public static function configureOptions(OptionsResolver $resolver);
 
     /**
      * @param array $resolverConfiguration
@@ -22,6 +20,13 @@ interface ContextItemsResolverInterface
      * @throws \Exception
      */
     public function setConfiguration(array $resolverConfiguration);
+
+    /**
+     * @param EnvironmentServiceInterface $environmentService
+     *
+     * @return mixed
+     */
+    public function setEnvironment(EnvironmentServiceInterface $environmentService);
 
     /**
      * @param OptionsResolver $resolver

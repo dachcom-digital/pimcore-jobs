@@ -10,7 +10,7 @@ use JobsBundle\Manager\ConnectorContextManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RequestResolver implements ContextItemsResolverInterface
+class DynamicRouteRequestResolver implements ContextItemsResolverInterface
 {
     /**
      * @var array
@@ -21,7 +21,6 @@ class RequestResolver implements ContextItemsResolverInterface
      * @var EnvironmentServiceInterface
      */
     protected $environmentService;
-
 
     /**
      * @var ConnectorContextManagerInterface
@@ -39,18 +38,9 @@ class RequestResolver implements ContextItemsResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    public static function configureOptions(OptionsResolver $optionsResolver)
     {
-        $this->environmentService = $environmentService;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setConfiguration(array $resolverConfiguration)
-    {
-        $resolver = new OptionsResolver();
-        $resolver->setDefaults([
+        $optionsResolver->setDefaults([
             'is_localized_field'        => false,
             'must_match_request_locale' => false,
             'route_name'                => null,
@@ -58,18 +48,28 @@ class RequestResolver implements ContextItemsResolverInterface
             'route_object_identifier'   => null,
         ]);
 
-        $resolver->setAllowedTypes('is_localized_field', ['bool']);
-        $resolver->setAllowedTypes('must_match_request_locale', ['bool']);
-        $resolver->setAllowedTypes('route_name', ['string', 'null']);
-        $resolver->setAllowedTypes('route_request_identifier', ['string', 'null']);
-        $resolver->setAllowedTypes('route_object_identifier', ['string', 'null']);
-        $resolver->setRequired(['is_localized_field', 'must_match_request_locale', 'route_name', 'route_request_identifier', 'route_object_identifier']);
+        $optionsResolver->setAllowedTypes('is_localized_field', ['bool']);
+        $optionsResolver->setAllowedTypes('must_match_request_locale', ['bool']);
+        $optionsResolver->setAllowedTypes('route_name', ['string', 'null']);
+        $optionsResolver->setAllowedTypes('route_request_identifier', ['string', 'null']);
+        $optionsResolver->setAllowedTypes('route_object_identifier', ['string', 'null']);
+        $optionsResolver->setRequired(['is_localized_field', 'must_match_request_locale', 'route_name', 'route_request_identifier', 'route_object_identifier']);
+    }
 
-        try {
-            $this->configuration = $resolver->resolve($resolverConfiguration);
-        } catch (\Throwable $e) {
-            throw new \Exception(sprintf('Invalid "%s" connector configuration. %s', 'google', $e->getMessage()));
-        }
+    /**
+     * {@inheritDoc}
+     */
+    public function setConfiguration(array $resolverConfiguration)
+    {
+        $this->configuration = $resolverConfiguration;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    {
+        $this->environmentService = $environmentService;
     }
 
     /**
@@ -155,6 +155,8 @@ class RequestResolver implements ContextItemsResolverInterface
                 if ($request->getLocale() !== $contextDefinition->getLocale()) {
                     continue;
                 }
+
+                // host check?
             }
 
             $resolvedItems[] = new ResolvedItem($contextItem, $object, []);

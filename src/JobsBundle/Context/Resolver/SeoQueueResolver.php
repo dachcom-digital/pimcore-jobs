@@ -47,9 +47,9 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    public static function configureOptions(OptionsResolver $optionsResolver)
     {
-        $this->environmentService = $environmentService;
+        // no optinos
     }
 
     /**
@@ -58,6 +58,14 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     public function setConfiguration(array $resolverConfiguration)
     {
         $this->configuration = $resolverConfiguration;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    {
+        $this->environmentService = $environmentService;
     }
 
     /**
