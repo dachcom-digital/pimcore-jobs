@@ -41,7 +41,7 @@ jobs.connector.facebook.connect_service_note: 'Sie müssen eine Verbindung zu di
 jobs.connector.facebook.check_and_apply: 'Verbindung prüfen & anwenden'
 jobs.connector.context_definitions: 'Context-Definitionen'
 jobs.connector.context.id: 'Id'
-jobs.connector.context.locale: 'Locale'
+jobs.connector.context.locale: 'Lokalisierung'
 jobs.connector.context.host: 'Host'
 jobs.connector.context.active: 'Aktiv'
 jobs.connector.context.delete: 'Löschen'
