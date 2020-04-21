@@ -24,7 +24,7 @@ pimcore.plugin.Jobs = Class.create(pimcore.plugin.admin, {
 
         jobsMenu = new Ext.Action({
             id: 'jobs_bundle_setting_button',
-            text: t('Jobs Configuration'),
+            text: t('jobs.settings.configuration'),
             iconCls: 'jobs_icon_bundle',
             handler: this.openSettingsPanel.bind(this)
         });

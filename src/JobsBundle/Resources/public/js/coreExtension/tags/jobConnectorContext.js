@@ -126,30 +126,30 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
                 stripeRows: true,
                 columns: [
                     {
-                        text: 'ID',
+                        text: t('jobs.connector.context.id'),
                         sortable: false,
                         dataIndex: 'id',
                         hidden: false,
                         flex: 1
                     },
                     {
-                        text: t('locale'),
+                        text: t('jobs.connector.context.locale'),
                         sortable: false,
                         dataIndex: 'locale',
                         hidden: false,
                         flex: 1
                     },
                     {
-                        text: t('host'),
+                        text: t('jobs.connector.context.host'),
                         sortable: false,
                         dataIndex: 'host',
                         flex: 2
                     },
                     {
                         xtype: 'checkcolumn',
-                        text: t('active'),
+                        text: t('jobs.connector.context.active'),
                         sortable: false,
-                        menuText: t('Check to enable'),
+                        menuText: t('jobs.connector.context.check_to_enable'),
                         width: 100,
                         dataIndex: 'active',
                     }

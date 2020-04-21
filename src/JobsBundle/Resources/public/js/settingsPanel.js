@@ -21,7 +21,7 @@ Jobs.SettingsPanel = Class.create({
 
         this.panel = new Ext.Panel({
             id: 'jobs_bundle_settings',
-            title: t('Jobs Configuration'),
+            title: t('jobs.settings.configuration'),
             border: false,
             iconCls: 'jobs_icon_bundle',
             layout: 'border',
@@ -39,7 +39,7 @@ Jobs.SettingsPanel = Class.create({
         this.panel.add(new Ext.Panel({
             layout: 'fit',
             region: 'north',
-            title: 'Context Definitions',
+            title: t('jobs.connector.context_definitions'),
             autoScroll: true,
             forceLayout: true,
             border: false,
@@ -59,8 +59,8 @@ Jobs.SettingsPanel = Class.create({
                 var config = Ext.decode(response.responseText);
 
                 var descriptionText = !config.dataClassReady
-                    ? t(' Your Data Class is not ready to use. You need to add the "ConnectorContext" type to your class "' + config.dataClassPath + '".')
-                    : t(' Active Data Class: ') + config.dataClassPath;
+                    ? ' ' + t(' jobs.settings.dataclass.not_ready').format(config.dataClassPath)
+                    : ' ' + t('jobs.settings.dataclass.active_data_class').format(config.dataClassPath);
 
                 this.panel.add({
                     region: 'north',
@@ -70,11 +70,11 @@ Jobs.SettingsPanel = Class.create({
                     items: [
                         {
                             xtype: 'label',
-                            text: t('Data Class Configuration: '),
+                            text: t('jobs.settings.dataclass.configuration') + ': ',
                         },
                         {
                             xtype: 'label',
-                            text: config.dataClassReady ? t('Ready.') : t('Not Ready.'),
+                            text: config.dataClassReady ? t('jobs.settings.dataclass.ready_tag') : t('jobs.settings.dataclass.not_ready_tag'),
                             listeners: {
                                 afterrender: function (label) {
                                     label.setStyle('color', config.dataClassReady ? '#0e793e' : '#af1e32')
@@ -128,7 +128,7 @@ Jobs.SettingsPanel = Class.create({
                                 width: 400,
                                 height: 200,
                                 modal: true,
-                                title: t('New Context Definition'),
+                                title: t('jobs.connector.context.new_definition'),
                                 closeAction: 'destroy',
                                 items: [
                                     {
@@ -137,7 +137,7 @@ Jobs.SettingsPanel = Class.create({
                                         items: [
                                             {
                                                 xtype: 'textfield',
-                                                fieldLabel: t('Host'),
+                                                fieldLabel: t('jobs.connector.context.host'),
                                                 name: 'host',
                                                 width: 300,
                                                 emptyText: 'https://www.domain.com',
@@ -145,7 +145,7 @@ Jobs.SettingsPanel = Class.create({
                                             },
                                             {
                                                 xtype: 'combobox',
-                                                fieldLabel: t('Locale'),
+                                                fieldLabel: t('jobs.connector.context.locale'),
                                                 name: 'locale',
                                                 mode: 'local',
                                                 width: 300,
@@ -207,21 +207,21 @@ Jobs.SettingsPanel = Class.create({
             ],
             columns: [
                 {
-                    text: t('Id'),
+                    text: t('jobs.connector.context.id'),
                     sortable: false,
                     dataIndex: 'id',
                     hidden: false,
                     flex: 1
                 },
                 {
-                    text: t('locale'),
+                    text: t('jobs.connector.context.locale'),
                     sortable: false,
                     dataIndex: 'locale',
                     hidden: false,
                     flex: 1
                 },
                 {
-                    text: t('host'),
+                    text: t('jobs.connector.context.host'),
                     sortable: false,
                     dataIndex: 'host',
                     flex: 2
@@ -229,15 +229,15 @@ Jobs.SettingsPanel = Class.create({
                 {
                     xtype: 'actioncolumn',
                     width: 30,
-                    menuText: t('delete'),
+                    menuText: t('jobs.connector.context.delete'),
                     hideable: false,
                     items: [{
-                        tooltip: t('delete'),
+                        tooltip: t('jobs.connector.context.delete'),
                         icon: '/bundles/pimcoreadmin/img/flat-color-icons/delete.svg',
                         handler: function (grid, rowIndex) {
                             var rec = grid.getStore().getAt(rowIndex);
 
-                            Ext.Msg.confirm(t('delete'), t('Do you really want to delete this context definition? Every linked Job Context will be removed too!'), function (btn) {
+                            Ext.Msg.confirm(t('delete'), t('jobs.connector.context.delete_confirm'), function (btn) {
 
                                 if (btn !== 'yes') {
                                     return;
@@ -280,7 +280,7 @@ Jobs.SettingsPanel = Class.create({
         var connectorConfig = Ext.decode(response.responseText);
 
         this.tabPanel = new Ext.TabPanel({
-            title: t('Connectors'),
+            title: t('jobs.connector.list'),
             closable: false,
             deferredRender: false,
             forceLayout: true,

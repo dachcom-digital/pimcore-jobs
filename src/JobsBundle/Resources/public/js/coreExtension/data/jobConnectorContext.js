@@ -25,7 +25,7 @@ pimcore.object.classes.data.jobConnectorContext = Class.create(pimcore.object.cl
     },
 
     getTypeName: function () {
-        return t('jobs_connector_context');
+        return t('jobs.connector_context');
     },
 
     getGroup: function () {

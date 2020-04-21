@@ -10,24 +10,24 @@ Jobs.Connector.AbstractConnector = Class.create({
     states: {
         installation: {
             identifier: 'installed',
-            activate: t('Install'),
-            activated: t('Installed'),
-            inactivate: t('Uninstall'),
+            activate: t('jobs.connector.install'),
+            activated: t('jobs.connector.installed'),
+            inactivate: t('jobs.connector.uninstall'),
             inactivated: t('Not Installed')
         },
         availability: {
             identifier: 'enabled',
-            activate: t('Enable'),
-            activated: t('Enabled'),
-            inactivate: t('Disable'),
-            inactivated: t('Disabled')
+            activate: t('jobs.connector.enable'),
+            activated: t('jobs.connector.enabled'),
+            inactivate: t('jobs.connector.disable'),
+            inactivated: t('jobs.connector.disabled')
         },
         connection: {
             identifier: 'connected',
-            activate: t('Connect'),
-            activated: t('Connected'),
-            inactivate: t('Disconnect'),
-            inactivated: t('Not connected')
+            activate: t('jobs.connector.connect'),
+            activated: t('jobs.connector.connected'),
+            inactivate: t('jobs.connector.disconnect'),
+            inactivated: t('jobs.connector.not_connected')
         },
     },
 
@@ -72,7 +72,7 @@ Jobs.Connector.AbstractConnector = Class.create({
 
         var fieldset = new Ext.form.FieldSet({
             collapsible: false,
-            title: t('Data Feeds')
+            title: t('jobs.connector.data_feeds')
         });
 
         this.feedConfigurationPanel = new Ext.grid.GridPanel({
@@ -98,7 +98,7 @@ Jobs.Connector.AbstractConnector = Class.create({
             tbar: [
                 {
                     xtype: 'button',
-                    text: t('Add Feed'),
+                    text: t('jobs.connector.add_feed'),
                     iconCls: 'pimcore_icon_add',
                     handler: function (btn) {
                         this.generateFeed(btn, btn.up('gridpanel').getStore());
@@ -107,21 +107,21 @@ Jobs.Connector.AbstractConnector = Class.create({
             ],
             columns: [
                 {
-                    text: t('Internal Id'),
+                    text: t('jobs.connector.feed.internal_id'),
                     sortable: false,
                     dataIndex: 'internalId',
                     hidden: false,
                     flex: 1
                 },
                 {
-                    text: t('External Id'),
+                    text: t('jobs.connector.feed.external_id'),
                     sortable: false,
                     dataIndex: 'externalId',
                     hidden: false,
                     flex: 1
                 },
                 {
-                    text: t('Feed Url'),
+                    text: t('jobs.connector.feed.feed_url'),
                     sortable: false,
                     dataIndex: 'feedUrl',
                     flex: 5
@@ -138,7 +138,7 @@ Jobs.Connector.AbstractConnector = Class.create({
 
         var fieldset = new Ext.form.FieldSet({
             collapsible: false,
-            title: t('Connector Configuration')
+            title: t('jobs.connector.configuration')
         }), data = this.data.customConfiguration !== null ? this.data.customConfiguration : {};
 
         this.customConfigurationPanel = new Ext.form.Panel({
@@ -168,7 +168,7 @@ Jobs.Connector.AbstractConnector = Class.create({
         return {
             xtype: 'fieldset',
             collapsible: false,
-            title: 'System',
+            title: t('jobs.connector.system'),
             items: [
                 {
                     xtype: 'fieldcontainer',
@@ -177,14 +177,14 @@ Jobs.Connector.AbstractConnector = Class.create({
                     items: [
                         {
                             xtype: 'label',
-                            text: 'Installation:',
+                            text: t('jobs.connector.installation') + ':',
                             width: 100,
                         },
                         {
                             xtype: 'label',
                             width: 200,
                             cls: 'state-field-label',
-                            text: this.data.installed ? t('Installed') : t('Not installed'),
+                            text: this.data.installed ? t('jobs.connector.installed') : t('jobs.connector.not_installed:'),
                             listeners: {
                                 afterrender: function (label) {
                                     label.setStyle('color', this.data.installed ? '#0e793e' : '#af1e32')
@@ -195,7 +195,7 @@ Jobs.Connector.AbstractConnector = Class.create({
                             xtype: 'button',
                             width: 150,
                             iconCls: this.data.installed ? 'pimcore_icon_cancel' : 'pimcore_icon_add',
-                            text: this.data.installed ? t('Uninstall') : t('Install'),
+                            text: this.data.installed ? t('jobs.connector.uninstall') : t('jobs.connector.install'),
                             style: 'border-color: transparent;',
                             listeners: {
                                 afterrender: function (btn) {
@@ -214,14 +214,14 @@ Jobs.Connector.AbstractConnector = Class.create({
                     items: [
                         {
                             xtype: 'label',
-                            text: 'Status:',
+                            text: t('jobs.connector.status') + ':',
                             width: 100,
                         },
                         {
                             xtype: 'label',
                             width: 200,
                             cls: 'state-field-label',
-                            text: this.data.enabled ? t('Enabled') : t('Disabled'),
+                            text: this.data.enabled ? t('jobs.connector.enabled') : t('jobs.connector.disabled'),
                             listeners: {
                                 afterrender: function (label) {
                                     label.setStyle('color', this.data.enabled ? '#0e793e' : '#af1e32')
@@ -232,7 +232,7 @@ Jobs.Connector.AbstractConnector = Class.create({
                             xtype: 'button',
                             width: 150,
                             iconCls: this.data.enabled ? 'pimcore_icon_cancel' : 'pimcore_icon_add',
-                            text: this.data.enabled ? t('Disable') : t('Enable'),
+                            text: this.data.enabled ? t('jobs.connector.disable') : t('jobs.connector.enable'),
                             style: 'border-color: transparent;',
                             listeners: {
                                 afterrender: function (btn) {
@@ -251,14 +251,14 @@ Jobs.Connector.AbstractConnector = Class.create({
                     items: [
                         {
                             xtype: 'label',
-                            text: 'Connection:',
+                            text: t('jobs.connector.connection') + ':',
                             width: 100,
                         },
                         {
                             xtype: 'label',
                             width: 200,
                             cls: 'state-field-label',
-                            text: this.data.autoConnect ? t('Auto Connected') : (this.data.connected ? t('Connected') : t('Currently Disconnected')),
+                            text: this.data.autoConnect ? t('jobs.connector.auto_connected') + ': ' : (this.data.connected ? t('jobs.connector.connected') : t('jobs.connector.disconnected')),
                             listeners: {
                                 afterrender: function (label) {
                                     var color = this.data.autoConnect ? '#212121' : (this.data.connected ? '#0e793e' : '#af1e32');
@@ -271,7 +271,7 @@ Jobs.Connector.AbstractConnector = Class.create({
                             width: 150,
                             hidden: this.data.autoConnect,
                             iconCls: this.data.connected ? 'pimcore_icon_cancel' : 'pimcore_icon_add',
-                            text: this.data.connected ? t('Disconnect') : t('Connect'),
+                            text: this.data.connected ? t('jobs.connector.disconnect') : t('jobs.connector.connect'),
                             style: 'border-color: transparent;',
                             listeners: {
                                 afterrender: function (btn) {
@@ -331,7 +331,7 @@ Jobs.Connector.AbstractConnector = Class.create({
             return;
         }
 
-        Ext.Msg.confirm(t('delete'), t('Do you really want to uninstall this connector? Every linked Job Context will be removed too!'), function (confirmBtn) {
+        Ext.Msg.confirm(t('delete'), t('jobs.connector.uninstall_note'), function (confirmBtn) {
 
             if (confirmBtn !== 'yes') {
                 return;
@@ -432,7 +432,7 @@ Jobs.Connector.AbstractConnector = Class.create({
         }
 
         if (this.customConfigurationPanel.getForm().isValid() === false) {
-            Ext.MessageBox.alert(t('error'), t('Configuration is not valid. Please fill out all required fields.'));
+            Ext.MessageBox.alert(t('error'), t('jobs.connector.save_incorrect_configuration'));
             return;
         }
 
@@ -454,7 +454,7 @@ Jobs.Connector.AbstractConnector = Class.create({
                     return;
                 }
 
-                pimcore.helpers.showNotification(t('success'), t('Connector Configuration successfully saved.'), 'success');
+                pimcore.helpers.showNotification(t('success'), t('jobs.connector.save_success'), 'success');
 
             }.bind(this),
             failure: function (response) {

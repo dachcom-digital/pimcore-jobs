@@ -43,7 +43,7 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
             gridStore.reload();
             btn.setDisabled(false);
         }, confirmResponse = function (confirmText, state) {
-            Ext.Msg.confirm(t('New Feed'), confirmText, function (confirmBtn) {
+            Ext.Msg.confirm(t('jos.connector.facebook.new_feed'), confirmText, function (confirmBtn) {
 
                 if (confirmBtn !== 'yes') {
                     btn.setDisabled(false);
@@ -71,7 +71,7 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
         }
 
         if (this.data.token === null) {
-            Ext.MessageBox.alert(t('error'), 'No valid token found. Please install this connector first.');
+            Ext.MessageBox.alert(t('error'), 'jobs.connector.facebook.invalid_token');
             return;
         }
 
@@ -80,15 +80,15 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
         var win = new Ext.Window({
             width: 400,
             bodyStyle: 'padding:10px',
-            title: t('Facebook Connect Service'),
-            html: t('You need to connect or application. first click "Connect". If the connection was successful, click "Check & Apply Connection"'),
+            title: t('jobs.connector.facebook.connect_service'),
+            html: t('jobs.connector.facebook.connect_service_note'),
             listeners: {
                 beforeclose: function () {
                     mainBtn.setDisabled(false);
                 }
             },
             buttons: [{
-                text: t('Connect'),
+                text: t('jobs.connector.facebook.connect'),
                 iconCls: 'pimcore_icon_open_window',
                 handler: function (btn) {
                     var buttons = btn.up('window').query('button');
@@ -98,7 +98,7 @@ Jobs.Connector.Facebook = Class.create(Jobs.Connector.AbstractConnector, {
                     window.open('/jobs/facebook/' + token + '/connect', '_blank');
                 }
             }, {
-                text: t('Check & Apply Connection'),
+                text: t('jobs.connector.facebook.check_and_apply'),
                 iconCls: 'pimcore_icon_apply',
                 disabled: true,
                 handler: function () {
