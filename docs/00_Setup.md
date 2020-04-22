@@ -86,10 +86,13 @@ class ObjectLinkGenerator implements LinkGeneratorInterface
             $connectorContextConfig = $connectorContextItem->getContextDefinition();
         }
 
-        $materRequest = \Pimcore::getContainer()->get('request_stack')->getMasterRequest();
+        $masterRequest = \Pimcore::getContainer()->get('request_stack')->getMasterRequest();
 
-        $locale = $connectorContextConfig !== null ? $connectorContextConfig->getLocale() : $materRequest->getLocale();
-        $host = $connectorContextConfig !== null ? $connectorContextConfig->getHost() : null;
+        $baseLocale = isset($params['_locale']) ? $params['_locale'] : $masterRequest->getLocale();
+        $baseHost = isset($params['host']) ? $params['host'] : null;
+
+        $locale = $connectorContextConfig !== null ? $connectorContextConfig->getLocale() : $baseLocale;
+        $host = $connectorContextConfig !== null ? $connectorContextConfig->getHost() : $baseHost;
 
         $path = $staticRoute->assemble(['object_id' => $object->getId(), '_locale' => $locale]);
 
