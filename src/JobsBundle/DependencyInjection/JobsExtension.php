@@ -45,7 +45,6 @@ class JobsExtension extends Extension
             $container->setParameter(sprintf('jobs.connectors.system_config.%s', $availableConnector['connector_name']), $availableConnector['connector_config']);
         }
 
-        $container->setParameter('jobs.entity.data_class_validator', $config['data_class_validator']);
         $container->setParameter('jobs.connectors.available', $availableConnectorsNames);
 
         $this->setupEnvironment($container, $config);
