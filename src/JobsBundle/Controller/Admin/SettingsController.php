@@ -17,7 +17,7 @@ use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 class SettingsController extends AdminController
 {
     /**
-     * @var ConnectorManagerInterface
+     * @var EnvironmentServiceInterface
      */
     protected $environmentService;
 
@@ -66,6 +66,7 @@ class SettingsController extends AdminController
      * @param Request $request
      *
      * @return JsonResponse
+     *
      * @throws \Exception
      */
     public function getConnectorsAction(Request $request)
@@ -74,7 +75,6 @@ class SettingsController extends AdminController
         $allConnectorDefinitions = $this->connectorManager->getAllConnectorDefinitions(true);
 
         foreach ($allConnectorDefinitions as $connectorDefinitionName => $connectorDefinition) {
-
             $engineConfiguration = null;
             $isInstalled = $connectorDefinition->engineIsLoaded();
 
@@ -190,6 +190,7 @@ class SettingsController extends AdminController
      * @param string  $flag
      *
      * @return JsonResponse
+     *
      * @throws \Exception
      */
     public function changeConnectorStateAction(Request $request, string $connectorName, string $stateType, string $flag = 'activate')
@@ -212,6 +213,7 @@ class SettingsController extends AdminController
                     $success = false;
                     $message = $e->getMessage();
                 }
+
                 break;
             case 'connection':
                 try {
@@ -226,6 +228,7 @@ class SettingsController extends AdminController
                     $success = false;
                     $message = $e->getMessage();
                 }
+
                 break;
             default:
                 throw new \Exception(sprintf('Invalid state type "%s"', $stateType));
@@ -407,5 +410,4 @@ class SettingsController extends AdminController
 
         $this->connectorService->updateConnectorEngineConfiguration($connectorName, $connectorConfiguration);
     }
-
 }

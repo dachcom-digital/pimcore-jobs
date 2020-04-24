@@ -12,11 +12,17 @@ class ItemTransformerDefinition implements ItemTransformerDefinitionInterface
      */
     protected $graph;
 
+    /**
+     * @param Graph $graph
+     */
     public function setGraph(Graph $graph)
     {
         $this->graph = $graph;
     }
 
+    /**
+     * @return Graph
+     */
     public function getGraph()
     {
         return $this->graph;

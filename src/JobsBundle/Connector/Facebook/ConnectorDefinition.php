@@ -26,7 +26,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     protected $itemTransformer;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConnectorEngine()
     {
@@ -34,7 +34,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setConnectorEngine(?ConnectorEngineInterface $connectorEngine)
     {
@@ -42,7 +42,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setItemTransformer(ItemTransformerInterface $itemTransformer)
     {
@@ -50,7 +50,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setDefinitionConfiguration(array $definitionConfiguration)
     {
@@ -69,7 +69,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function engineIsLoaded()
     {
@@ -77,7 +77,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isOnline()
     {
@@ -93,7 +93,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
             return false;
         }
 
-        if(!$this->isConnected()) {
+        if (!$this->isConnected()) {
             return false;
         }
 
@@ -102,7 +102,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
             return false;
         }
 
-        if(empty($configuration->getRecruitingManagerId())) {
+        if (empty($configuration->getRecruitingManagerId())) {
             return false;
         }
 
@@ -110,7 +110,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function beforeEnable()
     {
@@ -118,7 +118,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function beforeDisable()
     {
@@ -126,7 +126,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function allowMultipleContextItems()
     {
@@ -134,7 +134,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isAutoConnected()
     {
@@ -142,7 +142,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isConnected()
     {
@@ -159,7 +159,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function connect()
     {
@@ -169,7 +169,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function disconnect()
     {
@@ -177,7 +177,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildFeedGenerator(array $items, array $params)
     {
@@ -196,7 +196,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDefinitionConfiguration()
     {
@@ -204,7 +204,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function needsEngineConfiguration()
     {
@@ -212,7 +212,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getEngineConfigurationClass()
     {
@@ -220,7 +220,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getEngineConfiguration()
     {
@@ -237,7 +237,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function mapEngineConfigurationFromBackend(array $data)
     {
@@ -251,6 +251,10 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
         } else {
             $connectorEngineConfigurationClass = $this->getEngineConfigurationClass();
             $connectorConfiguration = new $connectorEngineConfigurationClass();
+        }
+
+        if (!$connectorConfiguration instanceof EngineConfiguration) {
+            return null;
         }
 
         $connectorConfiguration->setAppId($data['appId']);

@@ -44,7 +44,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supportsWorker(string $workerIdentifier)
     {
@@ -61,7 +61,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supportsResource($resource)
     {
@@ -82,7 +82,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generateQueueContext($resource)
     {
@@ -104,7 +104,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function processQueueEntry(QueueEntryInterface $queueEntry, string $workerIdentifier, array $context, $resource)
     {
@@ -121,7 +121,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function processWorkerResponse(WorkerResponseInterface $workerResponse)
     {

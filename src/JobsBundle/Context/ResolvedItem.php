@@ -35,7 +35,7 @@ class ResolvedItem implements ResolvedItemInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getContextItem()
     {
@@ -43,7 +43,7 @@ class ResolvedItem implements ResolvedItemInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSubject()
     {
@@ -51,7 +51,7 @@ class ResolvedItem implements ResolvedItemInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getResolvedParams()
     {
@@ -59,7 +59,7 @@ class ResolvedItem implements ResolvedItemInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getResolvedParam(string $param)
     {

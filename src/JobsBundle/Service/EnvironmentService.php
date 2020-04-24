@@ -25,7 +25,7 @@ class EnvironmentService implements EnvironmentServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDataClass()
     {
@@ -33,11 +33,10 @@ class EnvironmentService implements EnvironmentServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFeedHost()
     {
         return $this->feedHost;
     }
-
 }

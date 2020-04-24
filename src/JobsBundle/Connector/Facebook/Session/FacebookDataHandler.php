@@ -23,5 +23,4 @@ class FacebookDataHandler implements PersistentDataInterface
     {
         $this->session->set('FBRLH_' . $key, $value);
     }
-
 }

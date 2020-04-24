@@ -23,9 +23,7 @@ final class ContextItemsResolverPass implements CompilerPassInterface
         $definition = $container->getDefinition(ContextItemsResolverRegistry::class);
 
         foreach ($container->findTaggedServiceIds('jobs.context.items_resolver', true) as $serviceId => $attributes) {
-
             foreach ($attributes as $attribute) {
-
                 if (isset($attribute['priority'])) {
                     $priority = $attribute['priority'];
                 }
@@ -40,7 +38,6 @@ final class ContextItemsResolverPass implements CompilerPassInterface
         });
 
         foreach ($services as [, $index, $serviceId, $attributes]) {
-
             if (!isset($attributes['identifier'])) {
                 throw new InvalidArgumentException(sprintf('Attribute "identifier" missing for context item resolver "%s".', $serviceId));
             }

@@ -40,6 +40,7 @@ class ProviderController extends FrontendController
      * @param int     $feedId
      *
      * @return Response
+     *
      * @throws \Exception
      */
     public function provideFeedAction(Request $request, string $connectorName, string $token, int $feedId)

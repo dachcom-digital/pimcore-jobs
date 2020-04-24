@@ -46,7 +46,6 @@ class ContextItemsResolverRegistry implements ContextItemsResolverRegistryInterf
         return $this->resolver[$identifier];
     }
 
-
     /**
      * {@inheritdoc}
      */

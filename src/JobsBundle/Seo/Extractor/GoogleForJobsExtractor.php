@@ -43,7 +43,7 @@ class GoogleForJobsExtractor implements ExtractorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($element)
     {
@@ -62,7 +62,7 @@ class GoogleForJobsExtractor implements ExtractorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function updateMetaData($element, ?string $locale, SeoMetaDataInterface $seoMetadata)
     {

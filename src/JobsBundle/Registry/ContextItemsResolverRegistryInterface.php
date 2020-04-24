@@ -17,6 +17,7 @@ interface ContextItemsResolverRegistryInterface
      * @param string $identifier
      *
      * @return ContextItemsResolverInterface
+     *
      * @throws \Exception
      */
     public function get($identifier);
@@ -25,5 +26,4 @@ interface ContextItemsResolverRegistryInterface
      * @return ContextItemsResolverInterface[]
      */
     public function getAll();
-
 }

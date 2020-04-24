@@ -17,6 +17,7 @@ interface ConnectorDefinitionRegistryInterface
      * @param string $identifier
      *
      * @return ConnectorDefinitionInterface
+     *
      * @throws \Exception
      */
     public function get($identifier);
@@ -25,5 +26,4 @@ interface ConnectorDefinitionRegistryInterface
      * @return ConnectorDefinitionInterface[]
      */
     public function getAll();
-
 }

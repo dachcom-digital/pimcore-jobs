@@ -575,13 +575,11 @@ class ItemTransformerDefinition implements ItemTransformerDefinitionInterface
         }
 
         foreach ($class->getMethods() as $method) {
-
             if (!$method->isPublic()) {
                 continue;
             }
 
             if (substr($method->getName(), 0, 3) === 'get') {
-
                 $value = $method->invoke($this);
 
                 if (empty($value)) {

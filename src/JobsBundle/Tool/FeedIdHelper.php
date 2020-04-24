@@ -92,7 +92,6 @@ class FeedIdHelper
         unset($this->feedIds[$feedIndex]);
 
         $this->feedIds = array_values($this->feedIds);
-
     }
 
     /**
@@ -139,4 +138,3 @@ class FeedIdHelper
         return $this->feedIds;
     }
 }
-

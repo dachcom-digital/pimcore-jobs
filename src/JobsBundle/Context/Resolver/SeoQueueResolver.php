@@ -45,7 +45,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function configureOptions(OptionsResolver $optionsResolver)
     {
@@ -53,7 +53,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setConfiguration(array $resolverConfiguration)
     {
@@ -61,7 +61,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setEnvironment(EnvironmentServiceInterface $environmentService)
     {
@@ -69,7 +69,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureContextParameter(OptionsResolver $resolver)
     {
@@ -82,7 +82,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
     {
@@ -98,7 +98,6 @@ class SeoQueueResolver implements ContextItemsResolverInterface
 
         $resolvedItems = [];
         foreach ($connectorContextItems as $contextItem) {
-
             $item = $this->generateQueueEntry($resource, $contextItem);
             if (!$item instanceof ResolvedItemInterface) {
                 continue;

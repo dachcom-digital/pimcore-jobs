@@ -37,7 +37,7 @@ interface ConnectorDefinitionInterface
     public function engineIsLoaded();
 
     /**
-     * Returns true if connector is fully configured and ready to provide data
+     * Returns true if connector is fully configured and ready to provide data.
      *
      * @return bool
      */
@@ -68,14 +68,8 @@ interface ConnectorDefinitionInterface
      */
     public function isConnected();
 
-    /**
-     *
-     */
     public function connect();
 
-    /**
-     *
-     */
     public function disconnect();
 
     /**
@@ -112,6 +106,4 @@ interface ConnectorDefinitionInterface
      * @return ConnectorEngineConfigurationInterface|null
      */
     public function mapEngineConfigurationFromBackend(array $data);
-
 }
-

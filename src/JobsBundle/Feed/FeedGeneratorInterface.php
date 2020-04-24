@@ -18,4 +18,3 @@ interface FeedGeneratorInterface
      */
     public function generateItemTransformerDefinitionClass();
 }
-

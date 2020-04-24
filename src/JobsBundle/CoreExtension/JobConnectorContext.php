@@ -133,7 +133,6 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
         $items = [];
 
         foreach ($data as $connectorContext) {
-
             $connectorId = $connectorContext['connectorId'];
             $connectorName = $connectorContext['connectorName'];
             $contextItems = $connectorContext['contextItems'];
@@ -150,7 +149,6 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
             }
 
             foreach ($contextItems as $contextConfig) {
-
                 if ($contextConfig['active'] === false) {
                     continue;
                 }
@@ -304,7 +302,7 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
 
         /** @var ConnectorContextItemInterface $element */
         foreach ($data as $element) {
-            $connector = $element->getConnector() instanceof ConnectorEngineInterface ? $element->getConnector()->getName() : '[removed]';
+            $connector = $element->getConnectorEngine() instanceof ConnectorEngineInterface ? $element->getConnectorEngine()->getName() : '[removed]';
             $contextDefinitionId = $element->getContextDefinition() instanceof ContextDefinitionInterface ? $element->getContextDefinition()->getId() : '[removed]';
             $preview[] = (string) sprintf('%s: Context ID %s', $connector, $contextDefinitionId);
         }

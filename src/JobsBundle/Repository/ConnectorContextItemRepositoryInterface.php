@@ -29,7 +29,7 @@ interface ConnectorContextItemRepositoryInterface
 
     /**
      * @param int $connectorEngineId
-     * @param int    $objectId
+     * @param int $objectId
      *
      * @return ConnectorContextItemInterface[]
      */

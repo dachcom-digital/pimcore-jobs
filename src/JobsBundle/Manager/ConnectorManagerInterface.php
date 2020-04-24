@@ -68,5 +68,4 @@ interface ConnectorManagerInterface
      * @param string $connectorName
      */
     public function deleteEngineByName(string $connectorName);
-
 }

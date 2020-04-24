@@ -69,5 +69,4 @@ interface ConnectorContextManagerInterface
      * @return ConnectorContextItemInterface[]
      */
     public function generateConnectorContextConfigForObject(int $objectId);
-
 }

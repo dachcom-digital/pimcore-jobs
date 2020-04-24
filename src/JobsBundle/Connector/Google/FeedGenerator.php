@@ -5,7 +5,6 @@ namespace JobsBundle\Connector\Google;
 use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Feed\FeedGeneratorInterface;
 use JobsBundle\Transformer\ItemTransformerInterface;
-use Spatie\SchemaOrg\Graph;
 
 class FeedGenerator implements FeedGeneratorInterface
 {
@@ -37,7 +36,7 @@ class FeedGenerator implements FeedGeneratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generate(string $outputType)
     {
@@ -49,7 +48,7 @@ class FeedGenerator implements FeedGeneratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return ItemTransformerDefinition
      */
     public function generateItemTransformerDefinitionClass()
     {

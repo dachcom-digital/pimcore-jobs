@@ -16,4 +16,3 @@ interface ConnectorEngineConfigurationInterface
      */
     public function toBackendConfigArray();
 }
-

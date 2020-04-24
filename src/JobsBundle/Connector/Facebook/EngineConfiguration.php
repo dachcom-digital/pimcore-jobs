@@ -9,6 +9,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     /**
      * @internal
      *l
+     *
      * @var string
      */
     protected $accessToken;
@@ -91,7 +92,6 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
      * @return string
      *
      * @internal
-     *
      */
     public function getRecruitingManagerId()
     {
@@ -109,7 +109,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     }
 
     /**
-     * @param $appId
+     * @param string $appId
      */
     public function setAppId($appId)
     {
@@ -205,7 +205,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigParam(string $param)
     {
@@ -218,7 +218,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toBackendConfigArray()
     {

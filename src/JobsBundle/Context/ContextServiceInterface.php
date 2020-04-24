@@ -12,6 +12,7 @@ interface ContextServiceInterface
      * @param array                        $contextParameter
      *
      * @return array|ResolvedItem[]
+     *
      * @throws \Exception
      */
     public function resolveContextItems(string $contextName, ConnectorDefinitionInterface $connectorDefinition, array $contextParameter);

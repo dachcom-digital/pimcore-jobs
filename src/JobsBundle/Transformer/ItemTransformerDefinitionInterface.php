@@ -5,4 +5,3 @@ namespace JobsBundle\Transformer;
 interface ItemTransformerDefinitionInterface
 {
 }
-

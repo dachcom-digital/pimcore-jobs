@@ -46,7 +46,6 @@ class ConnectorDefinitionRegistry implements ConnectorDefinitionRegistryInterfac
         return $this->connector[$identifier];
     }
 
-
     /**
      * {@inheritdoc}
      */

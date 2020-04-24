@@ -77,7 +77,6 @@ class ConnectorManager implements ConnectorManagerInterface
         $allConnectorDefinitions = $this->connectorDefinitionRegistry->getAll();
 
         foreach ($allConnectorDefinitions as $connectorDefinitionName => $connectorDefinition) {
-
             if (!in_array($connectorDefinitionName, $this->availableConnectors)) {
                 continue;
             }

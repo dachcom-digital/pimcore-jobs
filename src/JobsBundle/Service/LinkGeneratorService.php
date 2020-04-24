@@ -9,7 +9,7 @@ use Pimcore\Model\DataObject\Concrete;
 class LinkGeneratorService implements LinkGeneratorServiceInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generate(Concrete $object, ConnectorContextItemInterface $contextItem)
     {

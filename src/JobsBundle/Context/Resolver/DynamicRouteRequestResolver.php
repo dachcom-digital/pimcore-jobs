@@ -36,7 +36,7 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function configureOptions(OptionsResolver $optionsResolver)
     {
@@ -57,7 +57,7 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setConfiguration(array $resolverConfiguration)
     {
@@ -65,7 +65,7 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setEnvironment(EnvironmentServiceInterface $environmentService)
     {
@@ -73,7 +73,7 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureContextParameter(OptionsResolver $resolver)
     {
@@ -88,7 +88,7 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
     {
@@ -149,7 +149,6 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
 
         $resolvedItems = [];
         foreach ($connectorContextItems as $contextItem) {
-
             if ($this->configuration['must_match_request_locale'] === true) {
                 $contextDefinition = $contextItem->getContextDefinition();
                 if ($request->getLocale() !== $contextDefinition->getLocale()) {

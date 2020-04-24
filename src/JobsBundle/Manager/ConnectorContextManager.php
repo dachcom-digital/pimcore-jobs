@@ -5,7 +5,6 @@ namespace JobsBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use JobsBundle\Model\ConnectorContextItem;
 use JobsBundle\Model\ConnectorContextItemInterface;
-use JobsBundle\Model\ContextDefinitionInterface;
 use JobsBundle\Repository\ConnectorContextItemRepositoryInterface;
 
 class ConnectorContextManager implements ConnectorContextManagerInterface
@@ -156,7 +155,6 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
         $onlineConnectorDefinitions = $this->connectorManager->getAllConnectorDefinitions(true);
 
         foreach ($onlineConnectorDefinitions as $connectorDefinition) {
-
             if (!$connectorDefinition->isOnline()) {
                 continue;
             }

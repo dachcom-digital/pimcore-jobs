@@ -162,16 +162,20 @@ class FacebookController extends FrontendController
         if ($generateState === 'initial') {
             if (empty($connectorConfiguration->getRecruitingManagerId())) {
                 $confirmText = 'No Recruiting Manger configured. Do you want to create one now?';
+
                 return $this->json(['success' => true, 'dispatchType' => 'confirm', 'confirmText' => $confirmText, 'state' => 'createRecruitingManager']);
             } else {
                 $confirmText = sprintf('Recruiting Manger with Id "%s" found. Do you want to request a new feed now?', $connectorConfiguration->getRecruitingManagerId());
+
                 return $this->json(['success' => true, 'dispatchType' => 'confirm', 'confirmText' => $confirmText, 'state' => 'createFeed']);
             }
         } elseif ($generateState === 'createRecruitingManager') {
             $response = $this->registerRecruitingManager($request->getSession(), $connectorEngine);
+
             return $this->json($response);
         } elseif ($generateState === 'createFeed') {
             $response = $this->registerFeed($request->getSession(), $connectorEngine);
+
             return $this->json($response);
         }
 
@@ -297,6 +301,7 @@ class FacebookController extends FrontendController
      * @param SessionInterface    $session
      *
      * @return Facebook
+     *
      * @throws FacebookSDKException
      */
     protected function getFacebook(EngineConfiguration $configuration, SessionInterface $session)
@@ -310,5 +315,4 @@ class FacebookController extends FrontendController
 
         return $fb;
     }
-
 }

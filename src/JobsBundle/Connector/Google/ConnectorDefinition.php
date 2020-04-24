@@ -38,7 +38,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConnectorEngine()
     {
@@ -46,7 +46,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setConnectorEngine(?ConnectorEngineInterface $connectorEngine)
     {
@@ -54,7 +54,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setItemTransformer(ItemTransformerInterface $itemTransformer)
     {
@@ -62,7 +62,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setDefinitionConfiguration(array $definitionConfiguration)
     {
@@ -81,7 +81,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function engineIsLoaded()
     {
@@ -89,7 +89,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isOnline()
     {
@@ -109,18 +109,19 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function beforeEnable()
     {
         if ($this->dependenciesInstalled === false) {
             $message = 'Dependencies not found. To enable this connector you need to install and activate "dachcom-digital/seo" and "dachcom-digital/schema"';
+
             throw new \Exception($message);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function beforeDisable()
     {
@@ -128,7 +129,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function allowMultipleContextItems()
     {
@@ -136,7 +137,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isAutoConnected()
     {
@@ -144,7 +145,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isConnected()
     {
@@ -152,7 +153,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function connect()
     {
@@ -160,7 +161,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function disconnect()
     {
@@ -168,7 +169,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildFeedGenerator(array $items, array $params)
     {
@@ -181,7 +182,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function needsEngineConfiguration()
     {
@@ -189,7 +190,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getEngineConfigurationClass()
     {
@@ -197,7 +198,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getEngineConfiguration()
     {
@@ -205,11 +206,10 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function mapEngineConfigurationFromBackend(array $data)
     {
         return null;
     }
-
 }

@@ -35,7 +35,7 @@ class FeedResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function configureOptions(OptionsResolver $optionsResolver)
     {
@@ -43,7 +43,7 @@ class FeedResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setConfiguration(array $resolverConfiguration)
     {
@@ -51,7 +51,7 @@ class FeedResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setEnvironment(EnvironmentServiceInterface $environmentService)
     {
@@ -59,7 +59,7 @@ class FeedResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureContextParameter(OptionsResolver $resolver)
     {
@@ -74,7 +74,7 @@ class FeedResolver implements ContextItemsResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
     {

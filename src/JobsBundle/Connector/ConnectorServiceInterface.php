@@ -16,22 +16,16 @@ interface ConnectorServiceInterface
 
     /**
      * @param string $connectorName
-     *
-     * @return void
      */
     public function uninstallConnector(string $connectorName);
 
     /**
      * @param string $connectorName
-     *
-     * @return void
      */
     public function enableConnector(string $connectorName);
 
     /**
      * @param string $connectorName
-     *
-     * @return void
      */
     public function disableConnector(string $connectorName);
 

@@ -38,7 +38,7 @@ class FeedGenerator implements FeedGeneratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generate(string $outputType)
     {
@@ -56,6 +56,7 @@ class FeedGenerator implements FeedGeneratorInterface
 
         if ($outputType === 'xml') {
             $encoder = new XmlEncoder('source');
+
             return $encoder->encode($feed->toArray(), 'xml');
         }
 
@@ -63,7 +64,7 @@ class FeedGenerator implements FeedGeneratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generateItemTransformerDefinitionClass()
     {
@@ -71,7 +72,7 @@ class FeedGenerator implements FeedGeneratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function generateFeedTransformerDefinitionClass()
     {

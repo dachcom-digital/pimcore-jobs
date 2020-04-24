@@ -18,7 +18,6 @@ final class ConnectorDefinitionPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('jobs.connector_definition', true) as $id => $tags) {
             $connectorDefinition = $container->getDefinition($id);
             foreach ($tags as $attributes) {
-
                 if ($container->hasParameter(sprintf('jobs.connectors.item_transformer.%s', $attributes['identifier']))) {
                     $connectorItemTransformerDefinition = $container->getParameter(sprintf('jobs.connectors.item_transformer.%s', $attributes['identifier']));
                     $connectorDefinition->addMethodCall('setItemTransformer', [$container->getDefinition($connectorItemTransformerDefinition)]);

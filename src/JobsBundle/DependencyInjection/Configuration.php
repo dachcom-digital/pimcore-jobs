@@ -16,6 +16,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('jobs');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('context')
                     ->prototype('array')

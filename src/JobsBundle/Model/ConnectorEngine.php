@@ -147,5 +147,4 @@ class ConnectorEngine implements ConnectorEngineInterface
     {
         return $this->configuration;
     }
-
 }

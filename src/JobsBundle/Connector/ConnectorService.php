@@ -38,7 +38,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function installConnector(string $connectorName)
     {
@@ -53,7 +53,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function uninstallConnector(string $connectorName)
     {
@@ -70,7 +70,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function enableConnector(string $connectorName)
     {
@@ -97,7 +97,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function disableConnector(string $connectorName)
     {
@@ -124,7 +124,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function connectConnector(string $connectorName)
     {
@@ -146,7 +146,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function disconnectConnector(string $connectorName)
     {
@@ -168,7 +168,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generateConnectorFeed(string $connectorName, string $outputType, array $items, array $params = [])
     {
@@ -183,7 +183,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function updateConnectorFeedIds(string $connectorName, array $feedIds)
     {
@@ -199,7 +199,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function updateConnectorEngineConfiguration(string $connectorName, ConnectorEngineConfigurationInterface $connectorConfiguration)
     {
@@ -215,7 +215,7 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function connectorDefinitionIsEnabled(string $connectorDefinition)
     {
@@ -223,11 +223,10 @@ class ConnectorService implements ConnectorServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConnectorDefinition(string $connectorName, bool $loadEngine = false)
     {
         return $this->connectorManager->getConnectorDefinition($connectorName, $loadEngine);
     }
-
 }
