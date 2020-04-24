@@ -4,9 +4,12 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     symfony:
         container_xml_path: var/cache/dev/appAppKernelDevDebugContainer.xml
+    excludes_analyse:
+        # as long we don't install the dependencies :(
+        - '*JobsBundle/Seo/Extractor/GoogleForJobsExtractor.php'
+        - '*JobsBundle/Seo/ResourceProcessor/GoogleJobsProcessor.php'
     ignoreErrors:
         # 3rd parties
-        - '/Class SeoBundle/'
         - '/.*Spatie\\SchemaOrg\\Graph.*/'
         # There is no global constant definition file we could include, ignore it:
         - '/Constant PIMCORE_[A-Z\\_]+ not found\./'
