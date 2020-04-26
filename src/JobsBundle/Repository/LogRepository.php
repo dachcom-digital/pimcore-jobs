@@ -3,7 +3,7 @@
 namespace JobsBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use JobsBundle\Model\LogEntry;
 
@@ -15,7 +15,7 @@ class LogRepository implements LogRepositoryInterface
     protected $entityManager;
 
     /**
-     * @var LogRepositoryInterface
+     * @var EntityRepository
      */
     protected $repository;
 
@@ -33,7 +33,6 @@ class LogRepository implements LogRepositoryInterface
      */
     public function findForObject(int $objectId)
     {
-        /** @var QueryBuilder $qb */
         $qb = $this->repository->createQueryBuilder('l');
 
         $query = $qb->where('l.objectId = :objectId')
@@ -47,7 +46,6 @@ class LogRepository implements LogRepositoryInterface
      */
     public function findForConnectorEngine(int $connectorEngineId)
     {
-        /** @var QueryBuilder $qb */
         $qb = $this->repository->createQueryBuilder('l');
 
         $query = $qb->where('l.connectorEngine = :connectorEngine')
@@ -61,7 +59,6 @@ class LogRepository implements LogRepositoryInterface
      */
     public function findForConnectorEngineAndObject(int $connectorEngineId, int $objectId)
     {
-        /** @var QueryBuilder $qb */
         $qb = $this->repository->createQueryBuilder('l');
 
         $query = $qb->where('l.objectId = :objectId')
@@ -79,7 +76,6 @@ class LogRepository implements LogRepositoryInterface
      */
     public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId)
     {
-        /** @var QueryBuilder $qb */
         $qb = $this->repository->createQueryBuilder('l');
 
         $query = $qb->delete()
@@ -97,7 +93,6 @@ class LogRepository implements LogRepositoryInterface
      */
     public function deleteForObject(int $objectId)
     {
-        /** @var QueryBuilder $qb */
         $qb = $this->repository->createQueryBuilder('l');
 
         $query = $qb->delete()
@@ -115,7 +110,6 @@ class LogRepository implements LogRepositoryInterface
     {
         $connection = $this->entityManager->getConnection();
         $platform = $connection->getDatabasePlatform();
-
         $connection->executeUpdate($platform->getTruncateTableSQL('jobs_log', true));
     }
 }

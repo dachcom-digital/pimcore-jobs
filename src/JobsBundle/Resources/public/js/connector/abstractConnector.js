@@ -184,7 +184,7 @@ Jobs.Connector.AbstractConnector = Class.create({
                             xtype: 'label',
                             width: 200,
                             cls: 'state-field-label',
-                            text: this.data.installed ? t('jobs.connector.installed') : t('jobs.connector.not_installed:'),
+                            text: this.data.installed ? t('jobs.connector.installed') : t('jobs.connector.not_installed'),
                             listeners: {
                                 afterrender: function (label) {
                                     label.setStyle('color', this.data.installed ? '#0e793e' : '#af1e32')
