@@ -1,6 +1,6 @@
-JobsBundle\Model\ConnectorContextItem:
+JobsBundle\Model\LogEntry:
     type: entity
-    table: jobs_connector_context_item
+    table: jobs_log
     fields:
         id:
             type: integer
@@ -10,8 +10,20 @@ JobsBundle\Model\ConnectorContextItem:
                 strategy: AUTO
         objectId:
             column: object_id
-            nullable: false
+            nullable: true
             type: integer
+        type:
+            column: '`type`'
+            nullable: false
+            type: string
+        message:
+            column: message
+            nullable: false
+            type: text
+        creationDate:
+            column: creation_date
+            type: datetime
+            nullable: false
     manyToOne:
         connectorEngine:
             targetEntity: JobsBundle\Model\ConnectorEngine
@@ -20,13 +32,3 @@ JobsBundle\Model\ConnectorContextItem:
                 name: connector
                 referencedColumnName: id
                 onDelete: CASCADE
-        contextDefinition:
-            targetEntity: JobsBundle\Model\ContextDefinition
-            orphanRemoval: true
-            joinColumn:
-                name: context_definition
-                referencedColumnName: id
-                onDelete: CASCADE
-    uniqueConstraints:
-        object_connector_context:
-            columns: [object_id, connector, context_definition]

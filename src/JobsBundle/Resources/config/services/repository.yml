@@ -13,3 +13,6 @@ services:
 
     JobsBundle\Repository\ContextDefinitionRepositoryInterface: '@JobsBundle\Repository\ContextDefinitionRepository'
     JobsBundle\Repository\ContextDefinitionRepository: ~
+
+    JobsBundle\Repository\LogRepositoryInterface: '@JobsBundle\Repository\LogRepository'
+    JobsBundle\Repository\LogRepository: ~

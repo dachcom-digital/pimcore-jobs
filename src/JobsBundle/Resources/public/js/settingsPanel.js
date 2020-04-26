@@ -26,6 +26,39 @@ Jobs.SettingsPanel = Class.create({
             iconCls: 'jobs_icon_bundle',
             layout: 'border',
             closable: true,
+            tbar: [
+                {
+                    type: 'button',
+                    text: t('jobs.logs.flush_all'),
+                    iconCls: 'pimcore_icon_cleanup',
+                    handler: function (btn) {
+                        Ext.Msg.confirm(t('jobs.logs.flush_confirm_title'), t('jobs.logs.flush_confirm'), function (confirmBtn) {
+
+                            if (confirmBtn !== 'yes') {
+                                return;
+                            }
+
+                            btn.setDisabled(true);
+
+                            Ext.Ajax.request({
+                                method: 'DELETE',
+                                url: '/admin/jobs/settings/log/flush',
+                                success: function (response) {
+
+                                    btn.setDisabled(false);
+
+                                    var resp = Ext.decode(response.responseText);
+                                    if (resp.success === true) {
+                                        Ext.Msg.alert(t('success'), t('jobs.logs.flush_success'));
+                                    } else {
+                                        Ext.Msg.alert(t('error'), resp.message);
+                                    }
+                                }.bind(this)
+                            });
+                        }.bind(this));
+                    }.bind(this)
+                }
+            ]
         });
 
         this.panel.on('destroy', function () {

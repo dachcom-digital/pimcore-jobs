@@ -92,19 +92,12 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function createNew(int $connectorId, bool $persist = true)
+    public function createNew(int $connectorId)
     {
         $connectorEngine = $this->connectorManager->getEngineById($connectorId);
 
         $connectorContextItem = new ConnectorContextItem();
         $connectorContextItem->setConnectorEngine($connectorEngine);
-
-        if ($persist === false) {
-            return $connectorContextItem;
-        }
-
-        $this->entityManager->persist($connectorContextItem);
-        $this->entityManager->flush();
 
         return $connectorContextItem;
     }
@@ -160,9 +153,10 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
             }
 
             $onlineConnectors[] = [
-                'id'    => $connectorDefinition->getConnectorEngine()->getId(),
-                'name'  => $connectorDefinition->getConnectorEngine()->getName(),
-                'label' => ucfirst($connectorDefinition->getConnectorEngine()->getName())
+                'id'            => $connectorDefinition->getConnectorEngine()->getId(),
+                'name'          => $connectorDefinition->getConnectorEngine()->getName(),
+                'label'         => ucfirst($connectorDefinition->getConnectorEngine()->getName()),
+                'has_log_panel' => $connectorDefinition->hasLogPanel()
             ];
         }
 

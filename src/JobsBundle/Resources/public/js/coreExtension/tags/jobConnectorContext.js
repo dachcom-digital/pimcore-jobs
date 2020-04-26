@@ -121,7 +121,7 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
                     data: storeData
                 }),
                 flex: 1,
-                width: 600,
+                width: 800,
                 columnLines: true,
                 stripeRows: true,
                 columns: [
@@ -170,6 +170,10 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
                 items: contextDefinitionGrid
             });
 
+            if (connector.has_log_panel === true) {
+                connectorPanel.add(this.generateLogPanel(connector.id));
+            }
+
             this.tabPanel.add(connectorPanel);
 
         }.bind(this));
@@ -177,6 +181,87 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
         this.tabPanel.setActiveTab(0);
 
         return this.tabPanel;
+    },
+
+    generateLogPanel: function (connectorEngineId) {
+
+        var store, grid, bbar, itemsPerPage = pimcore.helpers.grid.getDefaultPageSize(-1);
+
+        store = new Ext.data.Store({
+            pageSize: itemsPerPage,
+            proxy: {
+                type: 'ajax',
+                url: '/admin/jobs/settings/log/get-for-object/' + connectorEngineId + '/' + (this.object.id),
+                reader: {
+                    type: 'json',
+                    rootProperty: 'entries'
+                },
+                extraParams: {
+                    formId: this.formId
+                }
+            },
+            autoLoad: false,
+            fields: ['id', 'type', 'message', 'date']
+        });
+
+        bbar = pimcore.helpers.grid.buildDefaultPagingToolbar(store, {pageSize: itemsPerPage});
+
+        Ext.Array.each(bbar.query('tbtext'), function (tbTextComp) {
+            tbTextComp.setStyle({
+                fontSize: 'inherit !important',
+                lineHeight: 'inherit !important'
+            });
+        });
+
+        grid = new Ext.grid.GridPanel({
+            flex: 1,
+            width: 800,
+            style: {
+                marginTop: '20px',
+            },
+            store: store,
+            border: true,
+            columnLines: true,
+            stripeRows: true,
+            title: false,
+            bodyCls: 'pimcore_editable_grid',
+            tbar: [
+                {
+                    xtype: 'label',
+                    text: t('Logs')
+                },
+                '->',
+                {
+                    type: 'button',
+                    text: t('cleanup'),
+                    iconCls: 'pimcore_icon_cleanup',
+                    handler: function () {
+                        Ext.Ajax.request({
+                            method: 'DELETE',
+                            url: '/admin/jobs/settings/log/remove-for-object/' + connectorEngineId + '/' + (this.object.id),
+                            success: function (response) {
+                                store.reload();
+                            }.bind(this)
+                        });
+                    }.bind(this)
+                }
+            ],
+            bbar: bbar,
+            listeners: {
+                afterrender: function () {
+                    store.load();
+                }
+            },
+            columns: [
+                {text: 'ID', sortable: false, dataIndex: 'id', hidden: true},
+                {text: t('type'), sortable: false, dataIndex: 'type', hidden: false},
+                {text: t('message'), sortable: false, dataIndex: 'message', flex: 3, renderer: Ext.util.Format.htmlEncode},
+                {text: t('date'), sortable: false, dataIndex: 'date', flex: 1},
+            ]
+        });
+
+        return grid;
+
     },
 
     postSaveObject: function () {
@@ -210,7 +295,6 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
             saveData.push(connectorStorageData);
         });
 
-
         return saveData;
     },
 
@@ -230,5 +314,4 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
 
         return hasModifiedRecords;
     }
-
 });

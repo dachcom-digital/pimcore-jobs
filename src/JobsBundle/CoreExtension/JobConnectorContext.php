@@ -4,6 +4,8 @@ namespace JobsBundle\CoreExtension;
 
 use JobsBundle\Manager\ConnectorContextManager;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
+use JobsBundle\Manager\LogManager;
+use JobsBundle\Manager\LogManagerInterface;
 use JobsBundle\Model\ConnectorContextItemInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 use JobsBundle\Model\ContextDefinitionInterface;
@@ -31,6 +33,14 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
     private function getConnectorContextManager()
     {
         return \Pimcore::getContainer()->get(ConnectorContextManager::class);
+    }
+
+    /**
+     * @return LogManagerInterface
+     */
+    private function getLogManager()
+    {
+        return \Pimcore::getContainer()->get(LogManager::class);
     }
 
     /**
@@ -158,7 +168,7 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
                 });
 
                 if (!$item instanceof ConnectorContextItemInterface) {
-                    $item = $this->getConnectorContextManager()->createNew($connectorId, false);
+                    $item = $this->getConnectorContextManager()->createNew($connectorId);
                 }
 
                 $item->setObjectId($object->getId());
@@ -237,6 +247,8 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
         foreach ($allConnectorContextItems as $connectorContextItem) {
             $this->getConnectorContextManager()->delete($connectorContextItem);
         }
+
+        $this->getLogManager()->deleteForObject($object->getId());
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace JobsBundle\Seo\ResourceProcessor;
 
+use JobsBundle\Manager\LogManagerInterface;
 use Pimcore\Model\DataObject\Concrete;
 use SeoBundle\Model\QueueEntryInterface;
 use SeoBundle\Worker\WorkerResponseInterface;
@@ -29,18 +30,26 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
     protected $connectorService;
 
     /**
+     * @var LogManagerInterface
+     */
+    protected $logManager;
+
+    /**
      * @param EnvironmentServiceInterface $environmentService
      * @param ContextServiceInterface     $contextService
      * @param ConnectorServiceInterface   $connectorService
+     * @param LogManagerInterface         $logManager
      */
     public function __construct(
         EnvironmentServiceInterface $environmentService,
         ContextServiceInterface $contextService,
-        ConnectorServiceInterface $connectorService
+        ConnectorServiceInterface $connectorService,
+        LogManagerInterface $logManager
     ) {
         $this->environmentService = $environmentService;
         $this->contextService = $contextService;
         $this->connectorService = $connectorService;
+        $this->logManager = $logManager;
     }
 
     /**
@@ -86,7 +95,6 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
      */
     public function generateQueueContext($resource)
     {
-        // which feed is it??
         $queueContext = [];
 
         if (!$resource instanceof Concrete) {
@@ -125,6 +133,23 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
      */
     public function processWorkerResponse(WorkerResponseInterface $workerResponse)
     {
-        // @todo: add custom "nice" log to a specific "job" tab in given data class?
+        $queueEntry = $workerResponse->getQueueEntry();
+
+        $log = $this->logManager->createNewForConnector('google');
+
+        if ($workerResponse->getStatus() === 200) {
+            $status = 'success';
+        } elseif ($workerResponse->getStatus() === 500) {
+            $status = 'fatal';
+        } else {
+            $status = 'error';
+        }
+
+        $log->setObjectId(2);
+        $log->setType($status);
+        $log->setMessage($workerResponse->getMessage());
+        $log->setObjectId($queueEntry->getDataId());
+
+        $this->logManager->update($log);
     }
 }

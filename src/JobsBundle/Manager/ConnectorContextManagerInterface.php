@@ -45,11 +45,10 @@ interface ConnectorContextManagerInterface
 
     /**
      * @param int  $connectorId
-     * @param bool $persist
      *
      * @return mixed
      */
-    public function createNew(int $connectorId, bool $persist = true);
+    public function createNew(int $connectorId);
 
     /**
      * @param ConnectorContextItemInterface $connectorContextItem

@@ -44,6 +44,21 @@ jobs_admin_settings_list_feed_ids:
     methods: [GET]
     defaults: { _controller: JobsBundle\Controller\Admin\SettingsController::listFeedIdsAction }
 
+jobs_admin_log_fetch_for_object:
+    path: /admin/jobs/settings/log/get-for-object/{connectorEngineId}/{objectId}
+    methods: [GET]
+    defaults: { _controller: JobsBundle\Controller\Admin\LogController::loadLogsForObjectAction }
+
+jobs_admin_log_remove_for_object:
+    path: /admin/jobs/settings/log/remove-for-object/{connectorEngineId}/{objectId}
+    methods: [DELETE]
+    defaults: { _controller: JobsBundle\Controller\Admin\LogController::removeLogsForObjectAction }
+
+jobs_admin_log_flush:
+    path: /admin/jobs/settings/log/flush
+    methods: [DELETE]
+    defaults: { _controller: JobsBundle\Controller\Admin\LogController::flushLogsAction }
+
 # Provider Routes
 jobs_provider_feed:
     path: /jobs/{connectorName}/{token}/feed/{feedId}

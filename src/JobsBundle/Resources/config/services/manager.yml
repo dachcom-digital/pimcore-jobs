@@ -16,3 +16,7 @@ services:
 
     JobsBundle\Manager\ContextDefinitionManagerInterface: '@JobsBundle\Manager\ContextDefinitionManager'
     JobsBundle\Manager\ContextDefinitionManager: ~
+
+    JobsBundle\Manager\LogManagerInterface: '@JobsBundle\Manager\LogManager'
+    JobsBundle\Manager\LogManager:
+        public: true # required in coreExtensions

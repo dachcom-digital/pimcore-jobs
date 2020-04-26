@@ -9,6 +9,10 @@ services:
         calls:
             - [setContainer, ['@service_container']]
 
+    JobsBundle\Controller\Admin\LogController:
+        calls:
+            - [setContainer, ['@service_container']]
+
     JobsBundle\Controller\ProviderController:
         calls:
             - [setContainer, ['@service_container']]

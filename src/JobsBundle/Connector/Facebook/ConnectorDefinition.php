@@ -214,6 +214,14 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
     /**
      * {@inheritdoc}
      */
+    public function hasLogPanel()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEngineConfigurationClass()
     {
         return EngineConfiguration::class;
