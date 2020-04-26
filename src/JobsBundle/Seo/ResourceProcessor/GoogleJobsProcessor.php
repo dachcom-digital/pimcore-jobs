@@ -4,6 +4,7 @@ namespace JobsBundle\Seo\ResourceProcessor;
 
 use JobsBundle\Manager\LogManagerInterface;
 use Pimcore\Model\DataObject\Concrete;
+use SeoBundle\Exception\WorkerResponseInterceptException;
 use SeoBundle\Model\QueueEntryInterface;
 use SeoBundle\Worker\WorkerResponseInterface;
 use SeoBundle\ResourceProcessor\ResourceProcessorInterface;
@@ -145,11 +146,13 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
             $status = 'error';
         }
 
-        $log->setObjectId(2);
         $log->setType($status);
         $log->setMessage($workerResponse->getMessage());
         $log->setObjectId($queueEntry->getDataId());
 
         $this->logManager->update($log);
+
+        // intercept further logging in seo bundle.
+        throw new WorkerResponseInterceptException();
     }
 }
