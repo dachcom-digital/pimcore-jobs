@@ -22,7 +22,7 @@ It will remove logs bounded to given connector **and** object only!
 There is also a global log flush workflow. Go to the global jobs config panel and hit the "Flush all logs"
 button at the left top corner.
 
-> Be aware that this will truncate the logs tables and can't be undone!
+> Be aware this will truncate the logs tables and can't be undone!
 
 ## Add Log
 
@@ -30,7 +30,7 @@ button at the left top corner.
 $log = $this->logManager->createNewForConnector('your_connnector');
 
 $log->setType('success');
-$log->setMessage('My Message'');
+$log->setMessage('My Message');
 $log->setObjectId(667);
 
 $this->logManager->update($log);
