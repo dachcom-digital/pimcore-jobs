@@ -53,6 +53,7 @@ This Bundle needs some preparation. Please checkout the [Setup](docs/00_Setup.md
 - [Object Context](docs/12_ObjectContext.md)
 - [Available Items Resolver](docs/20_AvailableItemsResolver.md)
   - [Custom Items Resolver](docs/21_CustomItemsResolver.md) (Expert)
+- [Logging](docs/22_Logging.md)
 
 ## Copyright and license
 Copyright: [DACHCOM.DIGITAL](http://dachcom-digital.ch)  

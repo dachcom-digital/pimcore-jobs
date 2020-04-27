@@ -2,6 +2,8 @@
 
 namespace JobsBundle\Repository;
 
+use Carbon\Carbon;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -98,6 +100,22 @@ class LogRepository implements LogRepositoryInterface
         $query = $qb->delete()
             ->where('l.objectId = :objectId')
             ->setParameter('objectId', $objectId)
+            ->getQuery();
+
+        $query->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteExpired(int $expireDays)
+    {
+        $qb = $this->repository->createQueryBuilder('l');
+        $expireDate = Carbon::now()->subDays($expireDays);
+
+        $query = $qb->delete()
+            ->where('l.creationDate < :expires')
+            ->setParameter('expires', $expireDate->toDateTime(), Type::DATETIME)
             ->getQuery();
 
         $query->execute();

@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('data_class')->defaultValue(null)->cannotBeEmpty()->end()
                 ->scalarNode('feed_host')->defaultValue(null)->end()
+                ->integerNode('log_expiration_days')->defaultValue(30)->end()
                 ->arrayNode('available_connectors')
                     ->prototype('array')
                         ->addDefaultsIfNotSet()

@@ -41,6 +41,11 @@ interface LogRepositoryInterface
     public function deleteForObject(int $objectId);
 
     /**
+     * @param int $expireDays
+     */
+    public function deleteExpired(int $expireDays);
+
+    /**
      * @throws \Exception
      */
     public function truncateLogTable();

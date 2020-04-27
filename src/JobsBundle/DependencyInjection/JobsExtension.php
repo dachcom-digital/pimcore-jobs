@@ -46,6 +46,7 @@ class JobsExtension extends Extension
         }
 
         $container->setParameter('jobs.connectors.available', $availableConnectorsNames);
+        $container->setParameter('jobs.logs.expiration_days', $config['log_expiration_days']);
 
         $this->setupEnvironment($container, $config);
         $this->checkGoogleConnectorDependencies($container, $loader, $availableConnectorsNames);

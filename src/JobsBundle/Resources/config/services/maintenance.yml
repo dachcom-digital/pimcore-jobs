@@ -1,0 +1,12 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    JobsBundle\EventListener\Maintenance\CleanUpLogsTask:
+        arguments:
+            $logExpirationDays: '%jobs.logs.expiration_days%'
+        tags:
+            - { name: pimcore.maintenance.task, type: jobs_cleanup_logs }
