@@ -62,7 +62,6 @@ Jobs.SettingsPanel = Class.create({
         });
 
         this.panel.on('destroy', function () {
-            Formbuilder.eventObserver = null;
             pimcore.globalmanager.remove('jobs_bundle_settings');
         }.bind(this));
 
