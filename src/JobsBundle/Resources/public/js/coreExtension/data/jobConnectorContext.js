@@ -29,7 +29,7 @@ pimcore.object.classes.data.jobConnectorContext = Class.create(pimcore.object.cl
     },
 
     getGroup: function () {
-        return 'jobs';
+        return 'Jobs';
     },
 
     getIconClass: function () {

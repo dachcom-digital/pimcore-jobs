@@ -91,7 +91,7 @@ Jobs.SettingsPanel = Class.create({
                 var config = Ext.decode(response.responseText);
 
                 var descriptionText = !config.dataClassReady
-                    ? ' ' + t(' jobs.settings.dataclass.not_ready').format(config.dataClassPath)
+                    ? ' ' + t('jobs.settings.dataclass.not_ready').format(config.dataClassPath)
                     : ' ' + t('jobs.settings.dataclass.active_data_class').format(config.dataClassPath);
 
                 this.panel.add({
