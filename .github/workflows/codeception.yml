@@ -40,13 +40,13 @@ jobs:
                 include:
                     -   pimcore: ^6.6
                         template_tag: v2.6.0
+                    -   pimcore: ^6.6
+                        symfony: ^3.4
+                        php: 7.4
+                        template_tag: v2.6.0
                     -   pimcore: ^6.7
                         template_tag: v2.7.0
                     -   pimcore: ^6.8
-                        template_tag: v2.8.0
-                    -   pimcore: ^6.8
-                        symfony: ^3.4
-                        php: 7.4
                         template_tag: v2.8.0
         steps:
             -   uses: actions/checkout@v2
