@@ -21,6 +21,14 @@
             "JobsBundle\\": "src/JobsBundle"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "": "src/"
+        },
+        "classmap": [
+            "app/AppKernel.php"
+        ]
+    },
     "extra": {
         "pimcore": {
             "bundles": [
@@ -36,7 +44,7 @@
         "codeception/codeception": "~2.4.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-symfony": "^0.12",
-        "symplify/easy-coding-standard": "^5.4"
+        "symplify/easy-coding-standard": "^8.0"
     },
     "conflict": {
         "symfony/monolog-bundle": "3.6.0"
