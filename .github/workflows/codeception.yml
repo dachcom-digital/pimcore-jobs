@@ -10,9 +10,9 @@ jobs:
         runs-on: ubuntu-latest
         env:
             DACHCOM_BUNDLE_TEST_DIR: "${{ github.workspace }}/tests"
-            DACHCOM_BUNDLE_NAME: "I18nBundle"
-            DACHCOM_BUNDLE_CLASS: "I18nBundle\\I18nBundle"
-            DACHCOM_BUNDLE_INSTALLER_CLASS: "I18nBundle\\Tool\\Install"
+            DACHCOM_BUNDLE_NAME: "JobsBundle"
+            DACHCOM_BUNDLE_CLASS: "JobsBundle\\JobsBundle"
+            DACHCOM_BUNDLE_INSTALLER_CLASS: "JobsBundle\\Tool\\Install"
 
             PIMCORE_ENVIRONMENT: "test"
             PIMCORE_TEST_DB_DSN: "mysql://root:root@localhost/dachcom_bundle_test"
