@@ -10,7 +10,7 @@ use Pimcore\Config;
 use Pimcore\Event\TestEvents;
 use Pimcore\Tests\Helper\Pimcore as PimcoreCoreModule;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class PimcoreCore extends PimcoreCoreModule
 {
@@ -142,14 +142,8 @@ class PimcoreCore extends PimcoreCoreModule
             $fileSystem->mkdir($runtimeConfigDir);
         }
 
-        $clearCache = false;
         if (!$fileSystem->exists($runtimeConfigConfig)) {
-            $clearCache = true;
             $fileSystem->touch($runtimeConfigConfig);
-        }
-
-        if ($clearCache === true) {
-            $this->clearCache();
         }
 
         $this->setConfiguration($configFile);
@@ -162,8 +156,7 @@ class PimcoreCore extends PimcoreCoreModule
         }
 
         // dispatch kernel booted event - will be used from services which need to reset state between tests
-        $this->kernel->getContainer()->get('event_dispatcher')->dispatch(TestEvents::KERNEL_BOOTED);
-
+        $this->kernel->getContainer()->get('event_dispatcher')->dispatch(new GenericEvent(), TestEvents::KERNEL_BOOTED);
     }
 
     /**
@@ -187,8 +180,8 @@ class PimcoreCore extends PimcoreCoreModule
             unlink($cacheDir . '/' . $class . '.php');
         }
 
+        $bundlePath = getenv('DACHCOM_BUNDLE_TEST_DIR');
         $bundleName = getenv('DACHCOM_BUNDLE_NAME');
-        $bundleClass = getenv('DACHCOM_BUNDLE_HOME');
 
         if ($configuration === null) {
             $configuration = self::DEFAULT_CONFIG_FILE;
@@ -200,7 +193,7 @@ class PimcoreCore extends PimcoreCoreModule
         $runtimeConfigDir = codecept_data_dir() . 'config';
         $runtimeConfigDirConfig = $runtimeConfigDir . '/config.yml';
 
-        $resource = $bundleClass . '/_etc/config/bundle/symfony/' . $configuration;
+        $resource = sprintf('%s/%s/%s', $bundlePath, '_etc/config/bundle/symfony', $configuration);
 
         $fileSystem->dumpFile($runtimeConfigDirConfig, file_get_contents($resource));
     }
@@ -223,32 +216,5 @@ class PimcoreCore extends PimcoreCoreModule
         } else {
             Cache::enable();
         }
-    }
-
-    protected function clearCache()
-    {
-        // not required anymore in S4.
-        if (Kernel::MAJOR_VERSION > 3) {
-            return;
-        }
-
-        Debug::debug('[PIMCORE] Clear Cache!');
-
-        $fileSystem = new Filesystem();
-        $cacheDir = PIMCORE_SYMFONY_CACHE_DIRECTORY;
-
-        if (!$fileSystem->exists($cacheDir)) {
-            return;
-        }
-
-        $oldCacheDir = substr($cacheDir, 0, -1) . ('~' === substr($cacheDir, -1) ? '+' : '~');
-
-        if ($fileSystem->exists($oldCacheDir)) {
-            $fileSystem->remove($oldCacheDir);
-        }
-
-        $fileSystem->rename($cacheDir, $oldCacheDir);
-        $fileSystem->mkdir($cacheDir);
-        $fileSystem->remove($oldCacheDir);
     }
 }

@@ -63,7 +63,7 @@ class JobsExtension extends Extension
 
         if (empty($feedHost) && $container->hasParameter('pimcore.config')) {
             $pimcoreConfig = $container->getParameter('pimcore.config');
-            $feedHost = isset($pimcoreConfig['general']['domain']) ? $pimcoreConfig['general']['domain'] : null;
+            $feedHost = isset($pimcoreConfig['general']['domain']) ? $pimcoreConfig['general']['domain'] : '';
         }
 
         $connectorServiceDefinition = $container->getDefinition(EnvironmentService::class);
