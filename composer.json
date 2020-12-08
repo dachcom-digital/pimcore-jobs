@@ -37,7 +37,8 @@
         }
     },
     "require": {
-        "pimcore/pimcore": "^6.0.0",
+        "pimcore/pimcore": "^6.0",
+        "symfony/symfony": "^4|^5",
         "doctrine/orm": "^2.7"
     },
     "require-dev": {

@@ -9,7 +9,8 @@ This Bundle allows you to synchronise your job offers with various connectors li
 ![image](https://user-images.githubusercontent.com/700119/79226665-0a6b0480-7e5f-11ea-9774-810b076e7fcd.png)
 
 #### Requirements
-* Pimcore >= 6.3.0
+* Pimcore >= 6.0
+- Symfony >= 4.4
 
 ## Installation
 
