@@ -1,3 +1,0 @@
-jobs:
-    data_class: Job
-    feed_host: 'http://localhost'
