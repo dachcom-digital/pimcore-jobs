@@ -2,12 +2,18 @@ pimcore:
     general:
         timezone: Europe/Berlin
         language: en
-        valid_languages: 'en'
+        valid_languages: 'en,de,fr,it,de_DE,en_US,de_CH'
         path_variable: ''
         domain: 'localhost'
         redirect_to_maindomain: false
         fallback_languages:
             en: ''
+            de: ''
+            fr: ''
+            it: ''
+            de_DE: 'de'
+            de_CH: 'de'
+            en_US: 'en'
         default_language: en
         disable_usage_statistics: true
         debug_admin_translations: false
