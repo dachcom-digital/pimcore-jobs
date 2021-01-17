@@ -87,4 +87,9 @@ class ConnectorContextItem implements ConnectorContextItemInterface
     {
         return $this->contextDefinition;
     }
+
+    public function __clone()
+    {
+        $this->id = null;
+    }
 }

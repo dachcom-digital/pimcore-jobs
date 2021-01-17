@@ -70,4 +70,9 @@ interface ConnectorEngineInterface
      * @return ConnectorEngineConfigurationInterface
      */
     public function getConfiguration();
+
+    /**
+     * @return bool
+     */
+    public function isFromClone();
 }

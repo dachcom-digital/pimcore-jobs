@@ -37,6 +37,11 @@ class ConnectorEngine implements ConnectorEngineInterface
     protected $feedIds;
 
     /**
+     * @var bool
+     */
+    protected $fromClone;
+
+    /**
      * {@inheritdoc}
      */
     public function setId($id)
@@ -146,5 +151,18 @@ class ConnectorEngine implements ConnectorEngineInterface
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFromClone()
+    {
+        return $this->fromClone;
+    }
+
+    public function __clone()
+    {
+        $this->fromClone = true;
     }
 }
