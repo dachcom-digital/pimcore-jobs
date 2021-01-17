@@ -20,6 +20,11 @@ class ContextDefinition implements ContextDefinitionInterface
     protected $locale;
 
     /**
+     * @var bool
+     */
+    protected $fromClone;
+
+    /**
      * {@inheritdoc}
      */
     public function setId($id)
@@ -65,5 +70,15 @@ class ContextDefinition implements ContextDefinitionInterface
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    public function isFromClone()
+    {
+        return $this->fromClone;
+    }
+
+    public function __clone()
+    {
+        $this->fromClone = true;
     }
 }

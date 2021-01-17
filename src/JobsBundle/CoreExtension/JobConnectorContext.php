@@ -4,6 +4,8 @@ namespace JobsBundle\CoreExtension;
 
 use JobsBundle\Manager\ConnectorContextManager;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
+use JobsBundle\Manager\ConnectorManager;
+use JobsBundle\Manager\ConnectorManagerInterface;
 use JobsBundle\Manager\LogManager;
 use JobsBundle\Manager\LogManagerInterface;
 use JobsBundle\Model\ConnectorContextItemInterface;
@@ -33,6 +35,14 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
     private function getConnectorContextManager()
     {
         return \Pimcore::getContainer()->get(ConnectorContextManager::class);
+    }
+
+    /**
+     * @return ConnectorManagerInterface
+     */
+    private function getConnectorManager()
+    {
+        return \Pimcore::getContainer()->get(ConnectorManager::class);
     }
 
     /**
@@ -206,8 +216,22 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
         $validConnectorContextItems = [];
         $availableConnectorContextItems = $this->load($object, ['force' => true]);
 
+        /** @var ConnectorContextItemInterface $connectorContextItem */
         foreach ($jobConnectorContext as $connectorContextItem) {
             $connectorContextItem->setObjectId($object->getId());
+
+            // pimcore's deepcopy does not support doctrine entities in a good way so any entity and subentity gets simply cloned
+            // since we don't want to clone our manyToOne relations, we need to re-assign them
+            // @todo: remove isFromClone with pimcore >= 7.2 and use CustomDataCopyInterface interface instead!
+
+            if ($connectorContextItem->getConnectorEngine()->isFromClone()) {
+                $connectorContextItem->setConnectorEngine($this->getConnectorManager()->getEngineById($connectorContextItem->getConnectorEngine()->getId()));
+            }
+
+            if ($connectorContextItem->getContextDefinition()->isFromClone()) {
+                $connectorContextItem->setContextDefinition($this->getConnectorContextManager()->getContextDefinition($connectorContextItem->getContextDefinition()->getId()));
+            }
+
             $this->getConnectorContextManager()->update($connectorContextItem);
 
             if ($connectorContextItem->getId()) {
@@ -321,4 +345,13 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
 
         return join(', ', $preview);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataForSearchIndex($object, $params = [])
+    {
+        return '';
+    }
+
 }

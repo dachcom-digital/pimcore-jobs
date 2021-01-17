@@ -28,4 +28,9 @@ interface ContextDefinitionInterface
      * @return string
      */
     public function getLocale();
+
+    /**
+     * @return bool
+     */
+    public function isFromClone();
 }
