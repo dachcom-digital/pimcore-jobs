@@ -8,14 +8,19 @@ use JobsBundle\Manager\ConnectorManager;
 use JobsBundle\Manager\ConnectorManagerInterface;
 use JobsBundle\Manager\LogManager;
 use JobsBundle\Manager\LogManagerInterface;
+use JobsBundle\Model\ConnectorContextItem;
 use JobsBundle\Model\ConnectorContextItemInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 use JobsBundle\Model\ContextDefinitionInterface;
 use Pimcore\Model\DataObject\ClassDefinition\Data;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\Element\ValidationException;
+use Symfony\Component\Serializer\Serializer;
 
-class JobConnectorContext extends Data implements Data\CustomResourcePersistingInterface
+class JobConnectorContext extends Data implements
+    Data\CustomResourcePersistingInterface,
+    Data\CustomVersionMarshalInterface,
+    Data\CustomRecyclingMarshalInterface
 {
     /**
      * Static type of this element.
@@ -51,6 +56,14 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
     private function getLogManager()
     {
         return \Pimcore::getContainer()->get(LogManager::class);
+    }
+
+    /**
+     * @return Serializer
+     */
+    protected function getSerializer()
+    {
+        return \Pimcore::getContainer()->get('serializer');
     }
 
     /**
@@ -124,7 +137,11 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
             return $data;
         }
 
-        return $this->getConnectorContextManager()->generateConnectorContextConfigForObject($object->getId());
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        return $this->getConnectorContextManager()->generateConnectorContextConfig($data);
     }
 
     /**
@@ -169,6 +186,7 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
             }
 
             foreach ($contextItems as $contextConfig) {
+
                 if ($contextConfig['active'] === false) {
                     continue;
                 }
@@ -183,8 +201,6 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
 
                 $item->setObjectId($object->getId());
                 $item->setContextDefinition($this->getConnectorContextManager()->getContextDefinition($contextConfig['id']));
-
-                $this->getConnectorContextManager()->update($item);
 
                 $items[] = $item;
             }
@@ -324,6 +340,58 @@ class JobConnectorContext extends Data implements Data\CustomResourcePersistingI
         }
 
         $object->markLazyKeyAsLoaded($this->getName());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function marshalVersion($object, $data)
+    {
+        if (!is_array($data)) {
+            return [];
+        }
+
+        return $this->getSerializer()->normalize($data, 'array', ['groups' => ['Version']]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unmarshalVersion($object, $data)
+    {
+        if (!is_array($data)) {
+            return [];
+        }
+
+        return array_filter(
+            $this->getSerializer()->denormalize($data, sprintf('%s[]', ConnectorContextItem::class))
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function marshalRecycleData($object, $data)
+    {
+        if (!is_array($data)) {
+            return [];
+        }
+
+        return $this->getSerializer()->normalize($data, 'array', ['groups' => ['Version']]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unmarshalRecycleData($object, $data)
+    {
+        if (!is_array($data)) {
+            return [];
+        }
+
+        return array_filter(
+            $this->getSerializer()->denormalize($data, sprintf('%s[]', ConnectorContextItem::class))
+        );
     }
 
     /**

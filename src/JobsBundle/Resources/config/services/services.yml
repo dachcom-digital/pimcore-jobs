@@ -16,3 +16,7 @@ services:
 
     JobsBundle\Service\EnvironmentServiceInterface: '@JobsBundle\Service\EnvironmentService'
     JobsBundle\Service\EnvironmentService: ~
+
+    JobsBundle\Normalizer\EntityNormalizer:
+        tags:
+            - serializer.normalizer
