@@ -1,0 +1,10 @@
+JobsBundle\Model\ConnectorContextItem:
+    attributes:
+        id:
+            groups: [ Default, Version ]
+        objectId:
+            groups: [ Default, Version ]
+        connectorEngine:
+            groups: [ Default, Version ]
+        contextDefinition:
+            groups: [ Default, Version ]

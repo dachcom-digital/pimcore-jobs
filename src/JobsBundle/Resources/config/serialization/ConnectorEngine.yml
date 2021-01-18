@@ -1,0 +1,14 @@
+JobsBundle\Model\ConnectorEngine:
+    attributes:
+        id:
+            groups: [ Default, Version ]
+        name:
+            groups: [ Default ]
+        enabled:
+            groups: [ Default ]
+        token:
+            groups: [ Default ]
+        configuration:
+            groups: [ Default ]
+        feedIds:
+            groups: [ Default ]

@@ -63,9 +63,9 @@ interface ConnectorContextManagerInterface
     public function delete(ConnectorContextItemInterface $connectorContextItem);
 
     /**
-     * @param int $objectId
+     * @param array $connectorContextItems
      *
      * @return ConnectorContextItemInterface[]
      */
-    public function generateConnectorContextConfigForObject(int $objectId);
+    public function generateConnectorContextConfig(array $connectorContextItems);
 }

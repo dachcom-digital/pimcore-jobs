@@ -125,7 +125,7 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function generateConnectorContextConfigForObject(int $objectId)
+    public function generateConnectorContextConfig(array $connectorContextItems)
     {
         $context = [];
         $onlineConnectors = [];
@@ -144,7 +144,6 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
             'context_definitions' => $contextDefinitions
         ];
 
-        $connectorContextItems = $this->getForObject($objectId);
         $onlineConnectorDefinitions = $this->connectorManager->getAllConnectorDefinitions(true);
 
         foreach ($onlineConnectorDefinitions as $connectorDefinition) {

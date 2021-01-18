@@ -1,0 +1,8 @@
+JobsBundle\Model\ContextDefinition:
+    attributes:
+        id:
+            groups: [ Version ]
+        host:
+            groups: [ Default ]
+        locale:
+            groups: [ Default ]
