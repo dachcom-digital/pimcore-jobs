@@ -13,6 +13,7 @@ use JobsBundle\Model\ConnectorContextItemInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 use JobsBundle\Model\ContextDefinitionInterface;
 use Pimcore\Model\DataObject\ClassDefinition\Data;
+use Pimcore\Model\DataObject\ClassDefinition\Data\CustomDataCopyInterface;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\Element\ValidationException;
 use Symfony\Component\Serializer\Serializer;
@@ -20,7 +21,8 @@ use Symfony\Component\Serializer\Serializer;
 class JobConnectorContext extends Data implements
     Data\CustomResourcePersistingInterface,
     Data\CustomVersionMarshalInterface,
-    Data\CustomRecyclingMarshalInterface
+    Data\CustomRecyclingMarshalInterface,
+    Data\CustomDataCopyInterface
 {
     /**
      * Static type of this element.
@@ -29,39 +31,22 @@ class JobConnectorContext extends Data implements
      */
     public $fieldtype = 'jobConnectorContext';
 
-    /**
-     * @var int
-     */
-    public $height;
-
-    /**
-     * @return ConnectorContextManagerInterface
-     */
-    private function getConnectorContextManager()
+    private function getConnectorContextManager(): ConnectorContextManagerInterface
     {
         return \Pimcore::getContainer()->get(ConnectorContextManager::class);
     }
 
-    /**
-     * @return ConnectorManagerInterface
-     */
-    private function getConnectorManager()
+    private function getConnectorManager(): ConnectorManagerInterface
     {
         return \Pimcore::getContainer()->get(ConnectorManager::class);
     }
 
-    /**
-     * @return LogManagerInterface
-     */
-    private function getLogManager()
+    private function getLogManager(): LogManagerInterface
     {
         return \Pimcore::getContainer()->get(LogManager::class);
     }
 
-    /**
-     * @return Serializer
-     */
-    protected function getSerializer()
+    protected function getSerializer(): Serializer
     {
         return \Pimcore::getContainer()->get('serializer');
     }
@@ -69,7 +54,7 @@ class JobConnectorContext extends Data implements
     /**
      * @param mixed $object
      *
-     * @return ConnectorContextItemInterface[]
+     * @return null|ConnectorContextItemInterface[]
      */
     public function preGetData($object)
     {
@@ -90,9 +75,6 @@ class JobConnectorContext extends Data implements
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function preSetData($object, $data, $params = [])
     {
         $this->markAsLoaded($object);
@@ -116,18 +98,15 @@ class JobConnectorContext extends Data implements
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataFromResource($data, $object = null, $params = [])
     {
         return [];
     }
 
     /**
-     * @param mixed $data
-     * @param null  $object
-     * @param array $params
+     * @param mixed         $data
+     * @param null|Concrete $object
+     * @param array         $params
      *
      * @return ConnectorContextItemInterface[]
      */
@@ -145,11 +124,11 @@ class JobConnectorContext extends Data implements
     }
 
     /**
-     * @param mixed $data
-     * @param null  $object
-     * @param array $params
+     * @param mixed         $data
+     * @param null|Concrete $object
+     * @param array         $params
      *
-     * @return array
+     * @return null|array
      *
      * @throws \Exception
      */
@@ -236,18 +215,6 @@ class JobConnectorContext extends Data implements
         foreach ($jobConnectorContext as $connectorContextItem) {
             $connectorContextItem->setObjectId($object->getId());
 
-            // pimcore's deepcopy does not support doctrine entities in a good way so any entity and subentity gets simply cloned
-            // since we don't want to clone our manyToOne relations, we need to re-assign them
-            // @todo: remove isFromClone with pimcore >= 7.2 and use CustomDataCopyInterface interface instead!
-
-            if ($connectorContextItem->getConnectorEngine()->isFromClone()) {
-                $connectorContextItem->setConnectorEngine($this->getConnectorManager()->getEngineById($connectorContextItem->getConnectorEngine()->getId()));
-            }
-
-            if ($connectorContextItem->getContextDefinition()->isFromClone()) {
-                $connectorContextItem->setContextDefinition($this->getConnectorContextManager()->getContextDefinition($connectorContextItem->getContextDefinition()->getId()));
-            }
-
             $this->getConnectorContextManager()->update($connectorContextItem);
 
             if ($connectorContextItem->getId()) {
@@ -256,7 +223,7 @@ class JobConnectorContext extends Data implements
         }
 
         foreach ($availableConnectorContextItems as $availableConnectorContextItem) {
-            if (!in_array($availableConnectorContextItem->getId(), $validConnectorContextItems)) {
+            if (!in_array($availableConnectorContextItem->getId(), $validConnectorContextItems, true)) {
                 $this->getConnectorContextManager()->delete($availableConnectorContextItem);
             }
         }
@@ -307,7 +274,7 @@ class JobConnectorContext extends Data implements
     }
 
     /**
-     * @param \stdClass[] $array
+     * @param \stdClass|\stdClass[] $array
      *
      * @return array
      */
@@ -324,7 +291,7 @@ class JobConnectorContext extends Data implements
             }
         }
         if ($array instanceof \stdClass) {
-            return $this->arrayCastRecursive((array) $array);
+            return $this->arrayCastRecursive([$array]);
         }
 
         return $array;
@@ -397,6 +364,32 @@ class JobConnectorContext extends Data implements
     /**
      * {@inheritdoc}
      */
+    public function createDataCopy(Concrete $object, $data)
+    {
+        if (!is_array($data)) {
+            return [];
+        }
+
+        $newData = [];
+        /** @var ConnectorContextItemInterface $connectorContextItem */
+        foreach ($data as $connectorContextItem) {
+
+            $newConnectorContextItem = clone $connectorContextItem;
+
+            $newConnectorContextItem->setId(null);
+            $newConnectorContextItem->setObjectId(null);
+            $newConnectorContextItem->setConnectorEngine($this->getConnectorManager()->getEngineById($connectorContextItem->getConnectorEngine()->getId()));
+            $newConnectorContextItem->setContextDefinition($this->getConnectorContextManager()->getContextDefinition($connectorContextItem->getContextDefinition()->getId()));
+
+            $newData[] = $newConnectorContextItem;
+        }
+
+        return $newData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getVersionPreview($data, $object = null, $params = [])
     {
         $preview = [];
@@ -411,7 +404,7 @@ class JobConnectorContext extends Data implements
             $preview[] = (string) sprintf('%s: Context ID %s', $connector, $contextDefinitionId);
         }
 
-        return join(', ', $preview);
+        return implode(', ', $preview);
     }
 
     /**
@@ -422,4 +415,23 @@ class JobConnectorContext extends Data implements
         return '';
     }
 
+    public function getParameterTypeDeclaration(): ?string
+    {
+        return '?array';
+    }
+
+    public function getReturnTypeDeclaration(): ?string
+    {
+        return '?array';
+    }
+
+    public function getPhpdocInputType(): ?string
+    {
+        return '\\' . ConnectorContextItemInterface::class . '[]';
+    }
+
+    public function getPhpdocReturnType(): ?string
+    {
+        return '\\' . ConnectorContextItemInterface::class . '[]';
+    }
 }

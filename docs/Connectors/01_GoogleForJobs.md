@@ -23,7 +23,7 @@ jobs:
     data_class: Job
     available_connectors:
         -   connector_name: google
-            connector_item_transformer: AppBundle\Transformer\GoogleItemTransformer
+            connector_item_transformer: App\Transformer\GoogleItemTransformer
             connector_items_resolver:
                 -   type: seo_queue
                 -   type: pimcore_object
@@ -37,13 +37,13 @@ The second one (`pimcore_object`) on the other hand only allows a single object 
 Some items resolver does have some configurable options. Read more about all items resolver [here](../20_AvailableItemsResolver.md).
 
 ## Item Transformer
-In our example we have a service class called `AppBundle\Transformer\GoogleItemTransformer`.
+In our example we have a service class called `App\Transformer\GoogleItemTransformer`.
 Every Item Transformer has its own logic as you can see here: 
 
 ```php
 <?php
 
-namespace AppBundle\Transformer;
+namespace App\Transformer;
 
 use Carbon\Carbon;
 use JobsBundle\Context\ResolvedItemInterface;
@@ -56,10 +56,7 @@ use Spatie\SchemaOrg\Schema;
 
 class GoogleItemTransformer implements ItemTransformerInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition)
+    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition): void
     {
         /** @var MyJobClass $subject */
         $subject = $item->getSubject();
@@ -80,12 +77,7 @@ class GoogleItemTransformer implements ItemTransformerInterface
 
     }
 
-    /**
-     * @param MyJobClass $job
-     *
-     * @return Place
-     */
-    protected function getJobLocation(MyJobClass $job)
+    protected function getJobLocation(MyJobClass $job): Place
     {
         return Schema::place()
             ->name('Bregenz')

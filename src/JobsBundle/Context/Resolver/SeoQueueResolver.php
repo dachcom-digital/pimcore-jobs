@@ -14,64 +14,33 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SeoQueueResolver implements ContextItemsResolverInterface
 {
-    /**
-     * @var array
-     */
-    protected $configuration;
+    protected array $configuration;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ConnectorContextManagerInterface $connectorContextManager;
+    protected LinkGeneratorServiceInterface $linkGeneratorService;
 
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
-
-    /**
-     * @var ConnectorContextManagerInterface
-     */
-    protected $connectorContextManager;
-
-    /**
-     * @var LinkGeneratorServiceInterface
-     */
-    protected $linkGeneratorService;
-
-    /**
-     * @param ConnectorContextManagerInterface $connectorContextManager
-     * @param LinkGeneratorServiceInterface    $linkGeneratorService
-     */
     public function __construct(ConnectorContextManagerInterface $connectorContextManager, LinkGeneratorServiceInterface $linkGeneratorService)
     {
         $this->connectorContextManager = $connectorContextManager;
         $this->linkGeneratorService = $linkGeneratorService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function configureOptions(OptionsResolver $optionsResolver)
+    public static function configureOptions(OptionsResolver $resolver): void
     {
-        // no optinos
+        // no options
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConfiguration(array $resolverConfiguration)
+    public function setConfiguration(array $resolverConfiguration): void
     {
         $this->configuration = $resolverConfiguration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    public function setEnvironment(EnvironmentServiceInterface $environmentService): void
     {
         $this->environmentService = $environmentService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureContextParameter(OptionsResolver $resolver)
+    public function configureContextParameter(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'resource' => null
@@ -81,10 +50,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
         $resolver->setAllowedTypes('resource', [sprintf('Pimcore\Model\DataObject\%s', $this->environmentService->getDataClass())]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
+    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array
     {
         $resource = $contextParameter['resource'];
         if (!$resource instanceof Concrete) {
@@ -109,13 +75,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
         return $resolvedItems;
     }
 
-    /**
-     * @param Concrete                      $object
-     * @param ConnectorContextItemInterface $contextItem
-     *
-     * @return ResolvedItemInterface|null
-     */
-    protected function generateQueueEntry(Concrete $object, ConnectorContextItemInterface $contextItem)
+    protected function generateQueueEntry(Concrete $object, ConnectorContextItemInterface $contextItem): ?ResolvedItemInterface
     {
         $type = 'unknown';
         $dataUrl = null;
@@ -127,7 +87,7 @@ class SeoQueueResolver implements ContextItemsResolverInterface
             return null;
         }
 
-        if (substr($dataUrl, 0, 4) !== 'http') {
+        if (!str_starts_with($dataUrl, 'http')) {
             return null;
         }
 
@@ -135,12 +95,10 @@ class SeoQueueResolver implements ContextItemsResolverInterface
             $type = 'pimcore_' . $object->getType();
         }
 
-        $resolvedItem = new ResolvedItem($contextItem, $object, [
+        return new ResolvedItem($contextItem, $object, [
             'type'    => $type,
             'dataId'  => $id,
             'dataUrl' => $dataUrl
         ]);
-
-        return $resolvedItem;
     }
 }

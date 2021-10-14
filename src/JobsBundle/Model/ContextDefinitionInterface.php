@@ -4,33 +4,13 @@ namespace JobsBundle\Model;
 
 interface ContextDefinitionInterface
 {
-    /**
-     * @return int
-     */
-    public function getId();
+    public function getId(): ?int;
 
-    /**
-     * @param string $host
-     */
-    public function setHost(string $host);
+    public function setHost(string $host): void;
 
-    /**
-     * @return string
-     */
-    public function getHost();
+    public function getHost(): string;
 
-    /**
-     * @param string $locale
-     */
-    public function setLocale(string $locale);
+    public function setLocale(string $locale): void;
 
-    /**
-     * @return string
-     */
-    public function getLocale();
-
-    /**
-     * @return bool
-     */
-    public function isFromClone();
+    public function getLocale(): string;
 }

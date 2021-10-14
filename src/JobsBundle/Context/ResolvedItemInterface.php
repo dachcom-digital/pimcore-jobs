@@ -7,25 +7,11 @@ use Pimcore\Model\DataObject\Concrete;
 
 interface ResolvedItemInterface
 {
-    /**
-     * @return ConnectorContextItemInterface|null
-     */
-    public function getContextItem();
+    public function getContextItem(): ?ConnectorContextItemInterface;
 
-    /**
-     * @return Concrete|null
-     */
-    public function getSubject();
+    public function getSubject(): ?Concrete;
 
-    /**
-     * @return array
-     */
-    public function getResolvedParams();
+    public function getResolvedParams(): array;
 
-    /**
-     * @param string $param
-     *
-     * @return mixed|null
-     */
-    public function getResolvedParam(string $param);
+    public function getResolvedParam(string $param): mixed;
 }

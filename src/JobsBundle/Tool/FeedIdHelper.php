@@ -6,24 +6,10 @@ use JobsBundle\Model\ConnectorEngineInterface;
 
 class FeedIdHelper
 {
-    /**
-     * @var array
-     */
-    protected $feedIds;
+    protected array $feedIds;
+    protected string $connectorToken;
+    protected string $connectorDefinitionName;
 
-    /**
-     * @var string
-     */
-    protected $connectorToken;
-
-    /**
-     * @var string
-     */
-    protected $connectorDefinitionName;
-
-    /**
-     * @param ConnectorEngineInterface $connectorEngine
-     */
     public function __construct(ConnectorEngineInterface $connectorEngine)
     {
         $this->connectorToken = $connectorEngine->getToken();
@@ -38,10 +24,7 @@ class FeedIdHelper
         $this->feedIds = $feedIds;
     }
 
-    /**
-     * @return int
-     */
-    public function generateFeedId()
+    public function generateFeedId(): int
     {
         $latestFeedId = count($this->feedIds) === 0 ? 0 : max(array_column($this->feedIds, 'internalId'));
 
@@ -51,14 +34,11 @@ class FeedIdHelper
     }
 
     /**
-     * @param int   $internalFeedId
-     * @param mixed $externalFeedId
-     *
      * @throws \Exception
      */
-    public function addFeedId(int $internalFeedId, $externalFeedId)
+    public function addFeedId(int $internalFeedId, mixed $externalFeedId): void
     {
-        $feedIndex = array_search($internalFeedId, array_column($this->feedIds, 'internalId'));
+        $feedIndex = array_search($internalFeedId, array_column($this->feedIds, 'internalId'), true);
 
         if ($feedIndex !== false) {
             throw new \Exception(sprintf('Feed Id %d already exists.', $internalFeedId));
@@ -77,13 +57,11 @@ class FeedIdHelper
     }
 
     /**
-     * @param int $internalFeedId
-     *
      * @throws \Exception
      */
-    public function removeFeedId(int $internalFeedId)
+    public function removeFeedId(int $internalFeedId): void
     {
-        $feedIndex = array_search($internalFeedId, array_column($this->feedIds, 'internalId'));
+        $feedIndex = array_search($internalFeedId, array_column($this->feedIds, 'internalId'), true);
 
         if ($feedIndex === false) {
             throw new \Exception(sprintf('Feed Id %d does not exist.', $internalFeedId));
@@ -94,14 +72,9 @@ class FeedIdHelper
         $this->feedIds = array_values($this->feedIds);
     }
 
-    /**
-     * @param int $internalId
-     *
-     * @return array|null
-     */
-    public function findFeedId(int $internalId)
+    public function findFeedId(int $internalId): ?array
     {
-        $feedIndex = array_search($internalId, array_column($this->feedIds, 'internalId'));
+        $feedIndex = array_search($internalId, array_column($this->feedIds, 'internalId'), true);
 
         if ($feedIndex === false) {
             return null;
@@ -110,12 +83,7 @@ class FeedIdHelper
         return $this->feedIds[$feedIndex];
     }
 
-    /**
-     * @param string $feedHost
-     *
-     * @return array
-     */
-    public function generateFeedList(string $feedHost)
+    public function generateFeedList(string $feedHost): array
     {
         $list = [];
         foreach ($this->feedIds as $feedId) {
@@ -130,10 +98,7 @@ class FeedIdHelper
         return $list;
     }
 
-    /**
-     * @return array
-     */
-    public function getAsArray()
+    public function getAsArray(): array
     {
         return $this->feedIds;
     }

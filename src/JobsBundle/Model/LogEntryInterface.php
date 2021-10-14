@@ -4,58 +4,25 @@ namespace JobsBundle\Model;
 
 interface LogEntryInterface
 {
-    /**
-     * @return int
-     */
-    public function getId();
+    public function getId(): ?int;
 
-    /**
-     * @param ConnectorEngineInterface $connectorEngine
-     */
-    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine);
+    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine): void;
 
-    /**
-     * @return ConnectorEngineInterface
-     */
-    public function getConnectorEngine();
+    public function getConnectorEngine(): ConnectorEngineInterface;
 
-    /**
-     * @param int $objectId
-     */
-    public function setObjectId(int $objectId);
+    public function setObjectId(int $objectId): void;
 
-    /**
-     * @return int
-     */
-    public function getObjectId();
+    public function getObjectId(): int;
 
-    /**
-     * @return string
-     */
-    public function getType();
+    public function getType(): string;
 
-    /**
-     * @param string $type
-     */
-    public function setType(string $type);
+    public function setType(string $type): void;
 
-    /**
-     * @return string
-     */
-    public function getMessage();
+    public function getMessage(): string;
 
-    /**
-     * @param string $message
-     */
-    public function setMessage(string $message);
+    public function setMessage(string $message): void;
 
-    /**
-     * @return \DateTime
-     */
     public function getCreationDate();
 
-    /**
-     * @param \DateTime $date
-     */
-    public function setCreationDate(\DateTime $date);
+    public function setCreationDate(\DateTime $date): void;
 }

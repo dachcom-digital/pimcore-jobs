@@ -1,5 +1,5 @@
 
-CREATE TABLE `jobs_connector_engine` (
+CREATE TABLE IF NOT EXISTS `jobs_connector_engine` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `enabled` tinyint(1) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `jobs_connector_engine` (
   UNIQUE KEY `UNIQ_D292B8495F37A13B` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `jobs_context_definition` (
+CREATE TABLE IF NOT EXISTS `jobs_context_definition` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `host` varchar(255) NOT NULL,
   `locale` varchar(255) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE `jobs_context_definition` (
   UNIQUE KEY `object_connector_context` (`host`,`locale`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `jobs_connector_context_item` (
+CREATE TABLE IF NOT EXISTS `jobs_connector_context_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `connector` int(11) DEFAULT NULL,
   `context_definition` int(11) DEFAULT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE `jobs_connector_context_item` (
   CONSTRAINT `FK_E08389F8E5EBE02D` FOREIGN KEY (`context_definition`) REFERENCES `jobs_context_definition` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `jobs_log` (
+CREATE TABLE IF NOT EXISTS `jobs_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `connector` int(11) DEFAULT NULL,
   `object_id` int(11) DEFAULT NULL,

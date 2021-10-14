@@ -11,20 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProviderController extends FrontendController
 {
-    /**
-     * @var ContextServiceInterface
-     */
-    protected $contextService;
+    protected ContextServiceInterface $contextService;
+    protected ConnectorServiceInterface $connectorService;
 
-    /**
-     * @var ConnectorServiceInterface
-     */
-    protected $connectorService;
-
-    /**
-     * @param ContextServiceInterface   $contextService
-     * @param ConnectorServiceInterface $connectorService
-     */
     public function __construct(
         ContextServiceInterface $contextService,
         ConnectorServiceInterface $connectorService
@@ -34,16 +23,9 @@ class ProviderController extends FrontendController
     }
 
     /**
-     * @param Request $request
-     * @param string  $connectorName
-     * @param string  $token
-     * @param int     $feedId
-     *
-     * @return Response
-     *
      * @throws \Exception
      */
-    public function provideFeedAction(Request $request, string $connectorName, string $token, int $feedId)
+    public function provideFeedAction(Request $request, string $connectorName, string $token, int $feedId): Response
     {
         if (!$this->connectorService->connectorDefinitionIsEnabled($connectorName)) {
             throw $this->createNotFoundException('Not Found');

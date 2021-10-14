@@ -4,86 +4,47 @@ namespace JobsBundle\Model;
 
 class ConnectorContextItem implements ConnectorContextItemInterface
 {
-    /**
-     * @var int
-     */
-    protected $id;
+    protected ?int $id = null;
+    protected ?int $objectId = null;
+    protected ?ConnectorEngineInterface $connectorEngine;
+    protected ?ContextDefinitionInterface $contextDefinition;
 
-    /**
-     * @var int
-     */
-    protected $objectId;
-
-    /**
-     * @var ConnectorEngineInterface
-     */
-    protected $connectorEngine;
-
-    /**
-     * @var ContextDefinitionInterface
-     */
-    protected $contextDefinition;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId($id)
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setObjectId(int $objectId)
+    public function setObjectId(?int $objectId): void
     {
         $this->objectId = $objectId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getObjectId()
+    public function getObjectId(): ?int
     {
         return $this->objectId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine)
+    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine): void
     {
         $this->connectorEngine = $connectorEngine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConnectorEngine()
+    public function getConnectorEngine(): ?ConnectorEngineInterface
     {
         return $this->connectorEngine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setContextDefinition(ContextDefinitionInterface $contextDefinition)
+    public function setContextDefinition(ContextDefinitionInterface $contextDefinition): void
     {
         $this->contextDefinition = $contextDefinition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getContextDefinition()
+    public function getContextDefinition(): ?ContextDefinitionInterface
     {
         return $this->contextDefinition;
     }

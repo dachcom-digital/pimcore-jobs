@@ -3,34 +3,21 @@
 namespace JobsBundle\Controller\Admin;
 
 use JobsBundle\Manager\LogManagerInterface;
+use JobsBundle\Model\LogEntryInterface;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 
 class LogController extends AdminController
 {
-    /**
-     * @var LogManagerInterface
-     */
-    protected $logManager;
+    protected LogManagerInterface $logManager;
 
-    /**
-     * @param LogManagerInterface $logManager
-     */
     public function __construct(LogManagerInterface $logManager)
     {
         $this->logManager = $logManager;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @param int     $connectorEngineId
-     * @param int     $objectId
-     *
-     * @return JsonResponse
-     */
-    public function loadLogsForObjectAction(Request $request, int $connectorEngineId, int $objectId)
+    public function loadLogsForObjectAction(Request $request, int $connectorEngineId, int $objectId): JsonResponse
     {
         $items = [];
         $offset = (int) $request->get('start', 0);
@@ -46,6 +33,7 @@ class LogController extends AdminController
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
+        /** @var LogEntryInterface $entry */
         foreach ($logEntriesPaginator as $entry) {
             $items[] = [
                 'id'      => $entry->getId(),
@@ -62,14 +50,7 @@ class LogController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param int     $connectorEngineId
-     * @param int     $objectId
-     *
-     * @return JsonResponse
-     */
-    public function removeLogsForObjectAction(Request $request, int $connectorEngineId, int $objectId)
+    public function removeLogsForObjectAction(Request $request, int $connectorEngineId, int $objectId): JsonResponse
     {
         try {
             $this->logManager->deleteForConnectorEngineAndObject($connectorEngineId, $objectId);
@@ -82,12 +63,7 @@ class LogController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function flushLogsAction(Request $request)
+    public function flushLogsAction(Request $request): JsonResponse
     {
         try {
             $this->logManager->flushLogs();

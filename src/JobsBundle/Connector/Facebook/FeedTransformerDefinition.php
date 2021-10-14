@@ -6,91 +6,52 @@ use Carbon\Carbon;
 
 class FeedTransformerDefinition
 {
-    /**
-     * @var string
-     */
-    protected $publisherName;
-
-    /**
-     * @var string
-     */
-    protected $publisherUrl;
-
-    /**
-     * @var Carbon
-     */
-    protected $lastBuildDate;
-
-    /**
-     * @var array|ItemTransformerDefinition[]
-     */
-    protected $items;
+    protected string $publisherName;
+    protected string $publisherUrl;
+    protected Carbon $lastBuildDate;
+    protected array $items;
 
     public function __construct()
     {
         $this->items = [];
     }
 
-    /**
-     * @param ItemTransformerDefinition $item
-     */
-    public function addItem(ItemTransformerDefinition $item)
+    public function addItem(ItemTransformerDefinition $item): void
     {
         $this->items[] = $item;
     }
 
-    /**
-     * @return Carbon
-     */
     public function getLastBuildDate(): Carbon
     {
         return $this->lastBuildDate;
     }
 
-    /**
-     * @param Carbon $lastBuildDate
-     */
     public function setLastBuildDate(Carbon $lastBuildDate): void
     {
         $this->lastBuildDate = $lastBuildDate;
     }
 
-    /**
-     * @return string
-     */
     public function getPublisherUrl(): string
     {
         return $this->publisherUrl;
     }
 
-    /**
-     * @param string $publisherUrl
-     */
     public function setPublisherUrl(string $publisherUrl): void
     {
         $this->publisherUrl = $publisherUrl;
     }
 
-    /**
-     * @return string
-     */
     public function getPublisherName(): string
     {
         return $this->publisherName;
     }
 
-    /**
-     * @param string $publisherName
-     */
     public function setPublisherName(string $publisherName): void
     {
         $this->publisherName = $publisherName;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         $jobsArray = [];
         foreach ($this->items as $item) {

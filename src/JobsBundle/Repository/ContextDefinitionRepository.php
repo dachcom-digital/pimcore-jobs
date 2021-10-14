@@ -5,34 +5,23 @@ namespace JobsBundle\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use JobsBundle\Model\ContextDefinition;
+use JobsBundle\Model\ContextDefinitionInterface;
 
 class ContextDefinitionRepository implements ContextDefinitionRepositoryInterface
 {
-    /**
-     * @var EntityRepository
-     */
-    protected $repository;
+    protected EntityRepository $repository;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->repository = $entityManager->getRepository(ContextDefinition::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findById(int $id)
+    public function findById(int $id): ?ContextDefinitionInterface
     {
         return $this->repository->find($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findAll()
+    public function findAll(): array
     {
         return $this->repository->findAll();
     }

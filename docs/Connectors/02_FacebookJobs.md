@@ -7,13 +7,13 @@ To use this connector you need to provide fully configured Facebook App!
 Before you start be sure you've checked out the [Setup Instructions](../00_Setup.md).
 
 ## Requirements
-First things first. To use this connector, you have to install some dependencies:
+First things first. To use this connector, you have to install the [league/oauth2-facebook](https://github.com/thephpleague/oauth2-facebook):
 
-- [facebook/graph-sdk](https://github.com/facebookarchive/php-graph-sdk/blob/5.x/README.md) (Mostly already installed within a Pimcore Installation)
+```bash
+composer require league/oauth2-facebook:^2.0
+```
 
 ## Example Configuration
-This is a example Configuration.
-
 Each Connector needs some `Items Resolver` (Find the right object for the right context) and a single `Item Transformer`
 (Transform your object into a valid Facebook xml block in this case [full feed specification](https://developers.facebook.com/docs/pages/jobs-xml/getting-started#company-info)).
 
@@ -22,7 +22,7 @@ jobs:
     data_class: Job
     available_connectors:
         -   connector_name: facebook
-            connector_item_transformer: AppBundle\Transformer\FacebookItemTransformer
+            connector_item_transformer: App\Transformer\FacebookItemTransformer
             connector_items_resolver:
                 -   type: feed
 ```
@@ -47,13 +47,13 @@ This Connector requires a fully registered feed. Click on "Add Feed" and start t
 If this step was successful, a second call will generate the feed itself. If this was successful too, your connector is fully configured and ready to use.
 
 ## Item Transformer
-In our example we have a service class called `AppBundle\Transformer\FacebookItemTransformer`.
+In our example we have a service class called `App\Transformer\FacebookItemTransformer`.
 Every Item Transformer has its own logic as you can see here: 
 
 ```php
 <?php
 
-namespace AppBundle\Transformer;
+namespace App\Transformer;
 
 use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Transformer\ItemTransformerDefinitionInterface;
@@ -62,10 +62,7 @@ use Pimcore\Model\DataObject\MyJobClass;
 
 class FacebookItemTransformer implements ItemTransformerInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition)
+    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition): void
     {
         /** @var MyJobClass $subject */
         $subject = $item->getSubject();

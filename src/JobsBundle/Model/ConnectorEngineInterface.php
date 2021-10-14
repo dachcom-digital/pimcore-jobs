@@ -6,73 +6,29 @@ use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 
 interface ConnectorEngineInterface
 {
-    /**
-     * @return int
-     */
-    public function getId();
+    public function getId(): ?int;
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name);
+    public function setName(string $name): void;
 
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 
-    /**
-     * @param bool $enabled
-     */
-    public function setEnabled(bool $enabled);
+    public function setEnabled(bool $enabled): void;
 
-    /**
-     * @return bool
-     */
-    public function getEnabled();
+    public function getEnabled(): bool;
 
-    /**
-     * @return bool
-     */
-    public function isEnabled();
+    public function isEnabled(): bool;
 
-    /**
-     * @param array $feedIds
-     */
-    public function setFeedIds(array $feedIds);
+    public function setFeedIds(array $feedIds): void;
 
-    /**
-     * @return bool
-     */
-    public function hasFeedIds();
+    public function hasFeedIds(): bool;
 
-    /**
-     * @return array|null
-     */
-    public function getFeedIds();
+    public function getFeedIds(): ?array;
 
-    /**
-     * @param string $token
-     */
-    public function setToken(string $token);
+    public function setToken(string $token): void;
 
-    /**
-     * @return string
-     */
-    public function getToken();
+    public function getToken(): string;
 
-    /**
-     * @param ConnectorEngineConfigurationInterface $configuration
-     */
-    public function setConfiguration(ConnectorEngineConfigurationInterface $configuration);
+    public function setConfiguration(ConnectorEngineConfigurationInterface $configuration): void;
 
-    /**
-     * @return ConnectorEngineConfigurationInterface
-     */
-    public function getConfiguration();
-
-    /**
-     * @return bool
-     */
-    public function isFromClone();
+    public function getConfiguration(): ?ConnectorEngineConfigurationInterface;
 }

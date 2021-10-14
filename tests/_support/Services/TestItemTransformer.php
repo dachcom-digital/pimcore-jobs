@@ -8,10 +8,8 @@ use JobsBundle\Transformer\ItemTransformerInterface;
 
 class TestItemTransformer implements ItemTransformerInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition)
+    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition): void
     {
+        // nothing to do so far
     }
 }

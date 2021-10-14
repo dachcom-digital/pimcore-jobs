@@ -4,38 +4,19 @@ namespace JobsBundle\Model;
 
 interface ConnectorContextItemInterface
 {
-    /**
-     * @return int
-     */
-    public function getId();
+    public function setId(?int $id): void;
 
-    /**
-     * @param int $objectId
-     */
-    public function setObjectId(int $objectId);
+    public function getId(): ?int;
 
-    /**
-     * @return int
-     */
-    public function getObjectId();
+    public function setObjectId(?int $objectId): void;
 
-    /**
-     * @param ConnectorEngineInterface $connectorEngine
-     */
-    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine);
+    public function getObjectId(): ?int;
 
-    /**
-     * @return ConnectorEngineInterface
-     */
-    public function getConnectorEngine();
+    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine): void;
 
-    /**
-     * @param ContextDefinitionInterface $contextDefinition
-     */
-    public function setContextDefinition(ContextDefinitionInterface $contextDefinition);
+    public function getConnectorEngine(): ?ConnectorEngineInterface;
 
-    /**
-     * @return ContextDefinitionInterface
-     */
-    public function getContextDefinition();
+    public function setContextDefinition(ContextDefinitionInterface $contextDefinition): void;
+
+    public function getContextDefinition(): ?ContextDefinitionInterface;
 }

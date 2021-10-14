@@ -6,24 +6,15 @@ use JobsBundle\Context\Resolver\ContextItemsResolverInterface;
 
 interface ContextItemsResolverRegistryInterface
 {
-    /**
-     * @param string $identifier
-     *
-     * @return bool
-     */
-    public function has($identifier);
+    public function has(string $identifier): bool;
 
     /**
-     * @param string $identifier
-     *
-     * @return ContextItemsResolverInterface
-     *
      * @throws \Exception
      */
-    public function get($identifier);
+    public function get(string $identifier): ContextItemsResolverInterface;
 
     /**
-     * @return ContextItemsResolverInterface[]
+     * @return array<int, ContextItemsResolverInterface>
      */
-    public function getAll();
+    public function getAll(): array;
 }

@@ -3,33 +3,17 @@
 namespace JobsBundle\Connector\Facebook;
 
 use Carbon\Carbon;
-use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Feed\FeedGeneratorInterface;
+use JobsBundle\Transformer\ItemTransformerDefinitionInterface;
 use JobsBundle\Transformer\ItemTransformerInterface;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class FeedGenerator implements FeedGeneratorInterface
 {
-    /**
-     * @var ItemTransformerInterface
-     */
-    protected $itemTransformer;
+    protected ItemTransformerInterface $itemTransformer;
+    protected array $items;
+    protected array $params;
 
-    /**
-     * @var array|ResolvedItemInterface[]
-     */
-    protected $items;
-
-    /**
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * @param ItemTransformerInterface      $itemTransformer
-     * @param array|ResolvedItemInterface[] $items
-     * @param array                         $params
-     */
     public function __construct(ItemTransformerInterface $itemTransformer, array $items, array $params)
     {
         $this->itemTransformer = $itemTransformer;
@@ -37,10 +21,7 @@ class FeedGenerator implements FeedGeneratorInterface
         $this->params = $params;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function generate(string $outputType)
+    public function generate(string $outputType): mixed
     {
         $feed = $this->generateFeedTransformerDefinitionClass();
 
@@ -63,18 +44,12 @@ class FeedGenerator implements FeedGeneratorInterface
         return $feed->toArray();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function generateItemTransformerDefinitionClass()
+    public function generateItemTransformerDefinitionClass(): ItemTransformerDefinitionInterface
     {
         return new ItemTransformerDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function generateFeedTransformerDefinitionClass()
+    protected function generateFeedTransformerDefinitionClass(): FeedTransformerDefinition
     {
         return new FeedTransformerDefinition();
     }

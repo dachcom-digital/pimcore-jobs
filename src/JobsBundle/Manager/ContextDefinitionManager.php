@@ -9,20 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ContextDefinitionManager implements ContextDefinitionManagerInterface
 {
-    /**
-     * @var ContextDefinitionRepositoryInterface
-     */
-    protected $contextDefinitionRepository;
+    protected ContextDefinitionRepositoryInterface $contextDefinitionRepository;
+    protected EntityManagerInterface $entityManager;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @param ContextDefinitionRepositoryInterface $contextDefinitionRepository
-     * @param EntityManagerInterface               $entityManager
-     */
     public function __construct(
         ContextDefinitionRepositoryInterface $contextDefinitionRepository,
         EntityManagerInterface $entityManager
@@ -31,10 +20,7 @@ class ContextDefinitionManager implements ContextDefinitionManagerInterface
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createNew(string $host, string $locale)
+    public function createNew(string $host, string $locale): ContextDefinitionInterface
     {
         $contextDefinition = new ContextDefinition();
         $contextDefinition->setHost($host);
@@ -46,10 +32,7 @@ class ContextDefinitionManager implements ContextDefinitionManagerInterface
         return $contextDefinition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getById(int $contextDefinitionId)
+    public function getById(int $contextDefinitionId): ?ContextDefinitionInterface
     {
         return $this->contextDefinitionRepository->findById($contextDefinitionId);
     }
@@ -57,15 +40,12 @@ class ContextDefinitionManager implements ContextDefinitionManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->contextDefinitionRepository->findAll();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function update(ContextDefinitionInterface $contextDefinition)
+    public function update(ContextDefinitionInterface $contextDefinition): ContextDefinitionInterface
     {
         $this->entityManager->persist($contextDefinition);
         $this->entityManager->flush();
@@ -73,10 +53,7 @@ class ContextDefinitionManager implements ContextDefinitionManagerInterface
         return $contextDefinition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(ContextDefinitionInterface $contextDefinition)
+    public function delete(ContextDefinitionInterface $contextDefinition): void
     {
         $this->entityManager->remove($contextDefinition);
         $this->entityManager->flush();

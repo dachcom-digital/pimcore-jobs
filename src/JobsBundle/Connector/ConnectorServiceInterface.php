@@ -2,77 +2,29 @@
 
 namespace JobsBundle\Connector;
 
-use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 
 interface ConnectorServiceInterface
 {
-    /**
-     * @param string $connectorName
-     *
-     * @return ConnectorEngineInterface
-     */
-    public function installConnector(string $connectorName);
+    public function installConnector(string $connectorName): ConnectorEngineInterface;
 
-    /**
-     * @param string $connectorName
-     */
-    public function uninstallConnector(string $connectorName);
+    public function uninstallConnector(string $connectorName): void;
 
-    /**
-     * @param string $connectorName
-     */
-    public function enableConnector(string $connectorName);
+    public function enableConnector(string $connectorName): void;
 
-    /**
-     * @param string $connectorName
-     */
-    public function disableConnector(string $connectorName);
+    public function disableConnector(string $connectorName): void;
 
-    /**
-     * @param string $connectorName
-     */
-    public function connectConnector(string $connectorName);
+    public function connectConnector(string $connectorName): void;
 
-    /**
-     * @param string $connectorName
-     */
-    public function disconnectConnector(string $connectorName);
+    public function disconnectConnector(string $connectorName): void;
 
-    /**
-     * @param string                        $connectorName
-     * @param string                        $outputType
-     * @param array|ResolvedItemInterface[] $items
-     * @param array                         $params
-     *
-     * @return mixed|void
-     */
-    public function generateConnectorFeed(string $connectorName, string $outputType, array $items, array $params = []);
+    public function generateConnectorFeed(string $connectorName, string $outputType, array $items, array $params = []): mixed;
 
-    /**
-     * @param string $connectorName
-     * @param array  $feedIds
-     */
-    public function updateConnectorFeedIds(string $connectorName, array $feedIds);
+    public function updateConnectorFeedIds(string $connectorName, array $feedIds): void;
 
-    /**
-     * @param string                                $connectorName
-     * @param ConnectorEngineConfigurationInterface $connectorConfiguration
-     */
-    public function updateConnectorEngineConfiguration(string $connectorName, ConnectorEngineConfigurationInterface $connectorConfiguration);
+    public function updateConnectorEngineConfiguration(string $connectorName, ConnectorEngineConfigurationInterface $connectorConfiguration): void;
 
-    /**
-     * @param string $connectorDefinitionName
-     *
-     * @return bool
-     */
-    public function connectorDefinitionIsEnabled(string $connectorDefinitionName);
+    public function connectorDefinitionIsEnabled(string $connectorDefinitionName): bool;
 
-    /**
-     * @param string $connectorDefinitionName
-     * @param bool   $loadEngine
-     *
-     * @return ConnectorDefinitionInterface
-     */
-    public function getConnectorDefinition(string $connectorDefinitionName, bool $loadEngine = false);
+    public function getConnectorDefinition(string $connectorDefinitionName, bool $loadEngine = false): ConnectorDefinitionInterface;
 }

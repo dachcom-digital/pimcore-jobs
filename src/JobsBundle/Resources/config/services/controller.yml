@@ -1,22 +1,8 @@
 services:
 
-    _defaults:
+    JobsBundle\Controller\:
+        resource: '../../Controller'
+        public: true
         autowire: true
         autoconfigure: true
-        public: true
-
-    JobsBundle\Controller\Admin\SettingsController:
-        calls:
-            - [setContainer, ['@service_container']]
-
-    JobsBundle\Controller\Admin\LogController:
-        calls:
-            - [setContainer, ['@service_container']]
-
-    JobsBundle\Controller\ProviderController:
-        calls:
-            - [setContainer, ['@service_container']]
-
-    JobsBundle\Controller\FacebookController:
-        calls:
-            - [setContainer, ['@service_container']]
+        tags: ['controller.service_arguments']

@@ -1,9 +1,12 @@
 includes:
 	- %currentWorkingDirectory%/vendor/phpstan/phpstan-symfony/extension.neon
 parameters:
+    scanFiles:
+        - %currentWorkingDirectory%/vendor/pimcore/pimcore/stubs/dynamic-constants.php
     reportUnmatchedIgnoredErrors: false
     symfony:
-        container_xml_path: %currentWorkingDirectory%/var/cache/test/appTestKernelTestDebugContainer.xml
+        container_xml_path: %currentWorkingDirectory%/var/cache/test/TestKernelTestDebugContainer.xml
+        constant_hassers: false
     excludes_analyse:
         # as long we don't install the dependencies :(
         - '*JobsBundle/Seo/Extractor/GoogleForJobsExtractor.php'
@@ -11,7 +14,4 @@ parameters:
     ignoreErrors:
         # 3rd parties
         - '/.*Spatie\\SchemaOrg\\Graph.*/'
-        # There is no global constant definition file we could include, ignore it:
-        - '/Constant PIMCORE_[A-Z\\_]+ not found\./'
-        - '/.*NodeDefinition::append.*/'
-        - '/.*NodeDefinition::addDefaultsIfNotSet.*/'
+        - '/.*League\\OAuth2\\Client.*/'

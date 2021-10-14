@@ -12,35 +12,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DynamicRouteRequestResolver implements ContextItemsResolverInterface
 {
-    /**
-     * @var array
-     */
-    protected $configuration;
+    protected array $configuration;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ConnectorContextManagerInterface $connectorContextManager;
 
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
-
-    /**
-     * @var ConnectorContextManagerInterface
-     */
-    protected $connectorContextManager;
-
-    /**
-     * @param ConnectorContextManagerInterface $connectorContextManager
-     */
     public function __construct(ConnectorContextManagerInterface $connectorContextManager)
     {
         $this->connectorContextManager = $connectorContextManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function configureOptions(OptionsResolver $optionsResolver)
+    public static function configureOptions(OptionsResolver $resolver): void
     {
-        $optionsResolver->setDefaults([
+        $resolver->setDefaults([
             'is_localized_field'        => false,
             'must_match_request_locale' => false,
             'route_name'                => null,
@@ -48,34 +31,25 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
             'route_object_identifier'   => null,
         ]);
 
-        $optionsResolver->setAllowedTypes('is_localized_field', ['bool']);
-        $optionsResolver->setAllowedTypes('must_match_request_locale', ['bool']);
-        $optionsResolver->setAllowedTypes('route_name', ['string', 'null']);
-        $optionsResolver->setAllowedTypes('route_request_identifier', ['string', 'null']);
-        $optionsResolver->setAllowedTypes('route_object_identifier', ['string', 'null']);
-        $optionsResolver->setRequired(['is_localized_field', 'must_match_request_locale', 'route_name', 'route_request_identifier', 'route_object_identifier']);
+        $resolver->setAllowedTypes('is_localized_field', ['bool']);
+        $resolver->setAllowedTypes('must_match_request_locale', ['bool']);
+        $resolver->setAllowedTypes('route_name', ['string', 'null']);
+        $resolver->setAllowedTypes('route_request_identifier', ['string', 'null']);
+        $resolver->setAllowedTypes('route_object_identifier', ['string', 'null']);
+        $resolver->setRequired(['is_localized_field', 'must_match_request_locale', 'route_name', 'route_request_identifier', 'route_object_identifier']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConfiguration(array $resolverConfiguration)
+    public function setConfiguration(array $resolverConfiguration): void
     {
         $this->configuration = $resolverConfiguration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    public function setEnvironment(EnvironmentServiceInterface $environmentService): void
     {
         $this->environmentService = $environmentService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureContextParameter(OptionsResolver $resolver)
+    public function configureContextParameter(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'is_preflight_check' => false,
@@ -87,10 +61,7 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
         $resolver->setAllowedTypes('is_preflight_check', ['bool']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
+    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array
     {
         /** @var Request $request */
         $request = $contextParameter['request'];
@@ -164,12 +135,7 @@ class DynamicRouteRequestResolver implements ContextItemsResolverInterface
         return $resolvedItems;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    protected function generateDummyForPreflight(Request $request)
+    protected function generateDummyForPreflight(Request $request): array
     {
         if ($request->get($this->configuration['route_request_identifier'], null) === null) {
             return [];

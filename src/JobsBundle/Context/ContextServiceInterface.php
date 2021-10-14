@@ -7,13 +7,8 @@ use JobsBundle\Connector\ConnectorDefinitionInterface;
 interface ContextServiceInterface
 {
     /**
-     * @param string                       $contextName
-     * @param ConnectorDefinitionInterface $connectorDefinition
-     * @param array                        $contextParameter
-     *
-     * @return array|ResolvedItem[]
-     *
+     * @return array<int, ResolvedItemInterface>
      * @throws \Exception
      */
-    public function resolveContextItems(string $contextName, ConnectorDefinitionInterface $connectorDefinition, array $contextParameter);
+    public function resolveContextItems(string $contextName, ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array;
 }

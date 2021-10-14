@@ -7,30 +7,16 @@ use Pimcore\Maintenance\TaskInterface;
 
 class CleanUpLogsTask implements TaskInterface
 {
-    /**
-     * @var int
-     */
-    protected $logExpirationDays;
+    protected int $logExpirationDays;
+    protected LogRepositoryInterface $logRepository;
 
-    /**
-     * @var LogRepositoryInterface
-     */
-    protected $logRepository;
-
-    /**
-     * @param int                    $logExpirationDays
-     * @param LogRepositoryInterface $logRepository
-     */
     public function __construct(int $logExpirationDays, LogRepositoryInterface $logRepository)
     {
         $this->logExpirationDays = $logExpirationDays;
         $this->logRepository = $logRepository;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute()
+    public function execute(): void
     {
         $this->logRepository->deleteExpired($this->logExpirationDays);
     }

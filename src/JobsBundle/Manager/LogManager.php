@@ -2,6 +2,7 @@
 
 namespace JobsBundle\Manager;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use JobsBundle\Model\LogEntry;
 use JobsBundle\Model\LogEntryInterface;
 use JobsBundle\Repository\LogRepositoryInterface;
@@ -9,26 +10,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class LogManager implements LogManagerInterface
 {
-    /**
-     * @var LogRepositoryInterface
-     */
-    protected $logRepository;
+    protected LogRepositoryInterface $logRepository;
+    protected ConnectorManagerInterface $connectorManager;
+    protected EntityManagerInterface $entityManager;
 
-    /**
-     * @var ConnectorManagerInterface
-     */
-    protected $connectorManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @param LogRepositoryInterface    $logRepository
-     * @param ConnectorManagerInterface $connectorManager
-     * @param EntityManagerInterface    $entityManager
-     */
     public function __construct(
         LogRepositoryInterface $logRepository,
         ConnectorManagerInterface $connectorManager,
@@ -39,58 +24,37 @@ class LogManager implements LogManagerInterface
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getForObject(int $objectId)
+    public function getForObject(int $objectId): Paginator
     {
         return $this->logRepository->findForObject($objectId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getForConnectorEngine(int $connectorEngineId, int $offset, int $limit)
+    public function getForConnectorEngine(int $connectorEngineId, int $offset, int $limit): Paginator
     {
         return $this->logRepository->findForConnectorEngine($connectorEngineId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId, int $offset, int $limit)
+    public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId, int $offset, int $limit): Paginator
     {
         return $this->logRepository->findForConnectorEngineAndObject($connectorEngineId, $objectId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId)
+    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId): void
     {
-        return $this->logRepository->deleteForConnectorEngineAndObject($connectorEngineId, $objectId);
+        $this->logRepository->deleteForConnectorEngineAndObject($connectorEngineId, $objectId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteForObject(int $objectId)
+    public function deleteForObject(int $objectId): void
     {
-        return $this->logRepository->deleteForObject($objectId);
+        $this->logRepository->deleteForObject($objectId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function flushLogs()
+    public function flushLogs(): void
     {
-        return $this->logRepository->truncateLogTable();
+        $this->logRepository->truncateLogTable();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createNew()
+    public function createNew(): LogEntryInterface
     {
         $logEntry = new LogEntry();
         $logEntry->setCreationDate(new \DateTime());
@@ -98,10 +62,7 @@ class LogManager implements LogManagerInterface
         return $logEntry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createNewForConnector(string $connectorName)
+    public function createNewForConnector(string $connectorName): LogEntryInterface
     {
         $connectorEngine = $this->connectorManager->getEngineByName($connectorName);
 
@@ -112,10 +73,7 @@ class LogManager implements LogManagerInterface
         return $logEntry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function update(LogEntryInterface $logEntry)
+    public function update(LogEntryInterface $logEntry): LogEntryInterface
     {
         $this->entityManager->persist($logEntry);
         $this->entityManager->flush();
@@ -123,10 +81,7 @@ class LogManager implements LogManagerInterface
         return $logEntry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(LogEntryInterface $logEntry)
+    public function delete(LogEntryInterface $logEntry): void
     {
         $this->entityManager->remove($logEntry);
         $this->entityManager->flush();

@@ -11,57 +11,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PimcoreObjectResolver implements ContextItemsResolverInterface
 {
-    /**
-     * @var array
-     */
-    protected $configuration;
+    protected array $configuration;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ConnectorContextManagerInterface $connectorContextManager;
 
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
-
-    /**
-     * @var ConnectorContextManagerInterface
-     */
-    protected $connectorContextManager;
-
-    /**
-     * @param ConnectorContextManagerInterface $connectorContextManager
-     */
     public function __construct(ConnectorContextManagerInterface $connectorContextManager)
     {
         $this->connectorContextManager = $connectorContextManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function configureOptions(OptionsResolver $optionsResolver)
+    public static function configureOptions(OptionsResolver $resolver): void
     {
-        // no optinos
+        // no options
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConfiguration(array $resolverConfiguration)
+    public function setConfiguration(array $resolverConfiguration): void
     {
         $this->configuration = $resolverConfiguration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    public function setEnvironment(EnvironmentServiceInterface $environmentService): void
     {
         $this->environmentService = $environmentService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureContextParameter(OptionsResolver $resolver)
+    public function configureContextParameter(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'element' => null,
@@ -75,10 +49,7 @@ class PimcoreObjectResolver implements ContextItemsResolverInterface
         $resolver->setAllowedTypes('element', DataObject\Concrete::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
+    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array
     {
         /** @var DataObject\Concrete $element */
         $element = $contextParameter['element'];

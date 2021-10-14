@@ -4,128 +4,69 @@ namespace JobsBundle\Model;
 
 class LogEntry implements LogEntryInterface
 {
-    /**
-     * @var int
-     */
-    protected $id;
+    protected ?int $id = null;
+    protected ConnectorEngineInterface $connectorEngine;
+    protected int $objectId;
+    protected string $type;
+    protected string $message;
+    protected \DateTime $creationDate;
 
-    /**
-     * @var ConnectorEngineInterface
-     */
-    protected $connectorEngine;
-
-    /**
-     * @var int
-     */
-    protected $objectId;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-     * @var \DateTime
-     */
-    protected $creationDate;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine)
+    public function setConnectorEngine(ConnectorEngineInterface $connectorEngine): void
     {
         $this->connectorEngine = $connectorEngine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConnectorEngine()
+    public function getConnectorEngine(): ConnectorEngineInterface
     {
         return $this->connectorEngine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setObjectId(int $objectId)
+    public function setObjectId(int $objectId): void
     {
         $this->objectId = $objectId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getObjectId()
+    public function getObjectId(): int
     {
         return $this->objectId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setMessage(string $message)
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setCreationDate(\DateTime $date)
+    public function setCreationDate(\DateTime $date): void
     {
         $this->creationDate = $date;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCreationDate()
+    public function getCreationDate(): \DateTime
     {
         return $this->creationDate;
     }

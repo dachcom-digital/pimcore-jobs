@@ -7,23 +7,14 @@ use Spatie\SchemaOrg\Graph;
 
 class ItemTransformerDefinition implements ItemTransformerDefinitionInterface
 {
-    /**
-     * @var Graph
-     */
-    protected $graph;
+    protected Graph $graph;
 
-    /**
-     * @param Graph $graph
-     */
-    public function setGraph(Graph $graph)
+    public function setGraph(Graph $graph): void
     {
         $this->graph = $graph;
     }
 
-    /**
-     * @return Graph
-     */
-    public function getGraph()
+    public function getGraph(): Graph
     {
         return $this->graph;
     }

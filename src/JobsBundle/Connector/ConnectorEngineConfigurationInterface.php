@@ -4,15 +4,7 @@ namespace JobsBundle\Connector;
 
 interface ConnectorEngineConfigurationInterface
 {
-    /**
-     * @param string $param
-     *
-     * @return mixed
-     */
-    public function getConfigParam(string $param);
+    public function getConfigParam(string $param): mixed;
 
-    /**
-     * @return array
-     */
-    public function toBackendConfigArray();
+    public function toBackendConfigArray(): array;
 }

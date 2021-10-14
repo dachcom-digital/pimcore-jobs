@@ -4,81 +4,37 @@ namespace JobsBundle\Model;
 
 class ContextDefinition implements ContextDefinitionInterface
 {
-    /**
-     * @var int
-     */
-    protected $id;
+    protected ?int $id = null;
+    protected string $host;
+    protected string $locale;
 
-    /**
-     * @var string
-     */
-    protected $host;
-
-    /**
-     * @var string
-     */
-    protected $locale;
-
-    /**
-     * @var bool
-     */
-    protected $fromClone;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setHost(string $host)
+    public function setHost(string $host): void
     {
         $this->host = $host;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setLocale(string $locale)
+    public function setLocale(string $locale): void
     {
         $this->locale = $locale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
-    }
-
-    public function isFromClone()
-    {
-        return $this->fromClone;
-    }
-
-    public function __clone()
-    {
-        $this->fromClone = true;
     }
 }

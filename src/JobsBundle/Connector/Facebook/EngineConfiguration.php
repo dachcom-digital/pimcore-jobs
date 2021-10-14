@@ -8,206 +8,127 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
 {
     /**
      * @internal
-     *l
-     *
-     * @var string
      */
-    protected $accessToken;
+    protected ?string $accessToken = null;
 
     /**
      * @internal
-     *
-     * @var string
      */
-    protected $accessTokenExpiresAt;
+    protected int|string $accessTokenExpiresAt;
 
     /**
      * @internal
-     *
-     * @var string
      */
-    protected $recruitingManagerId;
+    protected ?string $recruitingManagerId = null;
+
+    protected string $appId;
+    protected string $appSecret;
+    protected string $publisherName;
+    protected string $publisherUrl;
+    protected string $photoUrl;
+    protected string $dataPolicyUrl;
 
     /**
-     * @var string
-     */
-    protected $appId;
-
-    /**
-     * @var string
-     */
-    protected $appSecret;
-
-    /**
-     * @var string
-     */
-    protected $publisherName;
-
-    /**
-     * @var string
-     */
-    protected $publisherUrl;
-
-    /**
-     * @var string
-     */
-    protected $photoUrl;
-
-    /**
-     * @var string
-     */
-    protected $dataPolicyUrl;
-
-    /**
-     * @param string $token
-     *
      * @internal
      */
-    public function setAccessToken($token)
+    public function setAccessToken(string $token): void
     {
         $this->accessToken = $token;
     }
 
     /**
-     * @param string $expiresAt
-     *
      * @internal
      */
-    public function setAccessTokenExpiresAt($expiresAt)
+    public function setAccessTokenExpiresAt(int|string $expiresAt): void
     {
         $this->accessTokenExpiresAt = $expiresAt;
     }
 
     /**
-     * @return string
-     *
      * @internal
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?string
     {
         return $this->accessToken;
     }
 
     /**
-     * @return string
-     *
      * @internal
      */
-    public function getRecruitingManagerId()
+    public function getRecruitingManagerId(): ?string
     {
         return $this->recruitingManagerId;
     }
 
     /**
-     * @param string $recruitingManagerId
-     *
      * @internal
      */
-    public function setRecruitingManagerId(string $recruitingManagerId)
+    public function setRecruitingManagerId(string $recruitingManagerId): void
     {
         $this->recruitingManagerId = $recruitingManagerId;
     }
 
-    /**
-     * @param string $appId
-     */
-    public function setAppId($appId)
+    public function setAppId(string $appId): void
     {
         $this->appId = $appId;
     }
 
-    /**
-     * @return string
-     */
-    public function getAppId()
+    public function getAppId(): string
     {
         return $this->appId;
     }
 
-    /**
-     * @param string $appSecret
-     */
-    public function setAppSecret($appSecret)
+    public function setAppSecret(string $appSecret): void
     {
         $this->appSecret = $appSecret;
     }
 
-    /**
-     * @return string
-     */
-    public function getAppSecret()
+    public function getAppSecret(): string
     {
         return $this->appSecret;
     }
 
-    /**
-     * @return string
-     */
-    public function getPublisherName()
+    public function getPublisherName(): string
     {
         return $this->publisherName;
     }
 
-    /**
-     * @param string $publisherName
-     */
-    public function setPublisherName(string $publisherName)
+    public function setPublisherName(string $publisherName): void
     {
         $this->publisherName = $publisherName;
     }
 
-    /**
-     * @return string
-     */
-    public function getPublisherUrl()
+    public function getPublisherUrl(): string
     {
         return $this->publisherUrl;
     }
 
-    /**
-     * @param string $publisherUrl
-     */
-    public function setPublisherUrl(string $publisherUrl)
+    public function setPublisherUrl(string $publisherUrl): void
     {
         $this->publisherUrl = $publisherUrl;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhotoUrl()
+    public function getPhotoUrl(): string
     {
         return $this->photoUrl;
     }
 
-    /**
-     * @param string $photoUrl
-     */
-    public function setPhotoUrl(string $photoUrl)
+    public function setPhotoUrl(string $photoUrl): void
     {
         $this->photoUrl = $photoUrl;
     }
 
-    /**
-     * @return string
-     */
-    public function getDataPolicyUrl()
+    public function getDataPolicyUrl(): string
     {
         return $this->dataPolicyUrl;
     }
 
-    /**
-     * @param string $dataPolicyUrl
-     */
-    public function setDataPolicyUrl(string $dataPolicyUrl)
+    public function setDataPolicyUrl(string $dataPolicyUrl): void
     {
         $this->dataPolicyUrl = $dataPolicyUrl;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigParam(string $param)
+    public function getConfigParam(string $param): mixed
     {
         $getter = sprintf('get%s', ucfirst($param));
         if (method_exists($this, $getter)) {
@@ -217,10 +138,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toBackendConfigArray()
+    public function toBackendConfigArray() :array
     {
         return [
             'appId'         => $this->getAppId(),

@@ -6,547 +6,289 @@ use JobsBundle\Transformer\ItemTransformerDefinitionInterface;
 
 class ItemTransformerDefinition implements ItemTransformerDefinitionInterface
 {
-    /**
-     * @var string
-     */
-    protected $title;
+    protected ?string $title = null;
+    protected ?string $date = null;
+    protected ?string $id = null;
+    protected ?string $photoUrl = null;
+    protected ?string $description = null;
+    protected ?string $jobType = null;
+    protected ?string $companyName = null;
+    protected ?string $companyId = null;
+    protected ?string $companyFullAddress = null;
+    protected ?string $companyFacebookUrl = null;
+    protected ?string $companyDataPolicyUrl = null;
+    protected ?string $companyUrl = null;
+    protected ?string $companyPageMatchingApproach = null;
+    protected ?string $fullAddress = null;
+    protected ?string $houseNumber = null;
+    protected ?string $streetName = null;
+    protected ?string $city = null;
+    protected ?string $region = null;
+    protected ?string $country = null;
+    protected ?string $postalCode = null;
+    protected ?string $salary = null;
+    protected ?string $salaryMin = null;
+    protected ?string $salaryMax = null;
+    protected ?string $salaryCurrency = null;
+    protected ?string $salaryType = null;
+    protected ?array $facebookApplyData = null;
 
-    /**
-     * @var string
-     */
-    protected $date;
-
-    /**
-     * @var string
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $photoUrl;
-
-    /**
-     * @var string
-     */
-    protected $description;
-
-    /**
-     * @var string
-     */
-    protected $jobType;
-
-    /**
-     * @var string
-     */
-    protected $companyName;
-
-    /**
-     * @var string
-     */
-    protected $companyId;
-
-    /**
-     * @var string
-     */
-    protected $companyFullAddress;
-
-    /**
-     * @var string
-     */
-    protected $companyFacebookUrl;
-
-    /**
-     * @var string
-     */
-    protected $companyDataPolicyUrl;
-
-    /**
-     * @var string
-     */
-    protected $companyUrl;
-
-    /**
-     * @var string
-     */
-    protected $companyPageMatchingApproach;
-
-    /**
-     * @var string
-     */
-    protected $fullAddress;
-
-    /**
-     * @var string
-     */
-    protected $houseNumber;
-
-    /**
-     * @var string
-     */
-    protected $streetName;
-
-    /**
-     * @var string
-     */
-    protected $city;
-
-    /**
-     * @var string
-     */
-    protected $region;
-
-    /**
-     * @var string
-     */
-    protected $country;
-
-    /**
-     * @var string
-     */
-    protected $postalCode;
-
-    /**
-     * @var string
-     */
-    protected $salary;
-
-    /**
-     * @var string
-     */
-    protected $salaryMin;
-
-    /**
-     * @var string
-     */
-    protected $salaryMax;
-
-    /**
-     * @var string
-     */
-    protected $salaryCurrency;
-
-    /**
-     * @var string
-     */
-    protected $salaryType;
-
-    /**
-     * @var array
-     */
-    protected $facebookApplyData;
-
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getDate()
+    public function getDate(): ?string
     {
         return $this->date;
     }
 
-    /**
-     * @param string $date
-     */
-    public function setDate($date)
+    public function setDate(string $date): void
     {
         $this->date = $date;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    /**
-     * @param string $id
-     */
-    public function setId($id)
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPhotoUrl()
+    public function getPhotoUrl(): ?string
     {
         return $this->photoUrl;
     }
 
-    /**
-     * @param string $photoUrl
-     */
-    public function setPhotoUrl($photoUrl)
+    public function setPhotoUrl(string $photoUrl): void
     {
         $this->photoUrl = $photoUrl;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getJobType()
+    public function getJobType(): ?string
     {
         return $this->jobType;
     }
 
-    /**
-     * @param string $jobType
-     */
-    public function setJobType($jobType)
+    public function setJobType(string $jobType): void
     {
         $this->jobType = $jobType;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyName()
+    public function getCompanyName(): ?string
     {
         return $this->companyName;
     }
 
-    /**
-     * @param string $companyName
-     */
-    public function setCompanyName($companyName)
+    public function setCompanyName(string $companyName): void
     {
         $this->companyName = $companyName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyId()
+    public function getCompanyId(): ?string
     {
         return $this->companyId;
     }
 
-    /**
-     * @param string $companyId
-     */
-    public function setCompanyId($companyId)
+    public function setCompanyId(string $companyId): void
     {
         $this->companyId = $companyId;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyFullAddress()
+    public function getCompanyFullAddress(): ?string
     {
         return $this->companyFullAddress;
     }
 
-    /**
-     * @param string $companyFullAddress
-     */
-    public function setCompanyFullAddress($companyFullAddress)
+    public function setCompanyFullAddress(string $companyFullAddress): void
     {
         $this->companyFullAddress = $companyFullAddress;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyFacebookUrl()
+    public function getCompanyFacebookUrl(): ?string
     {
         return $this->companyFacebookUrl;
     }
 
-    /**
-     * @param string $companyFacebookUrl
-     */
-    public function setCompanyFacebookUrl($companyFacebookUrl)
+    public function setCompanyFacebookUrl(string $companyFacebookUrl): void
     {
         $this->companyFacebookUrl = $companyFacebookUrl;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyDataPolicyUrl()
+    public function getCompanyDataPolicyUrl(): ?string
     {
         return $this->companyDataPolicyUrl;
     }
 
-    /**
-     * @param string $companyDataPolicyUrl
-     */
-    public function setCompanyDataPolicyUrl($companyDataPolicyUrl)
+    public function setCompanyDataPolicyUrl(string $companyDataPolicyUrl): void
     {
         $this->companyDataPolicyUrl = $companyDataPolicyUrl;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyUrl()
+    public function getCompanyUrl(): ?string
     {
         return $this->companyUrl;
     }
 
-    /**
-     * @param string $companyUrl
-     */
-    public function setCompanyUrl($companyUrl)
+    public function setCompanyUrl(string $companyUrl): void
     {
         $this->companyUrl = $companyUrl;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyPageMatchingApproach()
+    public function getCompanyPageMatchingApproach(): ?string
     {
         return $this->companyPageMatchingApproach;
     }
 
-    /**
-     * @param string $companyPageMatchingApproach
-     */
-    public function setCompanyPageMatchingApproach($companyPageMatchingApproach)
+    public function setCompanyPageMatchingApproach(string $companyPageMatchingApproach): void
     {
         $this->companyPageMatchingApproach = $companyPageMatchingApproach;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFullAddress()
+    public function getFullAddress(): ?string
     {
         return $this->fullAddress;
     }
 
-    /**
-     * @param string $fullAddress
-     */
-    public function setFullAddress($fullAddress)
+    public function setFullAddress(string $fullAddress): void
     {
         $this->fullAddress = $fullAddress;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getHouseNumber()
+    public function getHouseNumber(): ?string
     {
         return $this->houseNumber;
     }
 
-    /**
-     * @param string $houseNumber
-     */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber(string $houseNumber): void
     {
         $this->houseNumber = $houseNumber;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getStreetName()
+    public function getStreetName(): ?string
     {
         return $this->streetName;
     }
 
-    /**
-     * @param string $streetName
-     */
-    public function setStreetName($streetName)
+    public function setStreetName(string $streetName): void
     {
         $this->streetName = $streetName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCity()
+    public function getCity(): ?string
     {
         return $this->city;
     }
 
-    /**
-     * @param string $city
-     */
-    public function setCity($city)
+    public function setCity(string $city): void
     {
         $this->city = $city;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getRegion()
+    public function getRegion(): ?string
     {
         return $this->region;
     }
 
-    /**
-     * @param string $region
-     */
-    public function setRegion($region)
+    public function setRegion(string $region): void
     {
         $this->region = $region;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCountry()
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
-    /**
-     * @param string $country
-     */
-    public function setCountry($country)
+    public function setCountry(string $country): void
     {
         $this->country = $country;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPostalCode()
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
-    /**
-     * @param string $postalCode
-     */
-    public function setPostalCode($postalCode)
+    public function setPostalCode(string $postalCode): void
     {
         $this->postalCode = $postalCode;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSalary()
+    public function getSalary(): ?string
     {
         return $this->salary;
     }
 
-    /**
-     * @param string $salary
-     */
-    public function setSalary($salary)
+    public function setSalary(string $salary): void
     {
         $this->salary = $salary;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSalaryMin()
+    public function getSalaryMin(): ?string
     {
         return $this->salaryMin;
     }
 
-    /**
-     * @param string $salaryMin
-     */
-    public function setSalaryMin($salaryMin)
+    public function setSalaryMin(string $salaryMin): void
     {
         $this->salaryMin = $salaryMin;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSalaryMax()
+    public function getSalaryMax(): ?string
     {
         return $this->salaryMax;
     }
 
-    /**
-     * @param string $salaryMax
-     */
-    public function setSalaryMax($salaryMax)
+    public function setSalaryMax(string $salaryMax): void
     {
         $this->salaryMax = $salaryMax;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSalaryCurrency()
+    public function getSalaryCurrency(): ?string
     {
         return $this->salaryCurrency;
     }
 
-    /**
-     * @param string $salaryCurrency
-     */
-    public function setSalaryCurrency($salaryCurrency)
+    public function setSalaryCurrency(string $salaryCurrency): void
     {
         $this->salaryCurrency = $salaryCurrency;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSalaryType()
+    public function getSalaryType(): ?string
     {
         return $this->salaryType;
     }
 
-    /**
-     * @param string $salaryType
-     */
-    public function setSalaryType($salaryType)
+    public function setSalaryType(string $salaryType): void
     {
         $this->salaryType = $salaryType;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getFacebookApplyData()
+    public function getFacebookApplyData(): ?array
     {
         return $this->facebookApplyData;
     }
 
     /**
-     * @param array $facebookApplyData
-     *
      * Valid Nodes:
      *
      *   (string) application-callback-url
@@ -556,15 +298,12 @@ class ItemTransformerDefinition implements ItemTransformerDefinitionInterface
      *      (string) phone-number-field
      *      (string) work-experience-field
      */
-    public function setFacebookApplyData($facebookApplyData)
+    public function setFacebookApplyData(array $facebookApplyData): void
     {
         $this->facebookApplyData = $facebookApplyData;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         $result = [];
 
@@ -579,14 +318,14 @@ class ItemTransformerDefinition implements ItemTransformerDefinitionInterface
                 continue;
             }
 
-            if (substr($method->getName(), 0, 3) === 'get') {
+            if (str_starts_with($method->getName(), 'get')) {
                 $value = $method->invoke($this);
 
                 if (empty($value)) {
                     continue;
                 }
 
-                $propName = preg_replace_callback('/([A-Z])/', function ($c) {
+                $propName = preg_replace_callback('/([A-Z])/', static function ($c) {
                     return '-' . strtolower($c[1]);
                 }, lcfirst(substr($method->getName(), 3)));
 

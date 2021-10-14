@@ -8,64 +8,29 @@ use JobsBundle\Model\ContextDefinitionInterface;
 interface ConnectorContextManagerInterface
 {
     /**
-     * @param int $objectId
-     *
-     * @return ConnectorContextItemInterface[]
+     * @return array<int, ConnectorContextItemInterface>
      */
-    public function getForObject(int $objectId);
+    public function getForObject(int $objectId): array;
 
     /**
-     * @param int $connectorEngineId
-     *
-     * @return ConnectorContextItemInterface[]
+     * @return array<int, ConnectorContextItemInterface>
      */
-    public function getForConnectorEngine(int $connectorEngineId);
+    public function getForConnectorEngine(int $connectorEngineId): array;
 
     /**
-     * @param int $connectorEngineId
-     * @param int $objectId
-     *
-     * @return ConnectorContextItemInterface[]
+     * @return array<int, ConnectorContextItemInterface>
      */
-    public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId);
+    public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId): array;
 
-    /**
-     * @param int $definitionContextId
-     *
-     * @return ContextDefinitionInterface
-     */
-    public function getContextDefinition(int $definitionContextId);
+    public function getContextDefinition(int $definitionContextId): ContextDefinitionInterface;
 
-    /**
-     * @param string $connectorDefinitionName
-     *
-     * @return bool
-     */
-    public function connectorAllowsMultipleContextItems(string $connectorDefinitionName);
+    public function connectorAllowsMultipleContextItems(string $connectorDefinitionName): bool;
 
-    /**
-     * @param int  $connectorId
-     *
-     * @return mixed
-     */
-    public function createNew(int $connectorId);
+    public function createNew(int $connectorId): ConnectorContextItemInterface;
 
-    /**
-     * @param ConnectorContextItemInterface $connectorContextItem
-     *
-     * @return ConnectorContextItemInterface
-     */
-    public function update(ConnectorContextItemInterface $connectorContextItem);
+    public function update(ConnectorContextItemInterface $connectorContextItem): ConnectorContextItemInterface;
 
-    /**
-     * @param ConnectorContextItemInterface $connectorContextItem
-     */
-    public function delete(ConnectorContextItemInterface $connectorContextItem);
+    public function delete(ConnectorContextItemInterface $connectorContextItem): void;
 
-    /**
-     * @param array $connectorContextItems
-     *
-     * @return ConnectorContextItemInterface[]
-     */
-    public function generateConnectorContextConfig(array $connectorContextItems);
+    public function generateConnectorContextConfig(array $connectorContextItems): array;
 }

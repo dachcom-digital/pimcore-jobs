@@ -3,41 +3,28 @@
 namespace JobsBundle\Context\Resolver;
 
 use JobsBundle\Connector\ConnectorDefinitionInterface;
-use JobsBundle\Context\ResolvedItem;
+use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Service\EnvironmentServiceInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 interface ContextItemsResolverInterface
 {
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public static function configureOptions(OptionsResolver $resolver);
+    public static function configureOptions(OptionsResolver $resolver): void;
 
     /**
-     * @param array $resolverConfiguration
-     *
      * @throws \Exception
      */
     public function setConfiguration(array $resolverConfiguration);
 
-    /**
-     * @param EnvironmentServiceInterface $environmentService
-     *
-     * @return mixed
-     */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService);
+    public function setEnvironment(EnvironmentServiceInterface $environmentService): void;
 
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureContextParameter(OptionsResolver $resolver);
+    public function configureContextParameter(OptionsResolver $resolver): void;
 
     /**
-     * @param ConnectorDefinitionInterface $connectorDefinition
-     * @param array                        $contextParameter
-     *
-     * @return array|ResolvedItem[]
+     * @return array<int, ResolvedItemInterface>
      */
-    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter);
+    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array;
 }

@@ -2,40 +2,27 @@
 
 namespace JobsBundle\Controller;
 
-use Facebook\Facebook;
-use Facebook\Exceptions\FacebookSDKException;
-use Facebook\FacebookResponse;
+use GuzzleHttp\Client;
 use JobsBundle\Connector\ConnectorServiceInterface;
 use JobsBundle\Connector\Facebook\EngineConfiguration;
-use JobsBundle\Connector\Facebook\Session\FacebookDataHandler;
 use JobsBundle\Model\ConnectorEngineInterface;
 use JobsBundle\Tool\FeedIdHelper;
 use JobsBundle\Service\EnvironmentServiceInterface;
+use League\OAuth2\Client\Provider\Facebook;
+use League\OAuth2\Client\Token\AccessToken;
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FacebookController extends FrontendController
 {
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ConnectorServiceInterface $connectorService;
 
-    /**
-     * @var ConnectorServiceInterface
-     */
-    protected $connectorService;
-
-    /**
-     * @param EnvironmentServiceInterface $environmentService
-     * @param ConnectorServiceInterface   $connectorService
-     */
     public function __construct(
         EnvironmentServiceInterface $environmentService,
         ConnectorServiceInterface $connectorService
@@ -44,83 +31,65 @@ class FacebookController extends FrontendController
         $this->connectorService = $connectorService;
     }
 
-    /**
-     * @param Request $request
-     * @param string  $token
-     *
-     * @return RedirectResponse
-     *
-     * @throws FacebookSDKException
-     */
-    public function connectAction(Request $request, string $token)
+    public function connectAction(Request $request, string $token): RedirectResponse
     {
-        $connectorDefinition = $this->connectorService->getConnectorDefinition('facebook', true);
+        $connectorEngine = $this->assertConnectorEngine($token);
 
-        if (!$connectorDefinition->engineIsLoaded()) {
-            throw $this->createNotFoundException('Not Found');
-        }
-
-        if ($token !== $connectorDefinition->getConnectorEngine()->getToken()) {
-            throw $this->createNotFoundException('Not Found');
-        }
-
-        $connectorEngineConfig = $connectorDefinition->getConnectorEngine()->getConfiguration();
+        $connectorEngineConfig = $connectorEngine->getConfiguration();
         if (!$connectorEngineConfig instanceof EngineConfiguration) {
             throw new HttpException(400, 'Invalid facebook configuration. Please configure your connector "facebook" in backend first.');
         }
 
-        $fb = $this->getFacebook($connectorEngineConfig, $request->getSession());
-        $helper = $fb->getRedirectLoginHelper();
+        $provider = $this->getFacebookProvider($connectorEngineConfig, $connectorEngine->getToken());
 
-        $callbackUrl = $this->generateUrl('jobs_facebook_connect_check', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+        $authUrl = $provider->getAuthorizationUrl([
+            'scope' => ['pages_show_list'],
+        ]);
 
-        $permissions = ['pages_show_list'];
-        $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+        $request->getSession()->set('FBRLH_oauth2state', $provider->getState());
 
-        return $this->redirect($loginUrl);
+        return $this->redirect($authUrl);
     }
 
     /**
-     * @param Request $request
-     * @param string  $token
-     *
-     * @return Response
-     *
      * @throws \Exception
      */
-    public function checkAction(Request $request, string $token)
+    public function checkAction(Request $request, string $token): Response
     {
-        $connectorDefinition = $this->connectorService->getConnectorDefinition('facebook', true);
+        $connectorEngine = $this->assertConnectorEngine($token);
 
-        if (!$connectorDefinition->engineIsLoaded()) {
-            throw $this->createNotFoundException('Not Found');
-        }
-
-        $connectorEngineConfig = $connectorDefinition->getConnectorEngine()->getConfiguration();
+        $connectorEngineConfig = $connectorEngine->getConfiguration();
         if (!$connectorEngineConfig instanceof EngineConfiguration) {
             throw new HttpException(400, 'Invalid facebook configuration. Please configure your connector "facebook" in backend first.');
         }
 
-        $fb = $this->getFacebook($connectorEngineConfig, $request->getSession());
-        $helper = $fb->getRedirectLoginHelper();
+        if (!$request->query->has('state') || $request->query->get('state') !== $request->getSession()->get('FBRLH_oauth2state')) {
+            throw new HttpException(400, 'Required param state missing from persistent data.');
+        }
 
-        if (!$accessToken = $helper->getAccessToken()) {
-            if ($helper->getError()) {
-                throw new HttpException(400, $helper->getError());
-            } else {
-                throw new HttpException(400, $request->query->get('error_message', 'Unknown Error.'));
+        $provider = $this->getFacebookProvider($connectorEngineConfig, $connectorEngine->getToken());
+
+        $defaultToken = $provider->getAccessToken('authorization_code', [
+            'code' => $request->query->get('code')
+        ]);
+
+        if (!$defaultToken instanceof AccessToken) {
+            $message = 'Could not generate access token';
+            if ($request->query->has('error_message')) {
+                $message = $request->query->get('error_message');
             }
+
+            throw new HttpException(400, $message);
         }
 
         try {
-            $oAuth2Client = $fb->getOAuth2Client();
-            $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-        } catch (FacebookSDKException $e) {
-            throw new HttpException(400, $e->getMessage());
+            $accessToken = $provider->getLongLivedAccessToken($defaultToken);
+        } catch (\Throwable $e) {
+            throw new HttpException(400, sprintf('Failed exchanging token: %s', $e->getMessage()));
         }
 
-        $connectorEngineConfig->setAccessToken($accessToken->getValue());
-        $connectorEngineConfig->setAccessTokenExpiresAt($accessToken->getExpiresAt());
+        $connectorEngineConfig->setAccessToken($accessToken->getToken());
+        $connectorEngineConfig->setAccessTokenExpiresAt($accessToken->getExpires());
         $this->connectorService->updateConnectorEngineConfiguration('facebook', $connectorEngineConfig);
 
         $response = new Response();
@@ -129,12 +98,7 @@ class FacebookController extends FrontendController
         return $response;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function adminGenerateFeedAction(Request $request)
+    public function adminGenerateFeedAction(Request $request): JsonResponse
     {
         $generateState = $request->request->get('state');
 
@@ -145,6 +109,11 @@ class FacebookController extends FrontendController
         }
 
         $connectorEngine = $connectorDefinition->getConnectorEngine();
+
+        if (!$connectorEngine instanceof ConnectorEngineInterface) {
+            return $this->json(['success' => false, 'message' => 'Connector is not loaded.']);
+        }
+
         $connectorConfiguration = $connectorEngine->getConfiguration();
 
         if (empty($connectorEngine->getToken())) {
@@ -164,17 +133,21 @@ class FacebookController extends FrontendController
                 $confirmText = 'No Recruiting Manger configured. Do you want to create one now?';
 
                 return $this->json(['success' => true, 'dispatchType' => 'confirm', 'confirmText' => $confirmText, 'state' => 'createRecruitingManager']);
-            } else {
-                $confirmText = sprintf('Recruiting Manger with Id "%s" found. Do you want to request a new feed now?', $connectorConfiguration->getRecruitingManagerId());
-
-                return $this->json(['success' => true, 'dispatchType' => 'confirm', 'confirmText' => $confirmText, 'state' => 'createFeed']);
             }
-        } elseif ($generateState === 'createRecruitingManager') {
-            $response = $this->registerRecruitingManager($request->getSession(), $connectorEngine);
+
+            $confirmText = sprintf('Recruiting Manger with Id "%s" found. Do you want to request a new feed now?', $connectorConfiguration->getRecruitingManagerId());
+
+            return $this->json(['success' => true, 'dispatchType' => 'confirm', 'confirmText' => $confirmText, 'state' => 'createFeed']);
+        }
+
+        if ($generateState === 'createRecruitingManager') {
+            $response = $this->registerRecruitingManager($connectorEngine);
 
             return $this->json($response);
-        } elseif ($generateState === 'createFeed') {
-            $response = $this->registerFeed($request->getSession(), $connectorEngine);
+        }
+
+        if ($generateState === 'createFeed') {
+            $response = $this->registerFeed($connectorEngine);
 
             return $this->json($response);
         }
@@ -185,13 +158,27 @@ class FacebookController extends FrontendController
         ]);
     }
 
-    /**
-     * @param SessionInterface         $session
-     * @param ConnectorEngineInterface $connectorEngine
-     *
-     * @return array
-     */
-    protected function registerRecruitingManager(SessionInterface $session, ConnectorEngineInterface $connectorEngine)
+    protected function assertConnectorEngine($token): ConnectorEngineInterface
+    {
+        $connectorDefinition = $this->connectorService->getConnectorDefinition('facebook', true);
+
+        if (!$connectorDefinition->engineIsLoaded()) {
+            throw $this->createNotFoundException('Not Found');
+        }
+
+        $connectorEngine = $connectorDefinition->getConnectorEngine();
+        if (!$connectorEngine instanceof ConnectorEngineInterface) {
+            throw $this->createNotFoundException('Not Found');
+        }
+
+        if ($token !== $connectorEngine->getToken()) {
+            throw $this->createNotFoundException('Not Found');
+        }
+
+        return $connectorEngine;
+    }
+
+    protected function registerRecruitingManager(ConnectorEngineInterface $connectorEngine): array
     {
         $connectorEngineConfig = $connectorEngine->getConfiguration();
         if (!$connectorEngineConfig instanceof EngineConfiguration) {
@@ -206,26 +193,23 @@ class FacebookController extends FrontendController
         ];
 
         try {
-            $fb = $this->getFacebook($connectorEngineConfig, $session);
-            $response = $fb->post('/me/recruiting_managers', $params, $connectorEngineConfig->getAccessToken());
-        } catch (FacebookSDKException $e) {
+            $response = $this->makeGraphCall('/me/recruiting_managers', $params, $connectorEngineConfig);
+        } catch (\Throwable $e) {
             return ['success' => false, 'message' => sprintf('Request error: %s', $e->getMessage())];
         }
 
-        if (!$response instanceof FacebookResponse) {
+        if ($response === null) {
             return ['success' => false, 'message' => 'Invalid Response.'];
         }
 
-        $data = $response->getDecodedBody();
-
-        if (!isset($data['id'])) {
+        if (!isset($response['id'])) {
             return ['success' => false, 'message' => 'Missing recruiting manager id parameter in response.'];
         }
 
-        $connectorEngineConfig->setRecruitingManagerId($data['id']);
+        $connectorEngineConfig->setRecruitingManagerId($response['id']);
         $this->connectorService->updateConnectorEngineConfiguration('facebook', $connectorEngineConfig);
 
-        $confirmText = sprintf('Recruiting Manger with Id "%s" successfully registered. Do you want to request a new feed now?', $data['id']);
+        $confirmText = sprintf('Recruiting Manger with Id "%s" successfully registered. Do you want to request a new feed now?', $response['id']);
 
         return [
             'success'      => true,
@@ -235,13 +219,7 @@ class FacebookController extends FrontendController
         ];
     }
 
-    /**
-     * @param SessionInterface         $session
-     * @param ConnectorEngineInterface $connectorEngine
-     *
-     * @return array
-     */
-    protected function registerFeed(SessionInterface $session, ConnectorEngineInterface $connectorEngine)
+    protected function registerFeed(ConnectorEngineInterface $connectorEngine): array
     {
         $token = $connectorEngine->getToken();
         $feedIdHelper = new FeedIdHelper($connectorEngine);
@@ -264,24 +242,21 @@ class FacebookController extends FrontendController
         ];
 
         try {
-            $fb = $this->getFacebook($connectorEngineConfig, $session);
-            $response = $fb->post(sprintf('/%s/job_feeds', $connectorEngineConfig->getRecruitingManagerId()), $params, $connectorEngineConfig->getAccessToken());
-        } catch (FacebookSDKException $e) {
+            $response = $this->makeGraphCall(sprintf('/%s/job_feeds', $connectorEngineConfig->getRecruitingManagerId()), $params, $connectorEngineConfig);
+        } catch (\Throwable $e) {
             return ['success' => false, 'message' => sprintf('Request error: %s', $e->getMessage())];
         }
 
-        if (!$response instanceof FacebookResponse) {
+        if ($response === null) {
             return ['success' => false, 'message' => 'Invalid Response.'];
         }
 
-        $data = $response->getDecodedBody();
-
-        if (!isset($data['feed_id'])) {
+        if (!isset($response['feed_id'])) {
             return ['success' => false, 'message' => 'Missing parameter "feed_id" in response.'];
         }
 
         try {
-            $feedIdHelper->addFeedId($newFeedId, $data['feed_id']);
+            $feedIdHelper->addFeedId($newFeedId, $response['feed_id']);
         } catch (\Exception $e) {
             return ['success' => false, 'message' => sprintf('Error while generating new feed Id. %s', $e->getMessage())];
         }
@@ -292,27 +267,41 @@ class FacebookController extends FrontendController
             'success'      => true,
             'state'        => null,
             'dispatchType' => 'success',
-            'confirmText'  => sprintf('Feed ID "%s" successfully registered.', $data['feed_id'])
+            'confirmText'  => sprintf('Feed ID "%s" successfully registered.', $response['feed_id'])
         ];
     }
 
-    /**
-     * @param EngineConfiguration $configuration
-     * @param SessionInterface    $session
-     *
-     * @return Facebook
-     *
-     * @throws FacebookSDKException
-     */
-    protected function getFacebook(EngineConfiguration $configuration, SessionInterface $session)
+    protected function makeGraphCall(string $endpoint, array $params, EngineConfiguration $engineConfiguration): ?array
     {
-        $fb = new Facebook([
-            'app_id'                  => $configuration->getAppId(),
-            'app_secret'              => $configuration->getAppSecret(),
-            'persistent_data_handler' => new FacebookDataHandler($session),
-            'default_graph_version'   => 'v2.8'
+        $client = new Client([
+            'base_uri' => 'https://graph.facebook.com/v2.10'
         ]);
 
-        return $fb;
+        $response = $client->post($endpoint, array_merge([
+            'query'       => [
+                'access_token'    => $engineConfiguration->getAccessToken(),
+                'appsecret_proof' => hash_hmac('sha256', $engineConfiguration->getAccessToken(), $engineConfiguration->getAppSecret()),
+            ],
+            'form_params' => $params
+
+        ], $params));
+
+        return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
     }
+
+    protected function getFacebookProvider(EngineConfiguration $configuration, string $token): Facebook
+    {
+        return new Facebook([
+            'clientId'        => $configuration->getAppId(),
+            'clientSecret'    => $configuration->getAppSecret(),
+            'redirectUri'     => $this->generateRedirectUri($token),
+            'graphApiVersion' => 'v2.10',
+        ]);
+    }
+
+    protected function generateRedirectUri(string $token): string
+    {
+        return $this->generateUrl('jobs_facebook_connect_check', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
 }

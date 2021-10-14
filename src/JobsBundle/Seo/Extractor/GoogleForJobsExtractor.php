@@ -12,26 +12,10 @@ use Spatie\SchemaOrg\Graph;
 
 class GoogleForJobsExtractor implements ExtractorInterface
 {
-    /**
-     * @var EnvironmentService
-     */
-    protected $environmentService;
+    protected EnvironmentService $environmentService;
+    protected ContextServiceInterface $contextService;
+    protected ConnectorServiceInterface $connectorService;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    protected $contextService;
-
-    /**
-     * @var ConnectorServiceInterface
-     */
-    protected $connectorService;
-
-    /**
-     * @param EnvironmentServiceInterface $environmentService
-     * @param ContextServiceInterface     $contextService
-     * @param ConnectorServiceInterface   $connectorService
-     */
     public function __construct(
         EnvironmentServiceInterface $environmentService,
         ContextServiceInterface $contextService,
@@ -42,10 +26,7 @@ class GoogleForJobsExtractor implements ExtractorInterface
         $this->connectorService = $connectorService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($element)
+    public function supports(mixed $element): bool
     {
         if (!$this->connectorService->connectorDefinitionIsEnabled('google')) {
             return false;
@@ -61,10 +42,7 @@ class GoogleForJobsExtractor implements ExtractorInterface
         return $element instanceof $classPath;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function updateMetaData($element, ?string $locale, SeoMetaDataInterface $seoMetadata)
+    public function updateMetaData(mixed $element, ?string $locale, SeoMetaDataInterface $seoMetadata): void
     {
         $connectorDefinition = $this->connectorService->getConnectorDefinition('google', true);
 

@@ -6,32 +6,20 @@ use JobsBundle\Model\ConnectorContextItemInterface;
 
 interface ConnectorContextItemRepositoryInterface
 {
-    /**
-     * @param int $id
-     *
-     * @return null|ConnectorContextItemInterface
-     */
-    public function findById(int $id);
+    public function findById(int $id): ?ConnectorContextItemInterface;
 
     /**
-     * @param int $objectId
-     *
-     * @return ConnectorContextItemInterface[]
+     * @return array<int, ConnectorContextItemInterface>
      */
-    public function findForObject(int $objectId);
+    public function findForObject(int $objectId): array;
 
     /**
-     * @param int $connectorEngineId
-     *
-     * @return ConnectorContextItemInterface[]
+     * @return array<int, ConnectorContextItemInterface>
      */
     public function findForConnectorEngine(int $connectorEngineId);
 
     /**
-     * @param int $connectorEngineId
-     * @param int $objectId
-     *
-     * @return ConnectorContextItemInterface[]
+     * @return array<int, ConnectorContextItemInterface>
      */
     public function findForConnectorEngineAndObject(int $connectorEngineId, int $objectId);
 }
