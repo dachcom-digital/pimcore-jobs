@@ -138,7 +138,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
         return null;
     }
 
-    public function getEngineConfiguration(): ?array
+    public function getEngineConfiguration(): ?ConnectorEngineConfigurationInterface
     {
         return null;
     }

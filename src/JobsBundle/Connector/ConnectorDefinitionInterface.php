@@ -56,7 +56,7 @@ interface ConnectorDefinitionInterface
 
     public function getEngineConfigurationClass(): ?string;
 
-    public function getEngineConfiguration(): ?array;
+    public function getEngineConfiguration(): ?ConnectorEngineConfigurationInterface;
 
     public function mapEngineConfigurationFromBackend(array $data): ?ConnectorEngineConfigurationInterface;
 }

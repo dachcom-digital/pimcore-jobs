@@ -52,7 +52,7 @@ class JobConnectorContext extends Data implements
     /**
      * @param mixed $object
      *
-     * @return ConnectorContextItemInterface[]
+     * @return null|ConnectorContextItemInterface[]
      */
     public function preGetData($object)
     {
@@ -102,9 +102,9 @@ class JobConnectorContext extends Data implements
     }
 
     /**
-     * @param mixed $data
-     * @param null  $object
-     * @param array $params
+     * @param mixed         $data
+     * @param null|Concrete $object
+     * @param array         $params
      *
      * @return ConnectorContextItemInterface[]
      */
@@ -122,11 +122,11 @@ class JobConnectorContext extends Data implements
     }
 
     /**
-     * @param mixed $data
-     * @param null  $object
-     * @param array $params
+     * @param mixed         $data
+     * @param null|Concrete $object
+     * @param array         $params
      *
-     * @return array
+     * @return null|array
      *
      * @throws \Exception
      */
@@ -284,7 +284,7 @@ class JobConnectorContext extends Data implements
     }
 
     /**
-     * @param \stdClass[] $array
+     * @param \stdClass|\stdClass[] $array
      *
      * @return array
      */
@@ -301,7 +301,7 @@ class JobConnectorContext extends Data implements
             }
         }
         if ($array instanceof \stdClass) {
-            return $this->arrayCastRecursive((array) $array);
+            return $this->arrayCastRecursive([$array]);
         }
 
         return $array;
@@ -411,11 +411,11 @@ class JobConnectorContext extends Data implements
 
     public function getPhpdocInputType(): ?string
     {
-        return '\\' .ConnectorContextItemInterface::class . '[]';
+        return '\\' . ConnectorContextItemInterface::class . '[]';
     }
 
     public function getPhpdocReturnType(): ?string
     {
-        return '\\' .ConnectorContextItemInterface::class . '[]';
+        return '\\' . ConnectorContextItemInterface::class . '[]';
     }
 }

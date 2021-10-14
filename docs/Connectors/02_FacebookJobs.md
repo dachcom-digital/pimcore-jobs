@@ -7,13 +7,13 @@ To use this connector you need to provide fully configured Facebook App!
 Before you start be sure you've checked out the [Setup Instructions](../00_Setup.md).
 
 ## Requirements
-First things first. To use this connector, you have to install some dependencies:
+First things first. To use this connector, you have to install the [league/oauth2-facebook](https://github.com/thephpleague/oauth2-facebook):
 
-- [facebook/graph-sdk](https://github.com/facebookarchive/php-graph-sdk/blob/5.x/README.md) (Mostly already installed within a Pimcore Installation)
+```bash
+composer require league/oauth2-facebook:^2.0
+```
 
 ## Example Configuration
-This is a example Configuration.
-
 Each Connector needs some `Items Resolver` (Find the right object for the right context) and a single `Item Transformer`
 (Transform your object into a valid Facebook xml block in this case [full feed specification](https://developers.facebook.com/docs/pages/jobs-xml/getting-started#company-info)).
 

@@ -3,7 +3,7 @@
 namespace JobsBundle\Context\Resolver;
 
 use JobsBundle\Connector\ConnectorDefinitionInterface;
-use JobsBundle\Context\ResolvedItem;
+use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Service\EnvironmentServiceInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,7 +24,7 @@ interface ContextItemsResolverInterface
     public function configureContextParameter(OptionsResolver $resolver): void;
 
     /**
-     * @return array<int, ResolvedItem>
+     * @return array<int, ResolvedItemInterface>
      */
     public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array;
 }

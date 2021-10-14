@@ -7,19 +7,10 @@ use JobsBundle\Model\LogEntryInterface;
 
 interface LogManagerInterface
 {
-    /**
-     * @return Paginator<int, LogEntryInterface>
-     */
     public function getForObject(int $objectId): Paginator;
 
-    /**
-     * @return Paginator<int, LogEntryInterface>
-     */
     public function getForConnectorEngine(int $connectorEngineId, int $offset, int $limit): Paginator;
 
-    /**
-     * @return Paginator<int, LogEntryInterface>
-     */
     public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId, int $offset, int $limit): Paginator;
 
     public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId): void;

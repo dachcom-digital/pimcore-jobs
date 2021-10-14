@@ -3,6 +3,7 @@
 namespace JobsBundle\Controller\Admin;
 
 use JobsBundle\Manager\LogManagerInterface;
+use JobsBundle\Model\LogEntryInterface;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Pimcore\Bundle\AdminBundle\Controller\AdminController;
@@ -32,6 +33,7 @@ class LogController extends AdminController
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
+        /** @var LogEntryInterface $entry */
         foreach ($logEntriesPaginator as $entry) {
             $items[] = [
                 'id'      => $entry->getId(),

@@ -163,7 +163,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
         return EngineConfiguration::class;
     }
 
-    public function getEngineConfiguration(): ?array
+    public function getEngineConfiguration(): ?ConnectorEngineConfigurationInterface
     {
         if (!$this->engineIsLoaded()) {
             return null;

@@ -4,7 +4,7 @@ namespace JobsBundle\Model;
 
 class ConnectorContextItem implements ConnectorContextItemInterface
 {
-    protected ?int $id;
+    protected ?int $id = null;
     protected int $objectId;
     protected ConnectorEngineInterface $connectorEngine;
     protected ContextDefinitionInterface $contextDefinition;
@@ -49,7 +49,7 @@ class ConnectorContextItem implements ConnectorContextItemInterface
         return $this->contextDefinition;
     }
 
-    public function __clone(): void
+    public function __clone()
     {
         $this->id = null;
     }

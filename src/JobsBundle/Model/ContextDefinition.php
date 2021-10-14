@@ -4,10 +4,10 @@ namespace JobsBundle\Model;
 
 class ContextDefinition implements ContextDefinitionInterface
 {
-    protected ?int $id;
+    protected ?int $id = null;
     protected string $host;
     protected string $locale;
-    protected bool $fromClone;
+    protected bool $fromClone = false;
 
     public function setId(int $id): void
     {
@@ -44,7 +44,7 @@ class ContextDefinition implements ContextDefinitionInterface
         return $this->fromClone;
     }
 
-    public function __clone(): void
+    public function __clone()
     {
         $this->fromClone = true;
     }

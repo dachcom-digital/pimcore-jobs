@@ -23,7 +23,9 @@ class FeedGenerator implements FeedGeneratorInterface
     {
         foreach ($this->items as $item) {
             $definition = $this->generateItemTransformerDefinitionClass();
-            $definition->setGraph($this->params['graph']);
+            if ($definition instanceof ItemTransformerDefinition) {
+                $definition->setGraph($this->params['graph']);
+            }
             $this->itemTransformer->transform($item, $definition);
         }
 

@@ -4,6 +4,7 @@
 
 ### Global Changes
 - PHP8 return type declarations added: you may have to adjust your extensions accordingly
+- [FB Connector](./docs/Connectors/02_FacebookJobs.md): `facebookarchive/php-graph-sdk` has been removed, we're now using the `league/oauth2-facebook` package.
 
 ***
 

@@ -43,8 +43,8 @@
         "symplify/easy-coding-standard": "^9.0"
     },
     "suggest": {
-        "facebook/graph-sdk": "^5.4",
-        "dachcom-digital/schema": "^1.0",
-        "dachcom-digital/seo": "^1.0"
+        "league/oauth2-facebook": "^2.0",
+        "dachcom-digital/schema": "^2.0",
+        "dachcom-digital/seo": "^2.0"
     }
 }

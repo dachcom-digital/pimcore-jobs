@@ -9,17 +9,17 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     /**
      * @internal
      */
-    protected string $accessToken;
+    protected ?string $accessToken = null;
 
     /**
      * @internal
      */
-    protected string $accessTokenExpiresAt;
+    protected int|string $accessTokenExpiresAt;
 
     /**
      * @internal
      */
-    protected string $recruitingManagerId;
+    protected ?string $recruitingManagerId = null;
 
     protected string $appId;
     protected string $appSecret;
@@ -39,7 +39,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     /**
      * @internal
      */
-    public function setAccessTokenExpiresAt(string $expiresAt): void
+    public function setAccessTokenExpiresAt(int|string $expiresAt): void
     {
         $this->accessTokenExpiresAt = $expiresAt;
     }
@@ -47,7 +47,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     /**
      * @internal
      */
-    public function getAccessToken(): string
+    public function getAccessToken(): ?string
     {
         return $this->accessToken;
     }
@@ -55,7 +55,7 @@ class EngineConfiguration implements ConnectorEngineConfigurationInterface
     /**
      * @internal
      */
-    public function getRecruitingManagerId(): string
+    public function getRecruitingManagerId(): ?string
     {
         return $this->recruitingManagerId;
     }

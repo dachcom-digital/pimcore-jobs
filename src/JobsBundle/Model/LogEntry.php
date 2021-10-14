@@ -4,7 +4,7 @@ namespace JobsBundle\Model;
 
 class LogEntry implements LogEntryInterface
 {
-    protected ?int $id;
+    protected ?int $id = null;
     protected ConnectorEngineInterface $connectorEngine;
     protected int $objectId;
     protected string $type;
