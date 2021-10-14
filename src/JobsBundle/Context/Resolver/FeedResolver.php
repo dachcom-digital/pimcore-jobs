@@ -11,57 +11,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FeedResolver implements ContextItemsResolverInterface
 {
-    /**
-     * @var array
-     */
-    protected $configuration;
+    protected array $configuration;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ConnectorContextManagerInterface $connectorContextManager;
 
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
-
-    /**
-     * @var ConnectorContextManagerInterface
-     */
-    protected $connectorContextManager;
-
-    /**
-     * @param ConnectorContextManagerInterface $connectorContextManager
-     */
     public function __construct(ConnectorContextManagerInterface $connectorContextManager)
     {
         $this->connectorContextManager = $connectorContextManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function configureOptions(OptionsResolver $optionsResolver)
+    public static function configureOptions(OptionsResolver $resolver): void
     {
-        // no optinos
+        // no options
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConfiguration(array $resolverConfiguration)
+    public function setConfiguration(array $resolverConfiguration): void
     {
         $this->configuration = $resolverConfiguration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEnvironment(EnvironmentServiceInterface $environmentService)
+    public function setEnvironment(EnvironmentServiceInterface $environmentService): void
     {
         $this->environmentService = $environmentService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureContextParameter(OptionsResolver $resolver)
+    public function configureContextParameter(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'internal_feed_id' => null,
@@ -73,10 +47,7 @@ class FeedResolver implements ContextItemsResolverInterface
         $resolver->setAllowedTypes('external_feed_id', ['null', 'int', 'string']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
+    public function resolve(ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array
     {
         // @todo: Determinate feed?
         $connectorContextItems = $this->connectorContextManager->getForConnectorEngine($connectorDefinition->getConnectorEngine()->getId());

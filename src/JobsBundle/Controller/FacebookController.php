@@ -22,20 +22,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FacebookController extends FrontendController
 {
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ConnectorServiceInterface $connectorService;
 
-    /**
-     * @var ConnectorServiceInterface
-     */
-    protected $connectorService;
-
-    /**
-     * @param EnvironmentServiceInterface $environmentService
-     * @param ConnectorServiceInterface   $connectorService
-     */
     public function __construct(
         EnvironmentServiceInterface $environmentService,
         ConnectorServiceInterface $connectorService
@@ -45,14 +34,9 @@ class FacebookController extends FrontendController
     }
 
     /**
-     * @param Request $request
-     * @param string  $token
-     *
-     * @return RedirectResponse
-     *
      * @throws FacebookSDKException
      */
-    public function connectAction(Request $request, string $token)
+    public function connectAction(Request $request, string $token): RedirectResponse
     {
         $connectorDefinition = $this->connectorService->getConnectorDefinition('facebook', true);
 
@@ -81,14 +65,9 @@ class FacebookController extends FrontendController
     }
 
     /**
-     * @param Request $request
-     * @param string  $token
-     *
-     * @return Response
-     *
      * @throws \Exception
      */
-    public function checkAction(Request $request, string $token)
+    public function checkAction(Request $request, string $token): Response
     {
         $connectorDefinition = $this->connectorService->getConnectorDefinition('facebook', true);
 
@@ -129,12 +108,7 @@ class FacebookController extends FrontendController
         return $response;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function adminGenerateFeedAction(Request $request)
+    public function adminGenerateFeedAction(Request $request): JsonResponse
     {
         $generateState = $request->request->get('state');
 
@@ -185,13 +159,7 @@ class FacebookController extends FrontendController
         ]);
     }
 
-    /**
-     * @param SessionInterface         $session
-     * @param ConnectorEngineInterface $connectorEngine
-     *
-     * @return array
-     */
-    protected function registerRecruitingManager(SessionInterface $session, ConnectorEngineInterface $connectorEngine)
+    protected function registerRecruitingManager(SessionInterface $session, ConnectorEngineInterface $connectorEngine): array
     {
         $connectorEngineConfig = $connectorEngine->getConfiguration();
         if (!$connectorEngineConfig instanceof EngineConfiguration) {
@@ -235,13 +203,7 @@ class FacebookController extends FrontendController
         ];
     }
 
-    /**
-     * @param SessionInterface         $session
-     * @param ConnectorEngineInterface $connectorEngine
-     *
-     * @return array
-     */
-    protected function registerFeed(SessionInterface $session, ConnectorEngineInterface $connectorEngine)
+    protected function registerFeed(SessionInterface $session, ConnectorEngineInterface $connectorEngine): array
     {
         $token = $connectorEngine->getToken();
         $feedIdHelper = new FeedIdHelper($connectorEngine);
@@ -297,22 +259,15 @@ class FacebookController extends FrontendController
     }
 
     /**
-     * @param EngineConfiguration $configuration
-     * @param SessionInterface    $session
-     *
-     * @return Facebook
-     *
      * @throws FacebookSDKException
      */
-    protected function getFacebook(EngineConfiguration $configuration, SessionInterface $session)
+    protected function getFacebook(EngineConfiguration $configuration, SessionInterface $session): Facebook
     {
-        $fb = new Facebook([
+        return new Facebook([
             'app_id'                  => $configuration->getAppId(),
             'app_secret'              => $configuration->getAppSecret(),
             'persistent_data_handler' => new FacebookDataHandler($session),
             'default_graph_version'   => 'v2.8'
         ]);
-
-        return $fb;
     }
 }

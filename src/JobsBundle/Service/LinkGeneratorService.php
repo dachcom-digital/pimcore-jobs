@@ -8,10 +8,7 @@ use Pimcore\Model\DataObject\Concrete;
 
 class LinkGeneratorService implements LinkGeneratorServiceInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function generate(Concrete $object, ConnectorContextItemInterface $contextItem)
+    public function generate(Concrete $object, ConnectorContextItemInterface $contextItem): ?string
     {
         $linkGeneratorContext = [
             'contextName'          => 'jobs.link_generator',

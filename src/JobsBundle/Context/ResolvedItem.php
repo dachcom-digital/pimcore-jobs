@@ -7,26 +7,10 @@ use Pimcore\Model\DataObject\Concrete;
 
 class ResolvedItem implements ResolvedItemInterface
 {
-    /**
-     * @var ConnectorContextItemInterface
-     */
-    protected $contextItem;
+    protected ?ConnectorContextItemInterface $contextItem;
+    protected ?Concrete $subject;
+    protected array $resolvedParams;
 
-    /**
-     * @var Concrete
-     */
-    protected $subject;
-
-    /**
-     * @var array
-     */
-    protected $resolvedParams;
-
-    /**
-     * @param ConnectorContextItemInterface|null $contextItem
-     * @param Concrete|null                      $subject
-     * @param array                              $resolvedParams
-     */
     public function __construct(?ConnectorContextItemInterface $contextItem, ?Concrete $subject, array $resolvedParams = [])
     {
         $this->contextItem = $contextItem;
@@ -34,35 +18,23 @@ class ResolvedItem implements ResolvedItemInterface
         $this->resolvedParams = $resolvedParams;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getContextItem()
+    public function getContextItem(): ?ConnectorContextItemInterface
     {
         return $this->contextItem;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubject()
+    public function getSubject(): ?Concrete
     {
         return $this->subject;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getResolvedParams()
+    public function getResolvedParams(): array
     {
         return $this->resolvedParams;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getResolvedParam(string $param)
+    public function getResolvedParam(string $param): mixed
     {
-        return isset($this->resolvedParams[$param]) ? $this->resolvedParams[$param] : null;
+        return $this->resolvedParams[$param] ?? null;
     }
 }

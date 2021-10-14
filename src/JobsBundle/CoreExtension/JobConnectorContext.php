@@ -29,39 +29,22 @@ class JobConnectorContext extends Data implements
      */
     public $fieldtype = 'jobConnectorContext';
 
-    /**
-     * @var int
-     */
-    public $height;
-
-    /**
-     * @return ConnectorContextManagerInterface
-     */
-    private function getConnectorContextManager()
+    private function getConnectorContextManager(): ConnectorContextManagerInterface
     {
         return \Pimcore::getContainer()->get(ConnectorContextManager::class);
     }
 
-    /**
-     * @return ConnectorManagerInterface
-     */
-    private function getConnectorManager()
+    private function getConnectorManager(): ConnectorManagerInterface
     {
         return \Pimcore::getContainer()->get(ConnectorManager::class);
     }
 
-    /**
-     * @return LogManagerInterface
-     */
-    private function getLogManager()
+    private function getLogManager(): LogManagerInterface
     {
         return \Pimcore::getContainer()->get(LogManager::class);
     }
 
-    /**
-     * @return Serializer
-     */
-    protected function getSerializer()
+    protected function getSerializer(): Serializer
     {
         return \Pimcore::getContainer()->get('serializer');
     }
@@ -90,9 +73,6 @@ class JobConnectorContext extends Data implements
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function preSetData($object, $data, $params = [])
     {
         $this->markAsLoaded($object);
@@ -116,9 +96,6 @@ class JobConnectorContext extends Data implements
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataFromResource($data, $object = null, $params = [])
     {
         return [];
@@ -256,7 +233,7 @@ class JobConnectorContext extends Data implements
         }
 
         foreach ($availableConnectorContextItems as $availableConnectorContextItem) {
-            if (!in_array($availableConnectorContextItem->getId(), $validConnectorContextItems)) {
+            if (!in_array($availableConnectorContextItem->getId(), $validConnectorContextItems, true)) {
                 $this->getConnectorContextManager()->delete($availableConnectorContextItem);
             }
         }
@@ -411,7 +388,7 @@ class JobConnectorContext extends Data implements
             $preview[] = (string) sprintf('%s: Context ID %s', $connector, $contextDefinitionId);
         }
 
-        return join(', ', $preview);
+        return implode(', ', $preview);
     }
 
     /**
@@ -422,4 +399,23 @@ class JobConnectorContext extends Data implements
         return '';
     }
 
+    public function getParameterTypeDeclaration(): ?string
+    {
+        return '?array';
+    }
+
+    public function getReturnTypeDeclaration(): ?string
+    {
+        return '?array';
+    }
+
+    public function getPhpdocInputType(): ?string
+    {
+        return '\\' .ConnectorContextItemInterface::class . '[]';
+    }
+
+    public function getPhpdocReturnType(): ?string
+    {
+        return '\\' .ConnectorContextItemInterface::class . '[]';
+    }
 }

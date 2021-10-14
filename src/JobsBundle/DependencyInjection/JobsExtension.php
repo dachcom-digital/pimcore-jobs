@@ -10,13 +10,7 @@ use Symfony\Component\Config\FileLocator;
 
 class JobsExtension extends Extension
 {
-    /**
-     * @param array            $configs
-     * @param ContainerBuilder $container
-     *
-     * @throws \Exception
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -52,18 +46,14 @@ class JobsExtension extends Extension
         $this->checkGoogleConnectorDependencies($container, $loader, $availableConnectorsNames);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
-    protected function setupEnvironment(ContainerBuilder $container, array $config)
+    protected function setupEnvironment(ContainerBuilder $container, array $config): void
     {
         $feedHost = is_string($config['feed_host']) ? $config['feed_host'] : '';
         $dataClass = is_string($config['data_class']) ? $config['data_class'] : '';
 
         if (empty($feedHost) && $container->hasParameter('pimcore.config')) {
             $pimcoreConfig = $container->getParameter('pimcore.config');
-            $feedHost = isset($pimcoreConfig['general']['domain']) ? $pimcoreConfig['general']['domain'] : '';
+            $feedHost = $pimcoreConfig['general']['domain'] ?? '';
         }
 
         $connectorServiceDefinition = $container->getDefinition(EnvironmentService::class);
@@ -72,17 +62,13 @@ class JobsExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param YamlFileLoader   $loader
-     * @param array            $availableConnectorsNames
-     *
      * @throws \Exception
      */
-    protected function checkGoogleConnectorDependencies(ContainerBuilder $container, YamlFileLoader $loader, array $availableConnectorsNames)
+    protected function checkGoogleConnectorDependencies(ContainerBuilder $container, YamlFileLoader $loader, array $availableConnectorsNames): void
     {
         $container->setParameter('jobs.connector.google.dependencies_installed', false);
 
-        if (!in_array('google', $availableConnectorsNames)) {
+        if (!in_array('google', $availableConnectorsNames, true)) {
             return;
         }
 
@@ -93,10 +79,7 @@ class JobsExtension extends Extension
         }
     }
 
-    /**
-     * @return array
-     */
-    protected function getCoreConnectors()
+    protected function getCoreConnectors(): array
     {
         return [
             [

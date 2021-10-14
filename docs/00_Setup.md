@@ -67,7 +67,7 @@ A Link Generator could look like this:
 ```php
 <?php
 
-namespace AppBundle;
+namespace App;
 
 use JobsBundle\Model\ConnectorContextItemInterface;
 use Pimcore\Model\DataObject\ClassDefinition\LinkGeneratorInterface;

@@ -3,7 +3,7 @@
 namespace JobsBundle\Repository;
 
 use Carbon\Carbon;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -11,29 +11,16 @@ use JobsBundle\Model\LogEntry;
 
 class LogRepository implements LogRepositoryInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
+    protected EntityRepository $repository;
 
-    /**
-     * @var EntityRepository
-     */
-    protected $repository;
-
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         $this->repository = $entityManager->getRepository(LogEntry::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findForObject(int $objectId)
+    public function findForObject(int $objectId): Paginator
     {
         $qb = $this->repository->createQueryBuilder('l');
 
@@ -43,10 +30,7 @@ class LogRepository implements LogRepositoryInterface
         return new Paginator($query);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findForConnectorEngine(int $connectorEngineId)
+    public function findForConnectorEngine(int $connectorEngineId): Paginator
     {
         $qb = $this->repository->createQueryBuilder('l');
 
@@ -56,10 +40,7 @@ class LogRepository implements LogRepositoryInterface
         return new Paginator($query);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findForConnectorEngineAndObject(int $connectorEngineId, int $objectId)
+    public function findForConnectorEngineAndObject(int $connectorEngineId, int $objectId): Paginator
     {
         $qb = $this->repository->createQueryBuilder('l');
 
@@ -73,10 +54,7 @@ class LogRepository implements LogRepositoryInterface
         return new Paginator($query);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId)
+    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId): void
     {
         $qb = $this->repository->createQueryBuilder('l');
 
@@ -90,10 +68,7 @@ class LogRepository implements LogRepositoryInterface
         $query->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteForObject(int $objectId)
+    public function deleteForObject(int $objectId): void
     {
         $qb = $this->repository->createQueryBuilder('l');
 
@@ -105,29 +80,23 @@ class LogRepository implements LogRepositoryInterface
         $query->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteExpired(int $expireDays)
+    public function deleteExpired(int $expireDays): void
     {
         $qb = $this->repository->createQueryBuilder('l');
         $expireDate = Carbon::now()->subDays($expireDays);
 
         $query = $qb->delete()
             ->where('l.creationDate < :expires')
-            ->setParameter('expires', $expireDate->toDateTime(), Type::DATETIME)
+            ->setParameter('expires', $expireDate->toDateTime(), Types::DATETIME_MUTABLE)
             ->getQuery();
 
         $query->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function truncateLogTable()
+    public function truncateLogTable(): void
     {
         $connection = $this->entityManager->getConnection();
         $platform = $connection->getDatabasePlatform();
-        $connection->executeUpdate($platform->getTruncateTableSQL('jobs_log', true));
+        $connection->executeStatement($platform->getTruncateTableSQL('jobs_log', true));
     }
 }

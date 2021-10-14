@@ -6,15 +6,7 @@ use JobsBundle\Model\ContextDefinitionInterface;
 
 interface ContextDefinitionRepositoryInterface
 {
-    /**
-     * @param int $id
-     *
-     * @return null|ContextDefinitionInterface
-     */
-    public function findById(int $id);
+    public function findById(int $id): ?ContextDefinitionInterface;
 
-    /**
-     * @return ContextDefinitionInterface[]
-     */
-    public function findAll();
+    public function findAll(): array;
 }

@@ -4,13 +4,7 @@ namespace JobsBundle\Service;
 
 interface EnvironmentServiceInterface
 {
-    /**
-     * @return string
-     */
-    public function getDataClass();
+    public function getDataClass(): string;
 
-    /**
-     * @return string
-     */
-    public function getFeedHost();
+    public function getFeedHost(): string;
 }

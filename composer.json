@@ -37,8 +37,7 @@
         }
     },
     "require": {
-        "pimcore/pimcore": "^6.0",
-        "symfony/symfony": "^4|^5",
+        "pimcore/pimcore": "^10.1",
         "doctrine/orm": "^2.7"
     },
     "require-dev": {
@@ -46,9 +45,6 @@
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-symfony": "^0.12",
         "symplify/easy-coding-standard": "^8.0"
-    },
-    "conflict": {
-        "symfony/monolog-bundle": "3.6.0"
     },
     "suggest": {
         "facebook/graph-sdk": "^5.4",

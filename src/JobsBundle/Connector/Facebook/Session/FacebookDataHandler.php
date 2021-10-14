@@ -7,19 +7,19 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class FacebookDataHandler implements PersistentDataInterface
 {
-    protected $session;
+    protected SessionInterface $session;
 
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
 
-    public function get($key)
+    public function get(string $key): mixed
     {
         return $this->session->get('FBRLH_' . $key);
     }
 
-    public function set($key, $value)
+    public function set(string $key, mixed $value): void
     {
         $this->session->set('FBRLH_' . $key, $value);
     }

@@ -6,29 +6,14 @@ use JobsBundle\Model\ConnectorEngineInterface;
 
 interface ConnectorEngineRepositoryInterface
 {
-    /**
-     * @param int $id
-     *
-     * @return null|ConnectorEngineInterface
-     */
-    public function findById($id);
+    public function findById(int $id): ?ConnectorEngineInterface;
+
+    public function findByName(string $name): ?ConnectorEngineInterface;
+
+    public function findIdByName(string $name): ?ConnectorEngineInterface;
 
     /**
-     * @param string $name
-     *
-     * @return null|ConnectorEngineInterface
+     * @return array<int, ConnectorEngineInterface>
      */
-    public function findByName(string $name);
-
-    /**
-     * @param string $name
-     *
-     * @return null|ConnectorEngineInterface
-     */
-    public function findIdByName(string $name);
-
-    /**
-     * @return ConnectorEngineInterface[]
-     */
-    public function findAll();
+    public function findAll(): array;
 }

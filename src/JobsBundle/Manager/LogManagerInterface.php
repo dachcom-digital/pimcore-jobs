@@ -8,68 +8,34 @@ use JobsBundle\Model\LogEntryInterface;
 interface LogManagerInterface
 {
     /**
-     * @param int $objectId
-     *
-     * @return Paginator|LogEntryInterface[]
+     * @return Paginator<int, LogEntryInterface>
      */
-    public function getForObject(int $objectId);
+    public function getForObject(int $objectId): Paginator;
 
     /**
-     * @param int $connectorEngineId
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return Paginator|LogEntryInterface[]
+     * @return Paginator<int, LogEntryInterface>
      */
-    public function getForConnectorEngine(int $connectorEngineId, int $offset, int $limit);
+    public function getForConnectorEngine(int $connectorEngineId, int $offset, int $limit): Paginator;
 
     /**
-     * @param int $connectorEngineId
-     * @param int $objectId
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return Paginator|LogEntryInterface[]
+     * @return Paginator<int, LogEntryInterface>
      */
-    public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId, int $offset, int $limit);
+    public function getForConnectorEngineAndObject(int $connectorEngineId, int $objectId, int $offset, int $limit): Paginator;
 
-    /**
-     * @param int $connectorEngineId
-     * @param int $objectId
-     */
-    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId);
+    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId): void;
 
-    /**
-     * @param int $objectId
-     */
-    public function deleteForObject(int $objectId);
+    public function deleteForObject(int $objectId): void;
 
     /**
      * @throws \Exception
      */
-    public function flushLogs();
+    public function flushLogs(): void;
 
-    /**
-     * @return LogEntryInterface
-     */
-    public function createNew();
+    public function createNew(): LogEntryInterface;
 
-    /**
-     * @param string $connectorName
-     *
-     * @return LogEntryInterface
-     */
-    public function createNewForConnector(string $connectorName);
+    public function createNewForConnector(string $connectorName): LogEntryInterface;
 
-    /**
-     * @param LogEntryInterface $logEntry
-     *
-     * @return LogEntryInterface
-     */
-    public function update(LogEntryInterface $logEntry);
+    public function update(LogEntryInterface $logEntry): LogEntryInterface;
 
-    /**
-     * @param LogEntryInterface $logEntry
-     */
-    public function delete(LogEntryInterface $logEntry);
+    public function delete(LogEntryInterface $logEntry): void;
 }

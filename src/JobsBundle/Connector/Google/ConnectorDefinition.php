@@ -3,68 +3,40 @@
 namespace JobsBundle\Connector\Google;
 
 use JobsBundle\Connector\ConnectorDefinitionInterface;
+use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
+use JobsBundle\Feed\FeedGeneratorInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 use JobsBundle\Transformer\ItemTransformerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConnectorDefinition implements ConnectorDefinitionInterface
 {
-    /**
-     * @var bool
-     */
-    protected $dependenciesInstalled;
+    protected bool $dependenciesInstalled;
+    protected ? ConnectorEngineInterface $connectorEngine;
+    protected array $definitionConfiguration;
+    protected ItemTransformerInterface $itemTransformer;
 
-    /**
-     * @var ConnectorEngineInterface|null
-     */
-    protected $connectorEngine;
-
-    /**
-     * @var array
-     */
-    protected $definitionConfiguration;
-
-    /**
-     * @var ItemTransformerInterface
-     */
-    protected $itemTransformer;
-
-    /**
-     * @param bool $dependenciesInstalled
-     */
     public function __construct(bool $dependenciesInstalled)
     {
         $this->dependenciesInstalled = $dependenciesInstalled;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConnectorEngine()
+    public function getConnectorEngine(): ?ConnectorEngineInterface
     {
         return $this->connectorEngine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConnectorEngine(?ConnectorEngineInterface $connectorEngine)
+    public function setConnectorEngine(?ConnectorEngineInterface $connectorEngine): void
     {
         $this->connectorEngine = $connectorEngine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setItemTransformer(ItemTransformerInterface $itemTransformer)
+    public function setItemTransformer(ItemTransformerInterface $itemTransformer): void
     {
         $this->itemTransformer = $itemTransformer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefinitionConfiguration(array $definitionConfiguration)
+    public function setDefinitionConfiguration(array $definitionConfiguration): void
     {
         $resolver = new OptionsResolver();
         $resolver->setDefaults([
@@ -80,18 +52,12 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function engineIsLoaded()
+    public function engineIsLoaded(): bool
     {
         return $this->getConnectorEngine() instanceof ConnectorEngineInterface;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isOnline()
+    public function isOnline(): bool
     {
         if ($this->definitionConfiguration['core_disabled'] === true) {
             return false;
@@ -108,10 +74,7 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
         return $this->isConnected();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function beforeEnable()
+    public function beforeEnable(): void
     {
         if ($this->dependenciesInstalled === false) {
             $message = 'Dependencies not found. To enable this connector you need to install and activate "dachcom-digital/seo" and "dachcom-digital/schema"';
@@ -120,103 +83,67 @@ class ConnectorDefinition implements ConnectorDefinitionInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function beforeDisable()
+    public function beforeDisable(): void
     {
         // not required. just disable it.
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function allowMultipleContextItems()
+    public function allowMultipleContextItems(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isAutoConnected()
+    public function isAutoConnected(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isConnected()
+    public function isConnected(): bool
     {
         return $this->isAutoConnected();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function connect()
+    public function connect(): void
     {
         // not required. this module is auto connected.
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function disconnect()
+    public function disconnect(): void
     {
         // not required. this module is auto connected.
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildFeedGenerator(array $items, array $params)
+    public function buildFeedGenerator(array $items, array $params): ?FeedGeneratorInterface
     {
         return new FeedGenerator($this->itemTransformer, $items, $params);
     }
 
-    public function getDefinitionConfiguration()
+    public function getDefinitionConfiguration(): array
     {
         return $this->definitionConfiguration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function needsEngineConfiguration()
+    public function needsEngineConfiguration(): bool
     {
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasLogPanel()
+    public function hasLogPanel(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getEngineConfigurationClass()
+    public function getEngineConfigurationClass(): ?string
     {
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getEngineConfiguration()
+    public function getEngineConfiguration(): ?array
     {
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function mapEngineConfigurationFromBackend(array $data)
+    public function mapEngineConfigurationFromBackend(array $data): ?ConnectorEngineConfigurationInterface
     {
         return null;
     }

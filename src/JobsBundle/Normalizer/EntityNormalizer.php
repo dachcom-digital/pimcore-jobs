@@ -10,31 +10,19 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class EntityNormalizer implements DenormalizerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null): bool
     {
         return \is_a($type, ConnectorContextItem::class, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         $connectorContextItem = null;
 

@@ -6,162 +6,90 @@ use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 
 class ConnectorEngine implements ConnectorEngineInterface
 {
-    /**
-     * @var int
-     */
-    protected $id;
+    protected ?int $id;
+    protected string $name;
+    protected bool $enabled;
+    protected string $token;
+    protected ConnectorEngineConfigurationInterface $configuration;
+    protected ?array $feedIds;
+    protected bool $fromClone;
 
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var bool
-     */
-    protected $enabled;
-
-    /**
-     * @var string
-     */
-    protected $token;
-
-    /**
-     * @var array
-     */
-    protected $configuration;
-
-    /**
-     * @var array
-     */
-    protected $feedIds;
-
-    /**
-     * @var bool
-     */
-    protected $fromClone;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEnabled(bool $enabled)
+    public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getEnabled()
+    public function getEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setToken(string $token)
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled === true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setFeedIds(array $feedIds)
+    public function setFeedIds(array $feedIds): void
     {
         $this->feedIds = $feedIds;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasFeedIds()
+    public function hasFeedIds(): bool
     {
         return is_array($this->feedIds) && count($this->feedIds) > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFeedIds()
+    public function getFeedIds(): ?array
     {
         return $this->feedIds;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConfiguration(ConnectorEngineConfigurationInterface $configuration)
+    public function setConfiguration(ConnectorEngineConfigurationInterface $configuration): void
     {
         $this->configuration = $configuration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfiguration()
+    public function getConfiguration(): ConnectorEngineConfigurationInterface
     {
         return $this->configuration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isFromClone()
+    public function isFromClone(): bool
     {
         return $this->fromClone;
     }
 
-    public function __clone()
+    public function __clone(): void
     {
         $this->fromClone = true;
     }

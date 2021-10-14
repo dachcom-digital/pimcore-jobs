@@ -15,32 +15,11 @@ use JobsBundle\Context\ResolvedItemInterface;
 
 class GoogleJobsProcessor implements ResourceProcessorInterface
 {
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ContextServiceInterface $contextService;
+    protected ConnectorServiceInterface $connectorService;
+    protected LogManagerInterface $logManager;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    protected $contextService;
-
-    /**
-     * @var ConnectorServiceInterface
-     */
-    protected $connectorService;
-
-    /**
-     * @var LogManagerInterface
-     */
-    protected $logManager;
-
-    /**
-     * @param EnvironmentServiceInterface $environmentService
-     * @param ContextServiceInterface     $contextService
-     * @param ConnectorServiceInterface   $connectorService
-     * @param LogManagerInterface         $logManager
-     */
     public function __construct(
         EnvironmentServiceInterface $environmentService,
         ContextServiceInterface $contextService,
@@ -53,10 +32,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
         $this->logManager = $logManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsWorker(string $workerIdentifier)
+    public function supportsWorker(string $workerIdentifier): bool
     {
         if (!$this->connectorService->connectorDefinitionIsEnabled('google')) {
             return false;
@@ -67,13 +43,10 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
             return false;
         }
 
-        return in_array($workerIdentifier, ['google_index']);
+        return $workerIdentifier === 'google_index';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsResource($resource)
+    public function supportsResource(mixed $resource): bool
     {
         if (empty($this->environmentService->getDataClass())) {
             return false;
@@ -91,10 +64,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function generateQueueContext($resource)
+    public function generateQueueContext(mixed $resource): array
     {
         $queueContext = [];
 
@@ -112,13 +82,8 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
         return $queueContext;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function processQueueEntry(QueueEntryInterface $queueEntry, string $workerIdentifier, array $context, $resource)
+    public function processQueueEntry(QueueEntryInterface $queueEntry, string $workerIdentifier, array $context, $resource): ?QueueEntryInterface
     {
-        $dataUrl = null;
-
         /** @var ResolvedItemInterface $resolvedItem */
         $resolvedItem = $context['resolvedItem'];
 
@@ -129,10 +94,7 @@ class GoogleJobsProcessor implements ResourceProcessorInterface
         return $queueEntry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function processWorkerResponse(WorkerResponseInterface $workerResponse)
+    public function processWorkerResponse(WorkerResponseInterface $workerResponse): void
     {
         $queueEntry = $workerResponse->getQueueEntry();
 

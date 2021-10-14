@@ -8,45 +8,28 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 interface LogRepositoryInterface
 {
     /**
-     * @param int $objectId
-     *
-     * @return Paginator|LogEntryInterface[]
+     * @return Paginator<int, LogEntryInterface>
      */
-    public function findForObject(int $objectId);
+    public function findForObject(int $objectId): Paginator;
 
     /**
-     * @param int $connectorEngineId
-     *
-     * @return Paginator|LogEntryInterface[]
+     * @return Paginator<int, LogEntryInterface>
      */
-    public function findForConnectorEngine(int $connectorEngineId);
+    public function findForConnectorEngine(int $connectorEngineId): Paginator;
 
     /**
-     * @param int $connectorEngineId
-     * @param int $objectId
-     *
-     * @return Paginator|LogEntryInterface[]
+     * @return Paginator<int, LogEntryInterface>
      */
-    public function findForConnectorEngineAndObject(int $connectorEngineId, int $objectId);
+    public function findForConnectorEngineAndObject(int $connectorEngineId, int $objectId): Paginator;
 
-    /**
-     * @param int $connectorEngineId
-     * @param int $objectId
-     */
-    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId);
+    public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId): void;
 
-    /**
-     * @param int $objectId
-     */
-    public function deleteForObject(int $objectId);
+    public function deleteForObject(int $objectId): void;
 
-    /**
-     * @param int $expireDays
-     */
-    public function deleteExpired(int $expireDays);
+    public function deleteExpired(int $expireDays): void;
 
     /**
      * @throws \Exception
      */
-    public function truncateLogTable();
+    public function truncateLogTable(): void;
 }

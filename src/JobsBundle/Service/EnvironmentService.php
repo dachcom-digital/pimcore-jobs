@@ -4,38 +4,21 @@ namespace JobsBundle\Service;
 
 class EnvironmentService implements EnvironmentServiceInterface
 {
-    /**
-     * @var string
-     */
-    protected $dataClass;
+    protected string $dataClass;
+    protected string $feedHost;
 
-    /**
-     * @var string
-     */
-    protected $feedHost;
-
-    /**
-     * @param string $dataClass
-     * @param string $feedHost
-     */
     public function __construct(string $dataClass, string $feedHost)
     {
         $this->dataClass = $dataClass;
         $this->feedHost = $feedHost;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDataClass()
+    public function getDataClass(): string
     {
         return $this->dataClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFeedHost()
+    public function getFeedHost(): string
     {
         return $this->feedHost;
     }

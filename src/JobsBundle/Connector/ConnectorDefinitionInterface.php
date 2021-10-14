@@ -2,113 +2,61 @@
 
 namespace JobsBundle\Connector;
 
-use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Feed\FeedGeneratorInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 use JobsBundle\Transformer\ItemTransformerInterface;
 
 interface ConnectorDefinitionInterface
 {
-    /**
-     * @param ConnectorEngineInterface|null $connectorEngine
-     */
-    public function setConnectorEngine(?ConnectorEngineInterface $connectorEngine);
+    public function setConnectorEngine(?ConnectorEngineInterface $connectorEngine): void;
+
+    public function getConnectorEngine(): ?ConnectorEngineInterface;
+
+    public function setItemTransformer(ItemTransformerInterface $itemTransformer): void;
 
     /**
-     * @return ConnectorEngineInterface|null
-     */
-    public function getConnectorEngine();
-
-    /**
-     * @param ItemTransformerInterface $itemTransformer
-     */
-    public function setItemTransformer(ItemTransformerInterface $itemTransformer);
-
-    /**
-     * @param array $configuration
-     *
      * @throws \Exception
      */
-    public function setDefinitionConfiguration(array $configuration);
+    public function setDefinitionConfiguration(array $definitionConfiguration): void;
 
-    /**
-     * @return bool
-     */
-    public function engineIsLoaded();
+    public function engineIsLoaded(): bool;
 
     /**
      * Returns true if connector is fully configured and ready to provide data.
-     *
-     * @return bool
      */
-    public function isOnline();
+    public function isOnline(): bool;
 
     /**
      * @throws \Exception
      */
-    public function beforeEnable();
+    public function beforeEnable(): void;
 
     /**
      * @throws \Exception
      */
-    public function beforeDisable();
+    public function beforeDisable(): void;
 
-    /**
-     * @return bool
-     */
-    public function allowMultipleContextItems();
+    public function allowMultipleContextItems(): bool;
 
-    /**
-     * @return bool
-     */
-    public function isAutoConnected();
+    public function isAutoConnected(): bool;
 
-    /**
-     * @return bool
-     */
-    public function isConnected();
+    public function isConnected(): bool;
 
-    public function connect();
+    public function connect(): void;
 
-    public function disconnect();
+    public function disconnect(): void;
 
-    /**
-     * @param array|ResolvedItemInterface[] $items
-     * @param array                         $params
-     *
-     * @return FeedGeneratorInterface
-     */
-    public function buildFeedGenerator(array $items, array $params);
+    public function buildFeedGenerator(array $items, array $params): ?FeedGeneratorInterface;
 
-    /**
-     * @return array
-     */
-    public function getDefinitionConfiguration();
+    public function getDefinitionConfiguration(): array;
 
-    /**
-     * @return bool
-     */
-    public function needsEngineConfiguration();
+    public function needsEngineConfiguration(): bool;
 
-    /**
-     * @return bool
-     */
-    public function hasLogPanel();
+    public function hasLogPanel(): bool;
 
-    /**
-     * @return null|string
-     */
-    public function getEngineConfigurationClass();
+    public function getEngineConfigurationClass(): ?string;
 
-    /**
-     * @return array|null
-     */
-    public function getEngineConfiguration();
+    public function getEngineConfiguration(): ?array;
 
-    /**
-     * @param array $data
-     *
-     * @return ConnectorEngineConfigurationInterface|null
-     */
-    public function mapEngineConfigurationFromBackend(array $data);
+    public function mapEngineConfigurationFromBackend(array $data): ?ConnectorEngineConfigurationInterface;
 }

@@ -6,35 +6,16 @@ use JobsBundle\Model\ContextDefinitionInterface;
 
 interface ContextDefinitionManagerInterface
 {
-    /**
-     * @param int $contextDefinitionId
-     *
-     * @return ContextDefinitionInterface|null
-     */
-    public function getById(int $contextDefinitionId);
+    public function getById(int $contextDefinitionId): ?ContextDefinitionInterface;
 
     /**
-     * @return ContextDefinitionInterface[]
+     * @return array<int, ContextDefinitionInterface>
      */
-    public function getAll();
+    public function getAll(): array;
 
-    /**
-     * @param string $host
-     * @param string $locale
-     *
-     * @return ContextDefinitionInterface
-     */
-    public function createNew(string $host, string $locale);
+    public function createNew(string $host, string $locale): ContextDefinitionInterface;
 
-    /**
-     * @param ContextDefinitionInterface $contextDefinition
-     *
-     * @return ContextDefinitionInterface|null
-     */
-    public function update(ContextDefinitionInterface $contextDefinition);
+    public function update(ContextDefinitionInterface $contextDefinition): ContextDefinitionInterface;
 
-    /**
-     * @param ContextDefinitionInterface $contextDefinition
-     */
-    public function delete(ContextDefinitionInterface $contextDefinition);
+    public function delete(ContextDefinitionInterface $contextDefinition): void;
 }

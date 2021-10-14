@@ -6,15 +6,7 @@ use JobsBundle\Transformer\ItemTransformerDefinitionInterface;
 
 interface FeedGeneratorInterface
 {
-    /**
-     * @param string $outputType
-     *
-     * @return mixed
-     */
-    public function generate(string $outputType);
+    public function generate(string $outputType): mixed;
 
-    /**
-     * @return ItemTransformerDefinitionInterface
-     */
-    public function generateItemTransformerDefinitionClass();
+    public function generateItemTransformerDefinitionClass(): ItemTransformerDefinitionInterface;
 }

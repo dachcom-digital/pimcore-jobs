@@ -16,38 +16,12 @@ use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 
 class SettingsController extends AdminController
 {
-    /**
-     * @var EnvironmentServiceInterface
-     */
-    protected $environmentService;
+    protected EnvironmentServiceInterface $environmentService;
+    protected ConnectorManagerInterface $connectorManager;
+    protected ContextDefinitionManagerInterface $contextDefinitionManager;
+    protected ConnectorDefinitionRegistryInterface $connectorRegistry;
+    protected ConnectorServiceInterface $connectorService;
 
-    /**
-     * @var ConnectorManagerInterface
-     */
-    protected $connectorManager;
-
-    /**
-     * @var ContextDefinitionManagerInterface
-     */
-    protected $contextDefinitionManager;
-
-    /**
-     * @var ConnectorDefinitionRegistryInterface
-     */
-    protected $connectorRegistry;
-
-    /**
-     * @var ConnectorServiceInterface
-     */
-    protected $connectorService;
-
-    /**
-     * @param EnvironmentServiceInterface          $environmentService
-     * @param ConnectorManagerInterface            $connectorManager
-     * @param ContextDefinitionManagerInterface    $contextDefinitionManager
-     * @param ConnectorDefinitionRegistryInterface $connectorRegistry
-     * @param ConnectorServiceInterface            $connectorService
-     */
     public function __construct(
         EnvironmentServiceInterface $environmentService,
         ConnectorManagerInterface $connectorManager,
@@ -63,13 +37,9 @@ class SettingsController extends AdminController
     }
 
     /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
-    public function getConnectorsAction(Request $request)
+    public function getConnectorsAction(Request $request): JsonResponse
     {
         $connectors = [];
         $allConnectorDefinitions = $this->connectorManager->getAllConnectorDefinitions(true);
@@ -104,12 +74,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function dataClassHealthCheckAction(Request $request)
+    public function dataClassHealthCheckAction(Request $request): JsonResponse
     {
         $dataClassReady = false;
         $dataClass = $this->environmentService->getDataClass();
@@ -126,13 +91,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param string  $connectorName
-     *
-     * @return JsonResponse
-     */
-    public function installConnectorAction(Request $request, string $connectorName)
+    public function installConnectorAction(Request $request, string $connectorName): JsonResponse
     {
         $token = null;
         $success = true;
@@ -156,13 +115,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param string  $connectorName
-     *
-     * @return JsonResponse
-     */
-    public function uninstallConnectorAction(Request $request, string $connectorName)
+    public function uninstallConnectorAction(Request $request, string $connectorName): JsonResponse
     {
         $success = true;
         $message = null;
@@ -184,16 +137,9 @@ class SettingsController extends AdminController
     }
 
     /**
-     * @param Request $request
-     * @param string  $connectorName
-     * @param string  $stateType
-     * @param string  $flag
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
-    public function changeConnectorStateAction(Request $request, string $connectorName, string $stateType, string $flag = 'activate')
+    public function changeConnectorStateAction(Request $request, string $connectorName, string $stateType, string $flag = 'activate'): JsonResponse
     {
         $success = true;
         $message = null;
@@ -243,13 +189,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param string  $connectorName
-     *
-     * @return JsonResponse
-     */
-    public function saveConnectorConfigurationAction(Request $request, string $connectorName)
+    public function saveConnectorConfigurationAction(Request $request, string $connectorName): JsonResponse
     {
         $success = true;
         $message = null;
@@ -269,13 +209,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param string  $connectorName
-     *
-     * @return JsonResponse
-     */
-    public function listFeedIdsAction(Request $request, string $connectorName)
+    public function listFeedIdsAction(Request $request, string $connectorName): JsonResponse
     {
         $connectorDefinition = $this->connectorManager->getConnectorDefinition($connectorName, true);
 
@@ -291,12 +225,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function listContextDefinitionsAction(Request $request)
+    public function listContextDefinitionsAction(Request $request): JsonResponse
     {
         $contextDefinitions = [];
 
@@ -314,12 +243,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function createContextDefinitionAction(Request $request)
+    public function createContextDefinitionAction(Request $request): JsonResponse
     {
         $success = true;
         $message = null;
@@ -340,12 +264,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function deleteContextDefinitionAction(Request $request)
+    public function deleteContextDefinitionAction(Request $request): JsonResponse
     {
         $success = true;
         $message = null;
@@ -366,12 +285,7 @@ class SettingsController extends AdminController
         ]);
     }
 
-    /**
-     * @param ConnectorDefinitionInterface $connectorDefinition
-     *
-     * @return array
-     */
-    protected function getConnectorConfigurationForBackend(ConnectorDefinitionInterface $connectorDefinition)
+    protected function getConnectorConfigurationForBackend(ConnectorDefinitionInterface $connectorDefinition): array
     {
         if (!$connectorDefinition->engineIsLoaded()) {
             return [];
@@ -386,12 +300,9 @@ class SettingsController extends AdminController
     }
 
     /**
-     * @param string     $connectorName
-     * @param array|null $configuration
-     *
      * @throws \Exception
      */
-    protected function updateConnectorConfigurationFromArray(string $connectorName, ?array $configuration)
+    protected function updateConnectorConfigurationFromArray(string $connectorName, ?array $configuration): void
     {
         $connectorDefinition = $this->connectorManager->getConnectorDefinition($connectorName, true);
 

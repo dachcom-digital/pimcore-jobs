@@ -22,7 +22,7 @@ jobs:
     data_class: Job
     available_connectors:
         -   connector_name: facebook
-            connector_item_transformer: AppBundle\Transformer\FacebookItemTransformer
+            connector_item_transformer: App\Transformer\FacebookItemTransformer
             connector_items_resolver:
                 -   type: feed
 ```
@@ -47,13 +47,13 @@ This Connector requires a fully registered feed. Click on "Add Feed" and start t
 If this step was successful, a second call will generate the feed itself. If this was successful too, your connector is fully configured and ready to use.
 
 ## Item Transformer
-In our example we have a service class called `AppBundle\Transformer\FacebookItemTransformer`.
+In our example we have a service class called `App\Transformer\FacebookItemTransformer`.
 Every Item Transformer has its own logic as you can see here: 
 
 ```php
 <?php
 
-namespace AppBundle\Transformer;
+namespace App\Transformer;
 
 use JobsBundle\Context\ResolvedItemInterface;
 use JobsBundle\Transformer\ItemTransformerDefinitionInterface;
@@ -62,10 +62,7 @@ use Pimcore\Model\DataObject\MyJobClass;
 
 class FacebookItemTransformer implements ItemTransformerInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition)
+    public function transform(ResolvedItemInterface $item, ItemTransformerDefinitionInterface $itemTransformerDefinition): void
     {
         /** @var MyJobClass $subject */
         $subject = $item->getSubject();

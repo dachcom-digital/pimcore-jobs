@@ -6,16 +6,9 @@ use JobsBundle\Context\Resolver\ContextItemsResolverInterface;
 
 class ContextItemsResolverRegistry implements ContextItemsResolverRegistryInterface
 {
-    /**
-     * @var array
-     */
-    protected $resolver;
+    protected array $resolver = [];
 
-    /**
-     * @param ContextItemsResolverInterface $service
-     * @param string                        $identifier
-     */
-    public function register($service, $identifier)
+    public function register(mixed $service, string $identifier): void
     {
         if (!in_array(ContextItemsResolverInterface::class, class_implements($service), true)) {
             throw new \InvalidArgumentException(
@@ -26,18 +19,12 @@ class ContextItemsResolverRegistry implements ContextItemsResolverRegistryInterf
         $this->resolver[$identifier] = $service;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function has($identifier)
+    public function has($identifier): bool
     {
         return isset($this->resolver[$identifier]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get($identifier)
+    public function get($identifier): ContextItemsResolverInterface
     {
         if (!$this->has($identifier)) {
             throw new \Exception('Context Items Resolver "' . $identifier . '" does not exist');
@@ -46,10 +33,7 @@ class ContextItemsResolverRegistry implements ContextItemsResolverRegistryInterf
         return $this->resolver[$identifier];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->resolver;
     }

@@ -8,23 +8,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContextService implements ContextServiceInterface
 {
-    /**
-     * @var ContextItemsResolverRegistryInterface
-     */
-    protected $contextItemsResolverRegistry;
+    protected ContextItemsResolverRegistryInterface $contextItemsResolverRegistry;
 
-    /**
-     * @param ContextItemsResolverRegistryInterface $contextItemsResolverRegistry
-     */
     public function __construct(ContextItemsResolverRegistryInterface $contextItemsResolverRegistry)
     {
         $this->contextItemsResolverRegistry = $contextItemsResolverRegistry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolveContextItems(string $contextName, ConnectorDefinitionInterface $connectorDefinition, array $contextParameter)
+    public function resolveContextItems(string $contextName, ConnectorDefinitionInterface $connectorDefinition, array $contextParameter): array
     {
         if (!$this->contextItemsResolverRegistry->has($contextName)) {
             throw new \Exception(sprintf('Context Items Resolver "%s" not found.', $contextName));
