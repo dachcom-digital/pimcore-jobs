@@ -7,7 +7,6 @@ class ContextDefinition implements ContextDefinitionInterface
     protected ?int $id = null;
     protected string $host;
     protected string $locale;
-    protected bool $fromClone = false;
 
     public function setId(int $id): void
     {
@@ -37,15 +36,5 @@ class ContextDefinition implements ContextDefinitionInterface
     public function getLocale(): string
     {
         return $this->locale;
-    }
-
-    public function isFromClone(): bool
-    {
-        return $this->fromClone;
-    }
-
-    public function __clone()
-    {
-        $this->fromClone = true;
     }
 }

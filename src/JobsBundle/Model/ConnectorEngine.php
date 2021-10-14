@@ -7,12 +7,11 @@ use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 class ConnectorEngine implements ConnectorEngineInterface
 {
     protected ?int $id = null;
+    protected ?array $feedIds = [];
+    protected ?ConnectorEngineConfigurationInterface $configuration = null;
     protected string $name;
-    protected bool $enabled;
     protected string $token;
-    protected ?ConnectorEngineConfigurationInterface $configuration;
-    protected ?array $feedIds;
-    protected bool $fromClone = false;
+    protected bool $enabled;
 
     public function setId($id): void
     {
@@ -82,15 +81,5 @@ class ConnectorEngine implements ConnectorEngineInterface
     public function getConfiguration(): ?ConnectorEngineConfigurationInterface
     {
         return $this->configuration;
-    }
-
-    public function isFromClone(): bool
-    {
-        return $this->fromClone;
-    }
-
-    public function __clone()
-    {
-        $this->fromClone = true;
     }
 }

@@ -10,7 +10,7 @@ interface ConnectorEngineRepositoryInterface
 
     public function findByName(string $name): ?ConnectorEngineInterface;
 
-    public function findIdByName(string $name): ?ConnectorEngineInterface;
+    public function findIdByName(string $name): ?int;
 
     /**
      * @return array<int, ConnectorEngineInterface>

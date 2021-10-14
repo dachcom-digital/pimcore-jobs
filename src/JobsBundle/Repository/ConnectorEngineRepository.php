@@ -34,7 +34,7 @@ class ConnectorEngineRepository implements ConnectorEngineRepositoryInterface
         return $this->repository->findOneBy(['name' => $name]);
     }
 
-    public function findIdByName(string $name): ?ConnectorEngineInterface
+    public function findIdByName(string $name): ?int
     {
         $form = $this->findByName($name);
 

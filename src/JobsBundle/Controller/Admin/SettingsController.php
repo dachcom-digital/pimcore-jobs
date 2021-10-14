@@ -178,8 +178,6 @@ class SettingsController extends AdminController
                 break;
             default:
                 throw new \Exception(sprintf('Invalid state type "%s"', $stateType));
-
-                break;
         }
 
         return $this->adminJson([

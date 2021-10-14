@@ -36,12 +36,12 @@ class EntityNormalizer implements DenormalizerInterface
 
         $connectorEngine = $this->entityManager->find(ConnectorEngine::class, $data['connectorEngine']['id']);
         if (!$connectorEngine instanceof ConnectorEngine) {
-            return null;
+            return [];
         }
 
         $contextDefinition = $this->entityManager->find(ContextDefinition::class, $data['contextDefinition']['id']);
         if (!$contextDefinition instanceof ContextDefinition) {
-            return null;
+            return [];
         }
 
         $connectorContextItem->setObjectId($data['objectId']);

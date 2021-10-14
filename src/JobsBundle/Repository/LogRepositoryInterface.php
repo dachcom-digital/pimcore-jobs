@@ -7,19 +7,10 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 interface LogRepositoryInterface
 {
-    /**
-     * @return Paginator<int, LogEntryInterface>
-     */
     public function findForObject(int $objectId): Paginator;
 
-    /**
-     * @return Paginator<int, LogEntryInterface>
-     */
     public function findForConnectorEngine(int $connectorEngineId): Paginator;
 
-    /**
-     * @return Paginator<int, LogEntryInterface>
-     */
     public function findForConnectorEngineAndObject(int $connectorEngineId, int $objectId): Paginator;
 
     public function deleteForConnectorEngineAndObject(int $connectorEngineId, int $objectId): void;

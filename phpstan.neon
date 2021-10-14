@@ -14,3 +14,4 @@ parameters:
     ignoreErrors:
         # 3rd parties
         - '/.*Spatie\\SchemaOrg\\Graph.*/'
+        - '/.*League\\OAuth2\\Client.*/'

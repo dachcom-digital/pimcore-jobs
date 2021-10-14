@@ -2,7 +2,6 @@
 
 namespace DachcomBundle\Test\Helper;
 
-use Codeception\Exception\ModuleException;
 use Codeception\Module;
 use Codeception\TestInterface;
 use Dachcom\Codeception\Helper\PimcoreCore;
@@ -18,10 +17,7 @@ use Symfony\Component\DependencyInjection\Container;
 
 class Jobs extends Module
 {
-    /**
-     * @param TestInterface $test
-     */
-    public function _after(TestInterface $test)
+    public function _after(TestInterface $test): void
     {
         parent::_after($test);
 
@@ -34,13 +30,7 @@ class Jobs extends Module
         $db->exec('SET FOREIGN_KEY_CHECKS = 1;');
     }
 
-    /**
-     * @param array $params
-     *
-     * @return ConnectorEngineInterface
-     * @throws ModuleException
-     */
-    public function haveAJobConnector(array $params)
+    public function haveAJobConnector(array $params): ConnectorEngineInterface
     {
         $connectorService = $this->getContainer()->get(ConnectorServiceInterface::class);
 
@@ -54,13 +44,7 @@ class Jobs extends Module
         return $connectorEngine;
     }
 
-    /**
-     * @param array $params
-     *
-     * @return ContextDefinitionInterface
-     * @throws ModuleException
-     */
-    public function haveContextDefinition(array $params)
+    public function haveContextDefinition(array $params): ContextDefinitionInterface
     {
         $contextDefinitionManager = $this->getContainer()->get(ContextDefinitionManagerInterface::class);
 
@@ -71,15 +55,7 @@ class Jobs extends Module
         return $contextDefinition;
     }
 
-    /**
-     * @param DataObject                   $object
-     * @param ConnectorEngineInterface     $connector
-     * @param ContextDefinitionInterface[] $contextDefinitions
-     *
-     * @return DataObject
-     * @throws ModuleException
-     */
-    public function haveAObjectWithConnector(DataObject $object, ConnectorEngineInterface $connector, array $contextDefinitions)
+    public function haveAObjectWithConnector(DataObject $object, ConnectorEngineInterface $connector, array $contextDefinitions): DataObject
     {
         $connectorContextManager = $this->getContainer()->get(ConnectorContextManagerInterface::class);
 
@@ -102,15 +78,7 @@ class Jobs extends Module
         return $object;
     }
 
-    /**
-     * @param DataObject                   $object
-     * @param ConnectorEngineInterface     $connector
-     * @param ContextDefinitionInterface[] $contextDefinitions
-     *
-     * @return DataObject
-     * @throws ModuleException
-     */
-    public function addContextDefinitionToObjectConnectorWithoutSaving(DataObject $object, ConnectorEngineInterface $connector, array $contextDefinitions)
+    public function addContextDefinitionToObjectConnectorWithoutSaving(DataObject $object, ConnectorEngineInterface $connector, array $contextDefinitions): DataObject
     {
         $connectorContextManager = $this->getContainer()->get(ConnectorContextManagerInterface::class);
 
@@ -136,13 +104,7 @@ class Jobs extends Module
         return $object;
     }
 
-    /**
-     * @param DataObject $object
-     *
-     * @return DataObject
-     * @throws ModuleException
-     */
-    public function removeAllContextDefinitionFromObjectConnectorWithoutSaving(DataObject $object)
+    public function removeAllContextDefinitionFromObjectConnectorWithoutSaving(DataObject $object): DataObject
     {
         $object->setJobConnectorContext(null);
 
@@ -151,13 +113,7 @@ class Jobs extends Module
         return $object;
     }
 
-    /**
-     * @param DataObject $object
-     * @param array      $activeContextDefinitions
-     *
-     * @throws ModuleException
-     */
-    public function seeObjectWithActiveContextDefinitions(DataObject $object, array $activeContextDefinitions)
+    public function seeObjectWithActiveContextDefinitions(DataObject $object, array $activeContextDefinitions): void
     {
         $context = $object->getJobConnectorContext();
 
@@ -169,22 +125,14 @@ class Jobs extends Module
         }
     }
 
-    /**
-     * @param DataObject $object
-     * @param array      $activeContextDefinitions
-     */
-    public function seeObjectWithNoContextDefinitions(DataObject $object, array $activeContextDefinitions)
+    public function seeObjectWithNoContextDefinitions(DataObject $object, array $activeContextDefinitions): void
     {
         $context = $object->getJobConnectorContext();
 
         $this->assertCount(0, $context);
     }
 
-    /**
-     * @return Container
-     * @throws ModuleException
-     */
-    protected function getContainer()
+    protected function getContainer(): Container
     {
         return $this->getModule('\\' . PimcoreCore::class)->getContainer();
     }

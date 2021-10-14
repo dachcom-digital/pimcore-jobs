@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ConnectorDefinition implements ConnectorDefinitionInterface
 {
     protected bool $dependenciesInstalled;
-    protected ? ConnectorEngineInterface $connectorEngine;
+    protected ?ConnectorEngineInterface $connectorEngine;
     protected array $definitionConfiguration;
     protected ItemTransformerInterface $itemTransformer;
 

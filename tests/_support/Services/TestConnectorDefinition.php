@@ -11,11 +11,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TestConnectorDefinition implements ConnectorDefinitionInterface
 {
-    protected ConnectorEngineInterface $connectorEngine;
+    protected ?ConnectorEngineInterface $connectorEngine;
     protected array $definitionConfiguration;
     protected ItemTransformerInterface $itemTransformer;
 
-    public function getConnectorEngine(): ConnectorEngineInterface
+    public function getConnectorEngine(): ?ConnectorEngineInterface
     {
         return $this->connectorEngine;
     }
@@ -120,7 +120,7 @@ class TestConnectorDefinition implements ConnectorDefinitionInterface
         return null;
     }
 
-    public function getEngineConfiguration(): ?array
+    public function getEngineConfiguration(): ?ConnectorEngineConfigurationInterface
     {
         return null;
     }

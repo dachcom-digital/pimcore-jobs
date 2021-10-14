@@ -5,11 +5,11 @@ namespace JobsBundle\Model;
 class ConnectorContextItem implements ConnectorContextItemInterface
 {
     protected ?int $id = null;
-    protected int $objectId;
-    protected ConnectorEngineInterface $connectorEngine;
-    protected ContextDefinitionInterface $contextDefinition;
+    protected ?int $objectId = null;
+    protected ?ConnectorEngineInterface $connectorEngine;
+    protected ?ContextDefinitionInterface $contextDefinition;
 
-    public function setId($id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -19,12 +19,12 @@ class ConnectorContextItem implements ConnectorContextItemInterface
         return $this->id;
     }
 
-    public function setObjectId(int $objectId): void
+    public function setObjectId(?int $objectId): void
     {
         $this->objectId = $objectId;
     }
 
-    public function getObjectId(): int
+    public function getObjectId(): ?int
     {
         return $this->objectId;
     }
@@ -34,7 +34,7 @@ class ConnectorContextItem implements ConnectorContextItemInterface
         $this->connectorEngine = $connectorEngine;
     }
 
-    public function getConnectorEngine(): ConnectorEngineInterface
+    public function getConnectorEngine(): ?ConnectorEngineInterface
     {
         return $this->connectorEngine;
     }
@@ -44,7 +44,7 @@ class ConnectorContextItem implements ConnectorContextItemInterface
         $this->contextDefinition = $contextDefinition;
     }
 
-    public function getContextDefinition(): ContextDefinitionInterface
+    public function getContextDefinition(): ?ContextDefinitionInterface
     {
         return $this->contextDefinition;
     }

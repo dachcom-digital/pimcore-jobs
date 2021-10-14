@@ -11,3 +11,7 @@ doctrine:
         entity_managers:
             default:
                 auto_mapping: true
+
+doctrine_migrations:
+    migrations_paths:
+        'JobsBundle\Migrations': '@JobsBundle/Migrations'

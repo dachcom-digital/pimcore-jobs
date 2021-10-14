@@ -6,9 +6,6 @@ use DachcomBundle\Test\FunctionalTester;
 
 class ObjectConnectorCest
 {
-    /**
-     * @param FunctionalTester $I
-     */
     public function testObjectCopyWithConnector(FunctionalTester $I)
     {
         $classDefinition = $I->haveAPimcoreClass('TestClass');
@@ -34,9 +31,6 @@ class ObjectConnectorCest
         $I->seeObjectWithActiveContextDefinitions($newObject, [$contextDefinition->getId()]);
     }
 
-    /**
-     * @param FunctionalTester $I
-     */
     public function testObjectVersionWithNoDefinitionInConnector(FunctionalTester $I)
     {
         $classDefinition = $I->haveAPimcoreClass('TestClass');
@@ -69,9 +63,6 @@ class ObjectConnectorCest
         $I->seeObjectWithActiveContextDefinitions($object, [$contextDefinition->getId()]);
     }
 
-    /**
-     * @param FunctionalTester $I
-     */
     public function testObjectVersionWithAdditionalDefinitionInConnector(FunctionalTester $I)
     {
         $classDefinition = $I->haveAPimcoreClass('TestClass');
@@ -109,9 +100,6 @@ class ObjectConnectorCest
         $I->seeObjectWithActiveContextDefinitions($object, [$contextDefinition1->getId(), $contextDefinition2->getId()]);
     }
 
-    /**
-     * @param FunctionalTester $I
-     */
     public function testObjectRecycleBinWithConnector(FunctionalTester $I)
     {
         $classDefinition = $I->haveAPimcoreClass('TestClass');
