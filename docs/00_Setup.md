@@ -7,7 +7,7 @@ If you don't have any pimcore data object to manage your jobs you need to create
 After that, you need to tell JobsBundle about it:
 
 ```yaml
-# app/config/config.yml
+# config/packages/jobs.yaml
 jobs:
     data_class: MyJobDataClass
 ```
@@ -29,7 +29,7 @@ Some connectors require an interface from which they can fetch the data. For cer
 This forces us to define a global feed host. 
 
 ```yaml
-# app/config/config.yml
+# config/packages/jobs.yaml
 jobs:
     data_class: MyJobDataClass
     feed_host: 'http://www.my-company.com'
