@@ -51,9 +51,9 @@ class JobsExtension extends Extension
         $feedHost = is_string($config['feed_host']) ? $config['feed_host'] : '';
         $dataClass = is_string($config['data_class']) ? $config['data_class'] : '';
 
-        if (empty($feedHost) && $container->hasParameter('pimcore.config')) {
+        if (empty($feedHost)) {
             $pimcoreConfig = $container->getParameter('pimcore.config');
-            $feedHost = $pimcoreConfig['general']['domain'] ?? '';
+            $feedHost = $pimcoreConfig['general']['domain'];
         }
 
         $connectorServiceDefinition = $container->getDefinition(EnvironmentService::class);
@@ -73,6 +73,7 @@ class JobsExtension extends Extension
         }
 
         $bundles = $container->getParameter('kernel.bundles');
+        /** @phpstan-ignore-next-line */
         if (array_key_exists('SeoBundle', $bundles) && array_key_exists('SchemaBundle', $bundles)) {
             $container->setParameter('jobs.connector.google.dependencies_installed', true);
             $loader->load('external/seo.yml');
