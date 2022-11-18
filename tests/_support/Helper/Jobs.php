@@ -134,6 +134,6 @@ class Jobs extends Module
 
     protected function getContainer(): Container
     {
-        return $this->getModule('\\' . PimcoreCore::class)->getContainer();
+        return $this->getModule('\\' . PimcoreCore::class)->_getContainer();
     }
 }

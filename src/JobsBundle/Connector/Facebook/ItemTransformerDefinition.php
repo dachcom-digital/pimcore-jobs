@@ -307,11 +307,7 @@ class ItemTransformerDefinition implements ItemTransformerDefinitionInterface
     {
         $result = [];
 
-        try {
-            $class = new \ReflectionClass(__CLASS__);
-        } catch (\Exception $e) {
-            return [];
-        }
+        $class = new \ReflectionClass(__CLASS__);
 
         foreach ($class->getMethods() as $method) {
             if (!$method->isPublic()) {
