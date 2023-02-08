@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+## 2.1.0
+- [FEATURE] Pimcore 10.5 ready
+
 ## Migrating from Version 1.x to Version 2.0.0
 
 ### Global Changes
