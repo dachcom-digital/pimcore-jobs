@@ -12,7 +12,7 @@ This Bundle allows you to synchronise your job offers with various connectors li
 
 | Release | Supported Pimcore Versions | Supported Symfony Versions | Release Date | Maintained     | Branch     |
 |---------|----------------------------|----------------------------|--------------|----------------|------------|
-| **2.x** | `10.1` - `10.5`            | `5.4`                      | --           | Feature Branch | dev-master |
+| **2.x** | `10.5`                     | `5.4`                      | --           | Feature Branch | dev-master |
 | **1.x** | `6.0` - `6.9`              | `3.4`, `^4.4`              | 27.04.2020   | Unsupported    | 1.x        |
 
 
@@ -20,7 +20,7 @@ This Bundle allows you to synchronise your job offers with various connectors li
 
 ```json
 "require" : {
-    "dachcom-digital/jobs" : "~2.0.0",
+    "dachcom-digital/jobs" : "~2.1.0",
 }
 ```
 

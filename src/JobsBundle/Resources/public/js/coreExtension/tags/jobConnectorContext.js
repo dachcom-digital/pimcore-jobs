@@ -18,7 +18,7 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
         this.contextDefinitions = data.context_definitions;
         this.connectors = data.connectors;
         this.fieldConfig = fieldConfig;
-        this.eventDispatcherKey = pimcore.eventDispatcher.registerTarget(this.eventDispatcherKey, this);
+        document.addEventListener(pimcore.events.postSaveObject, this.postSaveObject.bind(this));
     },
 
     getGridColumnConfig: function (field) {
@@ -46,8 +46,8 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
 
     getLayoutEdit: function () {
         this.component = this.getEditLayout();
-        this.component.on('destroy', function () {
-            pimcore.eventDispatcher.unregisterTarget(this.eventDispatcherKey);
+        this.component.on('destroy', function() {
+            document.removeEventListener(pimcore.events.postSaveObject, this.postSaveObject.bind(this));
         }.bind(this));
 
         return this.component;
