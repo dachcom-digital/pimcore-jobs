@@ -274,7 +274,7 @@ class JobConnectorContext extends Data implements
     }
 
     /**
-     * @param \stdClass|\stdClass[] $array
+     * @param mixed $array
      *
      * @return array
      */
@@ -290,6 +290,7 @@ class JobConnectorContext extends Data implements
                 }
             }
         }
+
         if ($array instanceof \stdClass) {
             return $this->arrayCastRecursive([$array]);
         }
