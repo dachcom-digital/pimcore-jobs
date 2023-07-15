@@ -12,7 +12,8 @@ This Bundle allows you to synchronise your job offers with various connectors li
 
 | Release | Supported Pimcore Versions | Supported Symfony Versions | Release Date | Maintained     | Branch     |
 |---------|----------------------------|----------------------------|--------------|----------------|------------|
-| **2.x** | `10.5`, `10.6`             | `5.4`                      | --           | Feature Branch | dev-master |
+| **3.x** | `11.0`                     | `6.2`                      | --           | Feature Branch | dev-master |
+| **2.x** | `10.5`, `10.6`             | `5.4`                      | 14.10.2021   | Bugfixes       | 2.x        |
 | **1.x** | `6.0` - `6.9`              | `3.4`, `^4.4`              | 27.04.2020   | Unsupported    | 1.x        |
 
 
@@ -20,18 +21,24 @@ This Bundle allows you to synchronise your job offers with various connectors li
 
 ```json
 "require" : {
-    "dachcom-digital/jobs" : "~2.1.0",
+    "dachcom-digital/jobs" : "~3.0.0",
 }
 ```
 
-- Execute: `$ bin/console pimcore:bundle:enable JobsBundle`
+Add Bundle to `bundles.php`:
+```php
+return [
+    JobsBundle\JobsBundle::class => ['all' => true],
+];
+```
+
 - Execute: `$ bin/console pimcore:bundle:install JobsBundle`
 
 ## Upgrading
 - Execute: `$ bin/console doctrine:migrations:migrate --prefix 'JobsBundle\Migrations'`
 
 ## Usage
-This Bundle needs some preparation. Please checkout the [Setup](docs/00_Setup.md) guide first.
+This Bundle needs some preparation. Please check out the [Setup](docs/00_Setup.md) guide first.
 
 ## Further Information
 - [Setup](docs/00_Setup.md)

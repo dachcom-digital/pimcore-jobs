@@ -15,21 +15,12 @@ use JobsBundle\Context\ResolvedItemInterface;
 
 class GoogleJobsProcessor implements ResourceProcessorInterface
 {
-    protected EnvironmentServiceInterface $environmentService;
-    protected ContextServiceInterface $contextService;
-    protected ConnectorServiceInterface $connectorService;
-    protected LogManagerInterface $logManager;
-
     public function __construct(
-        EnvironmentServiceInterface $environmentService,
-        ContextServiceInterface $contextService,
-        ConnectorServiceInterface $connectorService,
-        LogManagerInterface $logManager
+        protected EnvironmentServiceInterface $environmentService,
+        protected ContextServiceInterface $contextService,
+        protected ConnectorServiceInterface $connectorService,
+        protected LogManagerInterface $logManager
     ) {
-        $this->environmentService = $environmentService;
-        $this->contextService = $contextService;
-        $this->connectorService = $connectorService;
-        $this->logManager = $logManager;
     }
 
     public function supportsWorker(string $workerIdentifier): bool

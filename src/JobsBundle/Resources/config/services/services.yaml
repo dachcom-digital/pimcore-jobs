@@ -5,6 +5,10 @@ services:
         autoconfigure: true
         public: false
 
+    JobsBundle\EventListener\Admin\AssetListener:
+        tags:
+            - { name: kernel.event_subscriber }
+
     JobsBundle\Connector\ConnectorServiceInterface: '@JobsBundle\Connector\ConnectorService'
     JobsBundle\Connector\ConnectorService: ~
 
@@ -20,3 +24,7 @@ services:
     JobsBundle\Normalizer\EntityNormalizer:
         tags:
             - serializer.normalizer
+
+    jobs.internal.serializer:
+        alias: serializer
+        public: true

@@ -10,16 +10,12 @@ use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
 class ConnectorService implements ConnectorServiceInterface
 {
     protected array $connectorCache = [];
-    protected ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry;
-    protected ConnectorManagerInterface $connectorManager;
 
     public function __construct(
-        ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry,
-        ConnectorManagerInterface $connectorManager
+        protected ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry,
+        protected ConnectorManagerInterface $connectorManager
     ) {
         $this->connectorCache = [];
-        $this->connectorDefinitionRegistry = $connectorDefinitionRegistry;
-        $this->connectorManager = $connectorManager;
     }
 
     public function installConnector(string $connectorName): ConnectorEngineInterface

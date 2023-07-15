@@ -16,7 +16,7 @@ class JobsExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new YamlFileLoader($container, new FileLocator([__DIR__ . '/../Resources/config']));
-        $loader->load('services.yml');
+        $loader->load('services.yaml');
 
         $persistenceConfig = $config['persistence']['doctrine'];
         $entityManagerName = $persistenceConfig['entity_manager'];
@@ -76,7 +76,7 @@ class JobsExtension extends Extension
         /** @phpstan-ignore-next-line */
         if (array_key_exists('SeoBundle', $bundles) && array_key_exists('SchemaBundle', $bundles)) {
             $container->setParameter('jobs.connector.google.dependencies_installed', true);
-            $loader->load('external/seo.yml');
+            $loader->load('external/seo.yaml');
         }
     }
 

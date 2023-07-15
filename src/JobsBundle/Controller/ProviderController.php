@@ -11,15 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProviderController extends FrontendController
 {
-    protected ContextServiceInterface $contextService;
-    protected ConnectorServiceInterface $connectorService;
-
     public function __construct(
-        ContextServiceInterface $contextService,
-        ConnectorServiceInterface $connectorService
+        protected ContextServiceInterface $contextService,
+        protected ConnectorServiceInterface $connectorService
     ) {
-        $this->contextService = $contextService;
-        $this->connectorService = $connectorService;
     }
 
     /**

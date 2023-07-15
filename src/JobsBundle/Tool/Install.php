@@ -2,7 +2,6 @@
 
 namespace JobsBundle\Tool;
 
-use Pimcore\Db\Connection;
 use Pimcore\Extension\Bundle\Installer\SettingsStoreAwareInstaller;
 
 class Install extends SettingsStoreAwareInstaller
@@ -16,9 +15,8 @@ class Install extends SettingsStoreAwareInstaller
 
     protected function installDbStructure(): void
     {
-        /** @var Connection $db */
         $db = \Pimcore\Db::get();
-        $db->query(file_get_contents($this->getInstallSourcesPath() . '/sql/install.sql'));
+        $db->executeQuery(file_get_contents($this->getInstallSourcesPath() . '/sql/install.sql'));
     }
 
     protected function getInstallSourcesPath(): string

@@ -10,11 +10,8 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class EntityNormalizer implements DenormalizerInterface
 {
-    protected EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(protected EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function supportsDenormalization($data, $type, $format = null): bool

@@ -9,15 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ContextDefinitionManager implements ContextDefinitionManagerInterface
 {
-    protected ContextDefinitionRepositoryInterface $contextDefinitionRepository;
-    protected EntityManagerInterface $entityManager;
-
     public function __construct(
-        ContextDefinitionRepositoryInterface $contextDefinitionRepository,
-        EntityManagerInterface $entityManager
+        protected ContextDefinitionRepositoryInterface $contextDefinitionRepository,
+        protected EntityManagerInterface $entityManager
     ) {
-        $this->contextDefinitionRepository = $contextDefinitionRepository;
-        $this->entityManager = $entityManager;
     }
 
     public function createNew(string $host, string $locale): ContextDefinitionInterface

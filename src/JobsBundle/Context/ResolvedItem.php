@@ -7,15 +7,12 @@ use Pimcore\Model\DataObject\Concrete;
 
 class ResolvedItem implements ResolvedItemInterface
 {
-    protected ?ConnectorContextItemInterface $contextItem;
-    protected ?Concrete $subject;
-    protected array $resolvedParams;
-
-    public function __construct(?ConnectorContextItemInterface $contextItem, ?Concrete $subject, array $resolvedParams = [])
+    public function __construct(
+        protected ?ConnectorContextItemInterface $contextItem,
+        protected ?Concrete $subject,
+        protected array $resolvedParams = []
+    )
     {
-        $this->contextItem = $contextItem;
-        $this->subject = $subject;
-        $this->resolvedParams = $resolvedParams;
     }
 
     public function getContextItem(): ?ConnectorContextItemInterface

@@ -266,7 +266,7 @@ pimcore.object.tags.jobConnectorContext = Class.create(pimcore.object.tags.abstr
 
     postSaveObject: function () {
         Ext.Array.each(this.connectorGrids, function (connector) {
-            connector['grid'].getStore().commitChanges();
+            connector.grid.getStore().commitChanges();
         });
     },
 

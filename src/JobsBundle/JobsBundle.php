@@ -34,26 +34,6 @@ class JobsBundle extends AbstractPimcoreBundle
         return self::PACKAGE_NAME;
     }
 
-    public function getCssPaths(): array
-    {
-        return [
-            '/bundles/jobs/css/admin.css'
-        ];
-    }
-
-    public function getJsPaths(): array
-    {
-        return [
-            '/bundles/jobs/js/plugin.js',
-            '/bundles/jobs/js/settingsPanel.js',
-            '/bundles/jobs/js/connector/abstractConnector.js',
-            '/bundles/jobs/js/connector/google.js',
-            '/bundles/jobs/js/connector/facebook.js',
-            '/bundles/jobs/js/coreExtension/data/jobConnectorContext.js',
-            '/bundles/jobs/js/coreExtension/tags/jobConnectorContext.js',
-        ];
-    }
-
     protected function configureDoctrineExtension(ContainerBuilder $container): void
     {
         $container->addCompilerPass(

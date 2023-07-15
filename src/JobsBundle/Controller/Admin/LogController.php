@@ -4,11 +4,11 @@ namespace JobsBundle\Controller\Admin;
 
 use JobsBundle\Manager\LogManagerInterface;
 use JobsBundle\Model\LogEntryInterface;
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 
-class LogController extends AdminController
+class LogController extends AdminAbstractController
 {
     protected LogManagerInterface $logManager;
 

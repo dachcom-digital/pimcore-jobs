@@ -9,31 +9,20 @@ use JobsBundle\Manager\ConnectorManagerInterface;
 use JobsBundle\Manager\ContextDefinitionManagerInterface;
 use JobsBundle\Service\EnvironmentServiceInterface;
 use JobsBundle\Tool\FeedIdHelper;
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 
-class SettingsController extends AdminController
+class SettingsController extends AdminAbstractController
 {
-    protected EnvironmentServiceInterface $environmentService;
-    protected ConnectorManagerInterface $connectorManager;
-    protected ContextDefinitionManagerInterface $contextDefinitionManager;
-    protected ConnectorDefinitionRegistryInterface $connectorRegistry;
-    protected ConnectorServiceInterface $connectorService;
-
     public function __construct(
-        EnvironmentServiceInterface $environmentService,
-        ConnectorManagerInterface $connectorManager,
-        ContextDefinitionManagerInterface $contextDefinitionManager,
-        ConnectorDefinitionRegistryInterface $connectorRegistry,
-        ConnectorServiceInterface $connectorService
+        protected EnvironmentServiceInterface $environmentService,
+        protected ConnectorManagerInterface $connectorManager,
+        protected ContextDefinitionManagerInterface $contextDefinitionManager,
+        protected ConnectorDefinitionRegistryInterface $connectorRegistry,
+        protected ConnectorServiceInterface $connectorService
     ) {
-        $this->environmentService = $environmentService;
-        $this->connectorManager = $connectorManager;
-        $this->contextDefinitionManager = $contextDefinitionManager;
-        $this->connectorRegistry = $connectorRegistry;
-        $this->connectorService = $connectorService;
     }
 
     /**

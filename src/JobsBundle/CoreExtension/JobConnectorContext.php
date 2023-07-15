@@ -13,8 +13,11 @@ use JobsBundle\Model\ConnectorContextItemInterface;
 use JobsBundle\Model\ConnectorEngineInterface;
 use JobsBundle\Model\ContextDefinitionInterface;
 use Pimcore\Model\DataObject\ClassDefinition\Data;
-use Pimcore\Model\DataObject\ClassDefinition\Data\CustomDataCopyInterface;
 use Pimcore\Model\DataObject\Concrete;
+use Pimcore\Model\DataObject\Fieldcollection;
+use Pimcore\Model\DataObject\Localizedfield;
+use Pimcore\Model\DataObject\Objectbrick;
+use Pimcore\Model\DataObject\Objectbrick\Data\AbstractData;
 use Pimcore\Model\Element\ValidationException;
 use Symfony\Component\Serializer\Serializer;
 
@@ -22,15 +25,10 @@ class JobConnectorContext extends Data implements
     Data\CustomResourcePersistingInterface,
     Data\CustomVersionMarshalInterface,
     Data\CustomRecyclingMarshalInterface,
-    Data\CustomDataCopyInterface
+    Data\CustomDataCopyInterface,
+    Data\PreGetDataInterface,
+    Data\PreSetDataInterface
 {
-    /**
-     * Static type of this element.
-     *
-     * @var string
-     */
-    public $fieldtype = 'jobConnectorContext';
-
     private function getConnectorContextManager(): ConnectorContextManagerInterface
     {
         return \Pimcore::getContainer()->get(ConnectorContextManager::class);
@@ -48,69 +46,44 @@ class JobConnectorContext extends Data implements
 
     protected function getSerializer(): Serializer
     {
-        return \Pimcore::getContainer()->get('serializer');
+        return \Pimcore::getContainer()->get('jobs.internal.serializer');
     }
 
-    /**
-     * @param mixed $object
-     *
-     * @return null|ConnectorContextItemInterface[]
-     */
-    public function preGetData($object)
+    public function preGetData(mixed $container, array $params = []): mixed
     {
-        if (!$object instanceof Concrete) {
+        if (!$container instanceof Concrete) {
             return null;
         }
 
-        $data = $object->getObjectVar($this->getName());
+        $data = $container->getObjectVar($this->getName());
 
-        if (!$object->isLazyKeyLoaded($this->getName())) {
-            $data = $this->load($object, ['force' => true]);
+        if (!$container->isLazyKeyLoaded($this->getName())) {
+            $data = $this->load($container, ['force' => true]);
             $setter = 'set' . ucfirst($this->getName());
-            if (method_exists($object, $setter)) {
-                $object->$setter($data);
+            if (method_exists($container, $setter)) {
+                $container->$setter($data);
             }
         }
 
         return $data;
     }
 
-    public function preSetData($object, $data, $params = [])
+    public function preSetData(mixed $container, mixed $data, array $params = []): mixed
     {
-        $this->markAsLoaded($object);
+        $this->markAsLoaded($container);
 
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isDiffChangeAllowed($object, $params = [])
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDiffDataForEditMode($data, $object = null, $params = [])
-    {
-        return [];
-    }
-
-    public function getDataFromResource($data, $object = null, $params = [])
+    public function getDiffDataForEditMode(mixed $data, Concrete $object = null, array $params = []): ?array
     {
         return [];
     }
 
     /**
-     * @param mixed         $data
-     * @param null|Concrete $object
-     * @param array         $params
-     *
      * @return ConnectorContextItemInterface[]
      */
-    public function getDataForEditmode($data, $object = null, $params = [])
+    public function getDataForEditmode(mixed $data, Concrete $object = null, array $params = []): mixed
     {
         if (!$object instanceof Concrete) {
             return $data;
@@ -124,15 +97,9 @@ class JobConnectorContext extends Data implements
     }
 
     /**
-     * @param mixed         $data
-     * @param null|Concrete $object
-     * @param array         $params
-     *
-     * @return null|array
-     *
      * @throws \Exception
      */
-    public function getDataFromEditmode($data, $object = null, $params = [])
+    public function getDataFromEditmode(mixed $data, Concrete $object = null, array $params = []): mixed
     {
         if (!is_array($data)) {
             return null;
@@ -170,7 +137,7 @@ class JobConnectorContext extends Data implements
                     continue;
                 }
 
-                $item = array_reduce($existingConnectorContextItems, function ($result, ConnectorContextItemInterface $item) use ($contextConfig) {
+                $item = array_reduce($existingConnectorContextItems, static function ($result, ConnectorContextItemInterface $item) use ($contextConfig) {
                     return $item->getContextDefinition()->getId() === $contextConfig['id'] ? $item : $result;
                 });
 
@@ -188,11 +155,7 @@ class JobConnectorContext extends Data implements
         return $items;
     }
 
-    /**
-     * @param mixed $object
-     * @param array $params
-     */
-    public function save($object, $params = [])
+    public function save(Localizedfield|\Pimcore\Model\DataObject\Fieldcollection\Data\AbstractData|AbstractData|Concrete $object, array $params = []): void
     {
         if (!method_exists($object, 'getJobConnectorContext')) {
             return;
@@ -229,10 +192,7 @@ class JobConnectorContext extends Data implements
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load($object, $params = [])
+    public function load(Localizedfield|\Pimcore\Model\DataObject\Fieldcollection\Data\AbstractData|AbstractData|Concrete $object, array $params = []): mixed
     {
         if (isset($params['force']) && $params['force']) {
             return $this->getConnectorContextManager()->getForObject($object->getId());
@@ -241,10 +201,7 @@ class JobConnectorContext extends Data implements
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($object, $params = [])
+    public function delete(Localizedfield|\Pimcore\Model\DataObject\Fieldcollection\Data\AbstractData|AbstractData|Concrete $object, array $params = []): void
     {
         $allConnectorContextItems = $this->load($object, ['force' => true]);
         if (!is_array($allConnectorContextItems)) {
@@ -258,27 +215,7 @@ class JobConnectorContext extends Data implements
         $this->getLogManager()->deleteForObject($object->getId());
     }
 
-    /**
-     * @param mixed $data
-     * @param null  $relatedObject
-     * @param mixed $params
-     * @param null  $idMapper
-     *
-     * @return ConnectorContextItemInterface[]
-     *
-     * @throws \Exception
-     */
-    public function getFromWebserviceImport($data, $relatedObject = null, $params = [], $idMapper = null)
-    {
-        return $this->getDataFromEditmode($this->arrayCastRecursive($data), $relatedObject, $params);
-    }
-
-    /**
-     * @param mixed $array
-     *
-     * @return array
-     */
-    protected function arrayCastRecursive($array)
+    protected function arrayCastRecursive(mixed $array): array
     {
         if (is_array($array)) {
             foreach ($array as $key => $value) {
@@ -310,10 +247,7 @@ class JobConnectorContext extends Data implements
         $object->markLazyKeyAsLoaded($this->getName());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function marshalVersion($object, $data)
+    public function marshalVersion(Concrete $object, mixed $data): mixed
     {
         if (!is_array($data)) {
             return [];
@@ -322,10 +256,7 @@ class JobConnectorContext extends Data implements
         return $this->getSerializer()->normalize($data, 'array', ['groups' => ['Version']]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function unmarshalVersion($object, $data)
+    public function unmarshalVersion(Concrete $object, mixed $data): mixed
     {
         if (!is_array($data)) {
             return [];
@@ -336,36 +267,17 @@ class JobConnectorContext extends Data implements
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function marshalRecycleData($object, $data)
+    public function marshalRecycleData(Concrete $object, mixed $data): mixed
     {
-        if (!is_array($data)) {
-            return [];
-        }
-
-        return $this->getSerializer()->normalize($data, 'array', ['groups' => ['Version']]);
+        return $this->marshalVersion($object, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function unmarshalRecycleData($object, $data)
+    public function unmarshalRecycleData(Concrete $object, mixed $data): mixed
     {
-        if (!is_array($data)) {
-            return [];
-        }
-
-        return array_filter(
-            $this->getSerializer()->denormalize($data, sprintf('%s[]', ConnectorContextItem::class))
-        );
+        return $this->unmarshalVersion($object, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createDataCopy(Concrete $object, $data)
+    public function createDataCopy(Concrete $object, mixed $data): mixed
     {
         if (!is_array($data)) {
             return [];
@@ -388,10 +300,7 @@ class JobConnectorContext extends Data implements
         return $newData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getVersionPreview($data, $object = null, $params = [])
+    public function getVersionPreview(mixed $data, Concrete $object = null, array $params = []): string
     {
         $preview = [];
         if (!is_array($data)) {
@@ -408,10 +317,7 @@ class JobConnectorContext extends Data implements
         return implode(', ', $preview);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDataForSearchIndex($object, $params = [])
+    public function getDataForSearchIndex(Localizedfield|Fieldcollection\Data\AbstractData|Objectbrick\Data\AbstractData|Concrete $object, array $params = []): string
     {
         return '';
     }
@@ -423,7 +329,7 @@ class JobConnectorContext extends Data implements
 
     public function getReturnTypeDeclaration(): ?string
     {
-        return '?array';
+        return $this->getParameterTypeDeclaration();
     }
 
     public function getPhpdocInputType(): ?string
@@ -434,5 +340,10 @@ class JobConnectorContext extends Data implements
     public function getPhpdocReturnType(): ?string
     {
         return '\\' . ConnectorContextItemInterface::class . '[]';
+    }
+
+    public function getFieldType(): string
+    {
+        return 'jobConnectorContext';
     }
 }

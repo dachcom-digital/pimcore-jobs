@@ -8,15 +8,13 @@ use JobsBundle\Transformer\ItemTransformerInterface;
 
 class FeedGenerator implements FeedGeneratorInterface
 {
-    protected ItemTransformerInterface $itemTransformer;
-    protected array $items;
-    protected array $params;
 
-    public function __construct(ItemTransformerInterface $itemTransformer, array $items, array $params)
+    public function __construct(
+        protected ItemTransformerInterface $itemTransformer,
+        protected array $items,
+        protected array $params
+    )
     {
-        $this->itemTransformer = $itemTransformer;
-        $this->items = $items;
-        $this->params = $params;
     }
 
     public function generate(string $outputType): mixed

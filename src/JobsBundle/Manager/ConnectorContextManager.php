@@ -10,21 +10,12 @@ use JobsBundle\Repository\ConnectorContextItemRepositoryInterface;
 
 class ConnectorContextManager implements ConnectorContextManagerInterface
 {
-    protected ConnectorManagerInterface $connectorManager;
-    protected ContextDefinitionManagerInterface $contextDefinitionManager;
-    protected ConnectorContextItemRepositoryInterface $connectorContextItemRepository;
-    protected EntityManagerInterface $entityManager;
-
     public function __construct(
-        ConnectorManagerInterface $connectorManager,
-        ContextDefinitionManagerInterface $contextDefinitionManager,
-        ConnectorContextItemRepositoryInterface $connectorContextItemRepository,
-        EntityManagerInterface $entityManager
+        protected ConnectorManagerInterface $connectorManager,
+        protected ContextDefinitionManagerInterface $contextDefinitionManager,
+        protected ConnectorContextItemRepositoryInterface $connectorContextItemRepository,
+        protected EntityManagerInterface $entityManager
     ) {
-        $this->connectorManager = $connectorManager;
-        $this->contextDefinitionManager = $contextDefinitionManager;
-        $this->connectorContextItemRepository = $connectorContextItemRepository;
-        $this->entityManager = $entityManager;
     }
 
     public function getForObject(int $objectId): array

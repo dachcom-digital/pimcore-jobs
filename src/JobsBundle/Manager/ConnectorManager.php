@@ -12,21 +12,12 @@ use Symfony\Component\Uid\Uuid;
 
 class ConnectorManager implements ConnectorManagerInterface
 {
-    protected array $availableConnectors;
-    protected ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry;
-    protected ConnectorEngineRepositoryInterface $connectorEngineRepository;
-    protected EntityManagerInterface $entityManager;
-
     public function __construct(
-        array $availableConnectors,
-        ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry,
-        ConnectorEngineRepositoryInterface $connectorEngineRepository,
-        EntityManagerInterface $entityManager
+        protected array $availableConnectors,
+        protected ConnectorDefinitionRegistryInterface $connectorDefinitionRegistry,
+        protected ConnectorEngineRepositoryInterface $connectorEngineRepository,
+        protected EntityManagerInterface $entityManager
     ) {
-        $this->availableConnectors = $availableConnectors;
-        $this->connectorDefinitionRegistry = $connectorDefinitionRegistry;
-        $this->connectorEngineRepository = $connectorEngineRepository;
-        $this->entityManager = $entityManager;
     }
 
     public function connectorDefinitionIsEnabled(string $connectorDefinitionName): bool

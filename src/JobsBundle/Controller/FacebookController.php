@@ -20,15 +20,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FacebookController extends FrontendController
 {
-    protected EnvironmentServiceInterface $environmentService;
-    protected ConnectorServiceInterface $connectorService;
-
     public function __construct(
-        EnvironmentServiceInterface $environmentService,
-        ConnectorServiceInterface $connectorService
+        protected EnvironmentServiceInterface $environmentService,
+        protected ConnectorServiceInterface $connectorService
     ) {
-        $this->environmentService = $environmentService;
-        $this->connectorService = $connectorService;
     }
 
     public function connectAction(Request $request, string $token): RedirectResponse

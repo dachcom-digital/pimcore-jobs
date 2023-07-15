@@ -1,6 +1,7 @@
 document.addEventListener(pimcore.events.pimcoreReady, (e) => {
 
-    var user = pimcore.globalmanager.get('user'),
+    let user = pimcore.globalmanager.get('user'),
+        jobsMenu,
         openSettings = function (config) {
             try {
                 pimcore.globalmanager.get('jobs_bundle_settings').activate();
@@ -23,5 +24,4 @@ document.addEventListener(pimcore.events.pimcoreReady, (e) => {
     if (layoutToolbar.settingsMenu) {
         layoutToolbar.settingsMenu.add(jobsMenu);
     }
-
 });
