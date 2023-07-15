@@ -4,7 +4,7 @@ namespace DachcomBundle\Test\Support\Helper;
 
 use Codeception\Module;
 use Codeception\TestInterface;
-use Dachcom\Codeception\Helper\PimcoreCore;
+use Dachcom\Codeception\Support\Helper\PimcoreCore;
 use JobsBundle\Connector\ConnectorServiceInterface;
 use JobsBundle\Manager\ConnectorContextManagerInterface;
 use JobsBundle\Manager\ContextDefinitionManagerInterface;
