@@ -2,7 +2,7 @@
 
 namespace DachcomBundle\Test\Support\Functional\Admin;
 
-use DachcomBundle\Test\FunctionalTester;
+use DachcomBundle\Test\Support\FunctionalTester;
 
 class ObjectConnectorCest
 {

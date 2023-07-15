@@ -15,7 +15,7 @@ jobs:
             TEST_PROJECT_ROOT_DIR: "${{ github.workspace }}"
 
             PIMCORE_CODECEPTION_FRAMEWORK: "${{ github.workspace }}/pimcore-codeception-framework"
-            PIMCORE_CODECEPTION_VERSION: "2.0"
+            PIMCORE_CODECEPTION_VERSION: "3.0"
 
             APP_ENV: test
             PIMCORE_TEST_DB_DSN: "mysql://root:root@127.0.0.1:3306/dachcom_bundle_test"
