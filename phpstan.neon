@@ -9,8 +9,8 @@ parameters:
         constant_hassers: false
     excludePaths:
         # as long we don't install the dependencies :(
-        - '*JobsBundle/Seo/Extractor/GoogleForJobsExtractor.php'
-        - '*JobsBundle/Seo/ResourceProcessor/GoogleJobsProcessor.php'
+        - src/Seo/Extractor/GoogleForJobsExtractor.php
+        - src/Seo/ResourceProcessor/GoogleJobsProcessor.php
     ignoreErrors:
         # 3rd parties
         - '/.*Spatie\\SchemaOrg\\Graph.*/'

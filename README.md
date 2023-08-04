@@ -46,7 +46,7 @@ This Bundle needs some preparation. Please check out the [Setup](docs/00_Setup.m
   - [Google For Jobs](./docs/Connectors/01_GoogleForJobs.md)
   - [Facebook Jobs](./docs/Connectors/02_FacebookJobs.md)
 - [Feeds](docs/11_Feeds.md)
-- [Object Context](docs/12_ObjectContext.md)g
+- [Object Context](docs/12_ObjectContext.md)
 - [Available Items Resolver](docs/20_AvailableItemsResolver.md)
   - [Custom Items Resolver](docs/21_CustomItemsResolver.md) (Expert)
 - [Logging](docs/22_Logging.md)

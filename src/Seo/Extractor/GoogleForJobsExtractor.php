@@ -12,18 +12,11 @@ use Spatie\SchemaOrg\Graph;
 
 class GoogleForJobsExtractor implements ExtractorInterface
 {
-    protected EnvironmentService $environmentService;
-    protected ContextServiceInterface $contextService;
-    protected ConnectorServiceInterface $connectorService;
-
     public function __construct(
-        EnvironmentServiceInterface $environmentService,
-        ContextServiceInterface $contextService,
-        ConnectorServiceInterface $connectorService
+        protected EnvironmentServiceInterface $environmentService,
+        protected ContextServiceInterface $contextService,
+        protected ConnectorServiceInterface $connectorService
     ) {
-        $this->environmentService = $environmentService;
-        $this->contextService = $contextService;
-        $this->connectorService = $connectorService;
     }
 
     public function supports(mixed $element): bool
