@@ -21,6 +21,6 @@ class Install extends SettingsStoreAwareInstaller
 
     protected function getInstallSourcesPath(): string
     {
-        return __DIR__ . '/../Resources/install';
+        return __DIR__ . '/../../config/install';
     }
 }

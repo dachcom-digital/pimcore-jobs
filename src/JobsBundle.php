@@ -29,6 +29,11 @@ class JobsBundle extends AbstractPimcoreBundle
         $container->addCompilerPass(new ContextItemsResolverPass());
     }
 
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
+    }
+
     protected function getComposerPackageName(): string
     {
         return self::PACKAGE_NAME;
@@ -52,10 +57,6 @@ class JobsBundle extends AbstractPimcoreBundle
 
     protected function getNameSpacePath(): string
     {
-        return sprintf(
-            '%s/Resources/config/doctrine/%s',
-            $this->getPath(),
-            'model'
-        );
+        return realpath(sprintf('%s/config/doctrine/%s', $this->getPath(), 'model'));
     }
 }

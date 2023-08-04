@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "JobsBundle\\": "src/JobsBundle"
+            "JobsBundle\\": "src/"
         }
     },
     "autoload-dev": {
