@@ -7,7 +7,7 @@ parameters:
     symfony:
         container_xml_path: %currentWorkingDirectory%/var/cache/test/TestKernelTestDebugContainer.xml
         constant_hassers: false
-    excludes_analyse:
+    excludePaths:
         # as long we don't install the dependencies :(
         - '*JobsBundle/Seo/Extractor/GoogleForJobsExtractor.php'
         - '*JobsBundle/Seo/ResourceProcessor/GoogleJobsProcessor.php'
