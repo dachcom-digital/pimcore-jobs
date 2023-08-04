@@ -2,7 +2,6 @@
 
 namespace JobsBundle\Seo\Extractor;
 
-use JobsBundle\Service\EnvironmentService;
 use JobsBundle\Service\EnvironmentServiceInterface;
 use SeoBundle\MetaData\Extractor\ExtractorInterface;
 use SeoBundle\Model\SeoMetaDataInterface;
