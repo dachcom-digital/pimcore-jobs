@@ -5,6 +5,9 @@
 ### Global Changes
 - Recommended folder structure by symfony adopted
 
+### New Features
+- i18n link generator support
+
 ***
 
 JobsBundle 2.x Upgrade Notes: https://github.com/dachcom-digital/pimcore-jobs/blob/2.x/UPGRADE.md

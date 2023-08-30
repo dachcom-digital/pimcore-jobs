@@ -50,9 +50,9 @@ Click on the `Add` button to create your first Context Definition:
 
 ![image](https://user-images.githubusercontent.com/700119/79229692-c0385200-7e63-11ea-90d3-c156443a6f6a.png)
 
-| Name | Description
-|------|------------|
-| `Host` | Define your host. This is required to generate absolute links |
+| Name     | Description                                                            |
+|----------|------------------------------------------------------------------------|
+| `Host`   | Define your host. This is required to generate absolute links          |
 | `Locale` | Set a locale. The Job Object should get transformed within this locale |
 
 
@@ -61,6 +61,11 @@ You can add as many Context Definitions as you want. However, please note that s
 ### V. Link Generator
 Your Job Object needs a valid Link Generator. 
 If you already have created a Link Generator make sure that you're respecting the host value.
+
+> [!NOTE]  
+> If you're using the I18n Bundle, you don't have to build such a complex link generator. 
+> JobsBundle will automatically send all required data to the link generator instead.  
+
 
 A Link Generator could look like this:
 
@@ -106,8 +111,8 @@ class ObjectLinkGenerator implements LinkGeneratorInterface
 ```
 
 ### VI. The Connector Configuration
-This is the final step: Setup your Connectors. Each connectors has its own configuration and strategies.
-Let's checkout the [Connector](./10_Connectors.md) Guide to learn how to use and install them. 
+This is the final step: Set up your Connectors. Each connector has its own configuration and strategies.
+Lets checkout the [Connector](./10_Connectors.md) Guide to learn how to use and install them. 
 
 ***
 

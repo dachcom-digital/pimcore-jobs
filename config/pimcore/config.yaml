@@ -14,4 +14,4 @@ doctrine:
 
 doctrine_migrations:
     migrations_paths:
-        'JobsBundle\Migrations': '@JobsBundle/Migrations'
+        'JobsBundle\Migrations': '@JobsBundle/src/Migrations'
