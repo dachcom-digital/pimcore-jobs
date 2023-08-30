@@ -15,3 +15,5 @@ parameters:
         # 3rd parties
         - '/.*Spatie\\SchemaOrg\\Graph.*/'
         - '/.*League\\OAuth2\\Client.*/'
+        - '#Class I18nBundle\\LinkGenerator\\I18nLinkGeneratorInterface not found\.#'
+        - '#Call to static method buildForEntity\(\) on an unknown class I18nBundle\\Builder\\RouteParameterBuilder\.#'
