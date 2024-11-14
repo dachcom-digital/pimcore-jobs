@@ -2,7 +2,6 @@
 
 namespace JobsBundle\DependencyInjection;
 
-use JobsBundle\Service\EnvironmentService;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -41,24 +40,10 @@ class JobsExtension extends Extension
 
         $container->setParameter('jobs.connectors.available', $availableConnectorsNames);
         $container->setParameter('jobs.logs.expiration_days', $config['log_expiration_days']);
+        $container->setParameter('jobs.feed_host', is_string($config['feed_host']) ? $config['feed_host'] : '');
+        $container->setParameter('jobs.data_class', is_string($config['data_class']) ? $config['data_class'] : '');
 
-        $this->setupEnvironment($container, $config);
         $this->checkGoogleConnectorDependencies($container, $loader, $availableConnectorsNames);
-    }
-
-    protected function setupEnvironment(ContainerBuilder $container, array $config): void
-    {
-        $feedHost = is_string($config['feed_host']) ? $config['feed_host'] : '';
-        $dataClass = is_string($config['data_class']) ? $config['data_class'] : '';
-
-        if (empty($feedHost)) {
-            $pimcoreConfig = $container->getParameter('pimcore.config');
-            $feedHost = $pimcoreConfig['general']['domain'];
-        }
-
-        $connectorServiceDefinition = $container->getDefinition(EnvironmentService::class);
-        $connectorServiceDefinition->setArgument('$dataClass', $dataClass);
-        $connectorServiceDefinition->setArgument('$feedHost', $feedHost);
     }
 
     /**

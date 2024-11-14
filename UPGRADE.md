@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+## 3.0.1
+- [BUGFIX] Fix connector env setup [#19](https://github.com/dachcom-digital/pimcore-jobs/issues/19)
+
 ## Migrating from Version 2.x to Version 3.0.0
 
 ### Global Changes

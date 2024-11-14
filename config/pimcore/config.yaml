@@ -5,13 +5,6 @@ pimcore:
                 map:
                     jobConnectorContext: JobsBundle\CoreExtension\JobConnectorContext
 
-doctrine:
-    orm:
-        auto_generate_proxy_classes: '%kernel.debug%'
-        entity_managers:
-            default:
-                auto_mapping: true
-
 doctrine_migrations:
     migrations_paths:
         'JobsBundle\Migrations': '@JobsBundle/src/Migrations'
