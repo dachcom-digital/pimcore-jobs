@@ -4,6 +4,7 @@ namespace JobsBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use JobsBundle\DependencyInjection\Compiler\ConnectorDefinitionPass;
+use JobsBundle\DependencyInjection\Compiler\ConnectorEnvironmentPass;
 use JobsBundle\DependencyInjection\Compiler\ContextItemsResolverPass;
 use JobsBundle\Tool\Install;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
@@ -25,6 +26,7 @@ class JobsBundle extends AbstractPimcoreBundle
     {
         $this->configureDoctrineExtension($container);
 
+        $container->addCompilerPass(new ConnectorEnvironmentPass());
         $container->addCompilerPass(new ConnectorDefinitionPass());
         $container->addCompilerPass(new ContextItemsResolverPass());
     }
