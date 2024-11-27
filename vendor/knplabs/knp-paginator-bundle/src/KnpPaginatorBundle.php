@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * (c) Thibault Duplessis <thibault.duplessis@gmail.com>.
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace Knp\Bundle\PaginatorBundle;
+
+use Knp\Bundle\PaginatorBundle\DependencyInjection\Compiler\PaginatorAwarePass;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+final class KnpPaginatorBundle extends Bundle
+{
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+        $container->addCompilerPass(new PaginatorAwarePass(), PassConfig::TYPE_BEFORE_REMOVING);
+    }
+
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
+    }
+}

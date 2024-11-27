@@ -1,13 +1,24 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace JobsBundle\Controller;
 
 use GuzzleHttp\Client;
 use JobsBundle\Connector\ConnectorServiceInterface;
 use JobsBundle\Connector\Facebook\EngineConfiguration;
 use JobsBundle\Model\ConnectorEngineInterface;
-use JobsBundle\Tool\FeedIdHelper;
 use JobsBundle\Service\EnvironmentServiceInterface;
+use JobsBundle\Tool\FeedIdHelper;
 use League\OAuth2\Client\Provider\Facebook;
 use League\OAuth2\Client\Token\AccessToken;
 use Pimcore\Controller\FrontendController;
@@ -278,7 +289,6 @@ class FacebookController extends FrontendController
                 'appsecret_proof' => hash_hmac('sha256', $engineConfiguration->getAccessToken(), $engineConfiguration->getAppSecret()),
             ],
             'form_params' => $params
-
         ], $params));
 
         return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
@@ -298,5 +308,4 @@ class FacebookController extends FrontendController
     {
         return $this->generateUrl('jobs_facebook_connect_check', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
     }
-
 }

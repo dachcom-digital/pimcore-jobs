@@ -1,0 +1,75 @@
+{
+    "name": "knplabs/knp-components",
+    "type": "library",
+    "description": "Knplabs component library",
+    "keywords": [
+        "components",
+        "paginator",
+        "pager",
+        "knp",
+        "knplabs"
+    ],
+    "homepage": "https://github.com/KnpLabs/knp-components",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "KnpLabs Team",
+            "homepage": "https://knplabs.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://github.com/KnpLabs/knp-components/contributors"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "symfony/event-dispatcher-contracts": "^3.0"
+    },
+    "require-dev": {
+        "ext-pdo_sqlite": "*",
+        "doctrine/dbal": "^3.8 || ^4.0",
+        "doctrine/mongodb-odm": "^2.5.5",
+        "doctrine/orm": "^2.13 || ^3.0",
+        "doctrine/phpcr-odm": "^1.8 || ^2.0",
+        "jackalope/jackalope-doctrine-dbal": "^1.12 || ^2.0",
+        "phpunit/phpunit": "^10.5 || ^11.3",
+        "propel/propel1": "^1.7",
+        "ruflin/elastica": "^7.0",
+        "solarium/solarium": "^6.0",
+        "symfony/http-foundation": "^5.4.38 || ^6.4.4 || ^7.0",
+        "symfony/http-kernel": "^5.4.38 || ^6.4.4 || ^7.0",
+        "symfony/property-access": "^5.4.38 || ^6.4.4 || ^7.0"
+    },
+    "suggest": {
+        "doctrine/common": "to allow usage pagination with Doctrine ArrayCollection",
+        "doctrine/mongodb-odm": "to allow usage pagination with Doctrine ODM MongoDB",
+        "doctrine/orm": "to allow usage pagination with Doctrine ORM",
+        "doctrine/phpcr-odm": "to allow usage pagination with Doctrine ODM PHPCR",
+        "propel/propel1": "to allow usage pagination with Propel ORM",
+        "ruflin/elastica": "to allow usage pagination with ElasticSearch Client",
+        "solarium/solarium": "to allow usage pagination with Solarium Client",
+        "symfony/http-foundation": "to retrieve arguments from Request",
+        "symfony/property-access": "to allow sorting arrays"
+    },
+    "conflict": {
+        "doctrine/dbal": "<3.8"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "5.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Knp\\Component\\": "src/Knp/Component"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "tests/Test"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

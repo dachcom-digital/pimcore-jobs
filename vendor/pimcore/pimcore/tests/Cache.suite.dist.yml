@@ -1,0 +1,5 @@
+actor: CacheTester
+modules:
+    enabled:
+        - \Pimcore\Tests\Support\Helper\Pimcore:
+            connect_db: true

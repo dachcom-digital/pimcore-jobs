@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace JobsBundle\CoreExtension;
 
 use JobsBundle\Manager\ConnectorContextManager;
@@ -21,13 +32,7 @@ use Pimcore\Model\DataObject\Objectbrick\Data\AbstractData;
 use Pimcore\Model\Element\ValidationException;
 use Symfony\Component\Serializer\Serializer;
 
-class JobConnectorContext extends Data implements
-    Data\CustomResourcePersistingInterface,
-    Data\CustomVersionMarshalInterface,
-    Data\CustomRecyclingMarshalInterface,
-    Data\CustomDataCopyInterface,
-    Data\PreGetDataInterface,
-    Data\PreSetDataInterface
+class JobConnectorContext extends Data implements Data\CustomResourcePersistingInterface, Data\CustomVersionMarshalInterface, Data\CustomRecyclingMarshalInterface, Data\CustomDataCopyInterface, Data\PreGetDataInterface, Data\PreSetDataInterface
 {
     private function getConnectorContextManager(): ConnectorContextManagerInterface
     {
@@ -127,7 +132,6 @@ class JobConnectorContext extends Data implements
             }
 
             foreach ($contextItems as $contextConfig) {
-
                 if ($contextConfig['active'] === false) {
                     continue;
                 }
@@ -278,7 +282,6 @@ class JobConnectorContext extends Data implements
         $newData = [];
         /** @var ConnectorContextItemInterface $connectorContextItem */
         foreach ($data as $connectorContextItem) {
-
             $newConnectorContextItem = clone $connectorContextItem;
 
             $newConnectorContextItem->setId(null);
