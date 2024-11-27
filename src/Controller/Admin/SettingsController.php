@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace JobsBundle\Controller\Admin;
 
 use JobsBundle\Connector\ConnectorDefinitionInterface;
@@ -7,12 +18,12 @@ use JobsBundle\Connector\ConnectorEngineConfigurationInterface;
 use JobsBundle\Connector\ConnectorServiceInterface;
 use JobsBundle\Manager\ConnectorManagerInterface;
 use JobsBundle\Manager\ContextDefinitionManagerInterface;
+use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
 use JobsBundle\Service\EnvironmentServiceInterface;
 use JobsBundle\Tool\FeedIdHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use JobsBundle\Registry\ConnectorDefinitionRegistryInterface;
 
 class SettingsController extends AdminAbstractController
 {
