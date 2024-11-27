@@ -109,12 +109,7 @@ class JobConnectorContext extends Data implements
             return null;
         }
 
-        if (!$object instanceof Concrete) {
-            return null;
-        }
-
         $items = [];
-
         foreach ($data as $connectorContext) {
             $connectorId = $connectorContext['connectorId'];
             $connectorName = $connectorContext['connectorName'];
@@ -235,10 +230,7 @@ class JobConnectorContext extends Data implements
         return $array;
     }
 
-    /**
-     * @param Concrete $object
-     */
-    protected function markAsLoaded($object)
+    protected function markAsLoaded($object): void
     {
         if (!$object instanceof Concrete) {
             return;
