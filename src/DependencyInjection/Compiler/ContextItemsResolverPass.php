@@ -44,9 +44,11 @@ final class ContextItemsResolverPass implements CompilerPassInterface
             $itemsResolverConfig = $container->getParameter(sprintf('jobs.connectors.items_resolver.%s', $attributes['identifier']));
 
             $options = new OptionsResolver();
-            /** @var ContextItemsResolverInterface $class */
             $class = $itemsResolverDefinition->getClass();
-            $class::configureOptions($options);
+
+            if (is_string($class) && is_subclass_of($class, ContextItemsResolverInterface::class)) {
+                $class::configureOptions($options);
+            }
 
             try {
                 $resolvedOptions = $options->resolve($itemsResolverConfig);

@@ -84,7 +84,6 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
         }
 
         $data = [
-            'context'             => [],
             'context_definitions' => $contextDefinitions
         ];
 
@@ -104,10 +103,6 @@ class ConnectorContextManager implements ConnectorContextManagerInterface
         }
 
         $data['connectors'] = $onlineConnectors;
-
-        if (!is_array($connectorContextItems)) {
-            return $data;
-        }
 
         foreach ($connectorContextItems as $connectorContextItem) {
             $context[] = [

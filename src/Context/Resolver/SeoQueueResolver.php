@@ -77,9 +77,6 @@ class SeoQueueResolver implements ContextItemsResolverInterface
 
     protected function generateQueueEntry(Concrete $object, ConnectorContextItemInterface $contextItem): ?ResolvedItemInterface
     {
-        $type = 'unknown';
-        $dataUrl = null;
-
         $id = $object->getId();
         $dataUrl = $this->linkGeneratorService->generate($object, $contextItem);
 
@@ -91,12 +88,8 @@ class SeoQueueResolver implements ContextItemsResolverInterface
             return null;
         }
 
-        if (method_exists($object, 'getType')) {
-            $type = 'pimcore_' . $object->getType();
-        }
-
         return new ResolvedItem($contextItem, $object, [
-            'type'    => $type,
+            'type'    => sprintf('pimcore_%s', $object->getType()),
             'dataId'  => $id,
             'dataUrl' => $dataUrl
         ]);
