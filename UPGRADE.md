@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+## 3.1.0
+- [LICENSE] Dual-License with GPL and Dachcom Commercial License (DCL) added
+
 ## 3.0.1
 - [BUGFIX] Fix connector env setup [#19](https://github.com/dachcom-digital/pimcore-jobs/issues/19)
 
